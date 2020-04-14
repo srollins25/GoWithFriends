@@ -1,0 +1,6 @@
+framework module Pods_GoWithFriends {
+  umbrella header "Pods-GoWithFriends-umbrella.h"
+
+  export *
+  module * { export * }
+}
