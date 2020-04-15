@@ -12,82 +12,58 @@ import MapKit
 struct MapView: View {
     
     @State private var manager = CLLocationManager()
-    @State var alert = false
     
     var body: some View {
         
-            MapView2(manager: $manager, alert: $alert).alert(isPresented: $alert){
-                Alert(title: Text("Enable Location Services in settings."))
-        }
+        MapView2(manager: $manager).edgesIgnoringSafeArea(.all)
     }
 }
 
 struct MapView2: UIViewRepresentable {
     
     @Binding var manager: CLLocationManager
-    @Binding var alert: Bool
-    let map = MKMapView()
     
     func makeUIView(context: Context) -> MKMapView {
+        let locationManager = CLLocationManager()
         let mapView = MKMapView()
-        let center = CLLocationCoordinate2D(latitude: 32.7516, longitude: -117.0785)
-        let region = MKCoordinateRegion(center: center, latitudinalMeters: 1000, longitudinalMeters: 1000)
-        mapView.region = region
         mapView.showsUserLocation = true
         manager.requestWhenInUseAuthorization()
-        manager.delegate = context.coordinator
-        manager.startUpdatingLocation()
+        mapView.delegate = context.coordinator
+        
+        if(CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse){
+            let location: CLLocationCoordinate2D = locationManager.location!.coordinate
+            let span = MKCoordinateSpan(latitudeDelta: 0.009, longitudeDelta: 0.009)
+            let region = MKCoordinateRegion(center: location, span: span)
+            mapView.setRegion(region, animated: true)
+            }
+        
+//        else{
+//            manager.requestWhenInUseAuthorization()
+//        }
+        
         return mapView
     }
     
-    func updateUIView(_ uiView: MKMapView, context: UIViewRepresentableContext<MapView2>) {
-        print("user location: ", uiView.userLocation.coordinate.latitude, uiView.userLocation.coordinate.latitude)
+    func updateUIView(_ view: MKMapView, context: Context) {
+        
+        view.showsUserLocation = true
+
     }
     
     func makeCoordinator() -> Coordinator {
-        return Coordinator(parent1: self)
+        Coordinator(self)
     }
     
-    class Coordinator: NSObject, CLLocationManagerDelegate {
+    class Coordinator: NSObject, MKMapViewDelegate {
         
         var parent: MapView2
         
-        init(parent1: MapView2){
-            parent = parent1
+        init(_ parent: MapView2){
+            self.parent = parent
         }
         
-        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            
-            if(status == .denied)
-            {
-                parent.alert.toggle()
-            }
-            
-        }
-        
-        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            let location = locations.last
-            let point = MKPointAnnotation()
-            
-            let georeader = CLGeocoder()
-            georeader.reverseGeocodeLocation(location!){ (places, error) in
-                
-                if(error != nil){
-                    print((error?.localizedDescription)!)
-                    return
-                }
-                
-                let place = places?.first?.locality
-                point.title = place
-                point.subtitle = "current"
-                point.coordinate = location!.coordinate
-                self.parent.map.removeAnnotations(self.parent.map.annotations)
-                self.parent.map.addAnnotation(point)
-                
-                let region = MKCoordinateRegion(center: location!.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-                self.parent.map.region = region
-                
-            }
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            print(mapView.centerCoordinate)
         }
     }
 }

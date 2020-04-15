@@ -33,7 +33,6 @@ struct PostCell: View {
                     }
                     
                     Text("time").font(.footnote)
-                    
             }
             
             Spacer()
@@ -41,7 +40,7 @@ struct PostCell: View {
                 print("edit")
             }){
                 Image(systemName: "ellipsis")
-            }
+            }.buttonStyle(BorderlessButtonStyle())
         }.padding()
             
         HStack(/*alignment: .firstTextBaseline, */ spacing: 40){
@@ -58,8 +57,8 @@ struct PostCell: View {
                     }
                     
                 }){
-                    Image(systemName: "arrowshape.turn.up.right")
-                }
+                    Image(systemName: "bubble.right")
+                }.buttonStyle(BorderlessButtonStyle())
                     Text(comments)
                 }
             HStack{
@@ -76,7 +75,7 @@ struct PostCell: View {
                 }
             }){
                 Image(systemName: "star")
-            }
+            }.buttonStyle(BorderlessButtonStyle())
                 Text(favorites)
 
                 }
@@ -84,7 +83,7 @@ struct PostCell: View {
                     print("share")
                 }){
                     Image(systemName: "paperplane")
-                }
+                }.buttonStyle(BorderlessButtonStyle())
             }.padding()
         }
     }

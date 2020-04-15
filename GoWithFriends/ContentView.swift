@@ -34,7 +34,7 @@ struct ContentView: View {
                     })
                     
                     MessageView().tabItem({
-                        Image(systemName: "tray")
+                        Image(systemName: "bubble.left.and.bubble.right")
                         Text("Inbox")
                     })
                     
