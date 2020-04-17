@@ -36,8 +36,8 @@ struct HomeView: View {
 
                         else
                         {
-                            ForEach(postsObserver.posts){ i in
-                                PostCell(id: i.id, name: i.name, image: i.image, postBody: i.postBody, comments: i.comments, favorites: i.favorites)
+                            ForEach(postsObserver.posts.reversed()){ i in
+                                PostCell(id: i.id, name: i.name, image: i.image, postBody: i.postBody, comments: i.comments, favorites: i.favorites, createdAt: i.createdAt)
                             }
                         }
                     }
@@ -45,11 +45,15 @@ struct HomeView: View {
 
                 Button(action: {
                     //new post
+                    
+                    let db = Firestore.firestore()
+                    let values = ["name": "user7", "image": "", "body": "testing", "comments": "0", "favorites": "0", "createdAt": Date().timeIntervalSince1970 as NSNumber] as [String : Any]
+                    db.collection("posts").addDocument(data: values)
                 }){
-                    Image(systemName: "square.and.pencil").padding(.all)
+                    Image(systemName: "plus.bubble").padding(.all)
                 }
                 .padding()
-                .background(Color.gray.opacity(0.75)).foregroundColor(.white).font(.title).frame(width:60, height: 60).clipShape(Circle()).padding(.trailing)
+                .background(Color.gray.opacity(0.75)).foregroundColor(.white).font(.title).frame(width:80, height: 80).clipShape(Circle()).padding(.trailing)
             }
             .navigationBarTitle(Text("Home"))
             .navigationBarItems(leading: Button(action: { self.session.signOut()
@@ -92,8 +96,10 @@ class PostObserver: ObservableObject {
                     let comments = i.document.get("comments") as! String
                     let body = i.document.get("body") as! String
                     let favorites = i.document.get("favorites") as! String
+                    let createdAt = i.document.get("createdAt") as! NSNumber
                     
-                    self.posts.append(dataType(id: id, name: name, image: image, postBody: body, comments: comments, favorites: favorites))
+                    self.posts.append(dataType(id: id, name: name, image: image, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt))
+                    self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                 }
                 
                 if(i.type == .removed){
@@ -140,6 +146,7 @@ struct dataType: Identifiable{
     var postBody: String
     var comments: String
     var favorites: String
+    var createdAt: NSNumber
 }
 
 struct HomeView_Previews: PreviewProvider {

@@ -18,6 +18,7 @@ struct PostCell: View {
     let postBody: String
     let comments: String
     let favorites: String
+    let createdAt: NSNumber
     
     var body: some View {
         VStack{
@@ -25,15 +26,15 @@ struct PostCell: View {
             Image(systemName: "person.circle").resizable().frame(width: 32, height: 32).clipShape(Circle())
                 VStack(alignment: .leading){
                     Text(name).font(.headline)
-                    Text(postBody).font(.body)
+                    Text(postBody).fixedSize(horizontal: false, vertical: true).font(.body)
                     
                     if(image != "")
                     {
-                        Image(image)
+                        
+                    AnimatedImage(name: image)
+
                     }
-                    
-                    Text("time").font(.footnote)
-            }
+                            }
             
             Spacer()
             Button(action: {
@@ -43,7 +44,8 @@ struct PostCell: View {
             }.buttonStyle(BorderlessButtonStyle())
         }.padding()
             
-        HStack(/*alignment: .firstTextBaseline, */ spacing: 40){
+        HStack(/*alignment: .firstTextBaseline, */ spacing: 40 ){
+            
             HStack{
                 Button(action: {
                     print("reply")
@@ -84,8 +86,13 @@ struct PostCell: View {
                 }){
                     Image(systemName: "paperplane")
                 }.buttonStyle(BorderlessButtonStyle())
-            }.padding()
+            
+            Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: createdAt)), formatter: RelativeDateTimeFormatter())").font(.footnote).padding()
+
+            }//.padding()
+           
         }
+        
     }
 }
 
@@ -94,3 +101,9 @@ struct PostCell: View {
 //        PostCell()
 //    }
 //}
+
+struct PostCell_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}

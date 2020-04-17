@@ -16,6 +16,8 @@ struct SignInView: View {
     
     @EnvironmentObject var session: SessionStore
     
+    @State private var animate = false
+    
     func signIn() {
         session.signIn(email: email, password: password) { (result, error) in
             if let error = error{
@@ -30,7 +32,11 @@ struct SignInView: View {
         }
     }
     
+
     var body: some View{
+        
+        ZStack{
+        
         VStack{
             Text("Welcome back").font(.system(size: 32, weight: .heavy))
             
@@ -43,29 +49,18 @@ struct SignInView: View {
                     .background(RoundedRectangle(cornerRadius: 5)
                     .strokeBorder(Color.blue, lineWidth: 1))
                 
-                SecureField("Password", text: $password)
-                    .font(.system(size: 14))
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 5)
-                .strokeBorder(Color.blue, lineWidth: 1))
-            }
-            .padding(.vertical, 64)
+                SecureField("Password", text: $password).font(.system(size: 14)).padding(12)
+                .background(RoundedRectangle(cornerRadius: 5).strokeBorder(Color.blue, lineWidth: 1))
+            }.padding(.vertical, 64)
             
             Button(action: signIn){
-                Text("Sign in")
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: 50)
-                    .foregroundColor(.white)
-                    .font(.system(size: 14, weight: .bold))
+                Text("Sign in").frame(minWidth: 0, maxWidth: .infinity).frame(height: 50).foregroundColor(.white).font(.system(size: 14, weight: .bold))
                     .background(LinearGradient(gradient: Gradient(colors: [.red, .green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                 .cornerRadius(5)
             }
             
             if(error != ""){
-                Text(error)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.red)
-                .padding()
+                Text(error).font(.system(size: 14, weight: .semibold)).foregroundColor(.red).padding()
             }
             
             Spacer()
@@ -73,18 +68,14 @@ struct SignInView: View {
             NavigationLink(destination: SignUpView()){
                 
                 HStack{
-                    Text("New user?")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundColor(.primary)
+                    Text("New user?").font(.system(size: 14, weight: .light)).foregroundColor(.primary)
                     
-                    Text("Create account")
-                        .font(.system(size: 14, weight: .semibold))
+                    Text("Create account").font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.purple)
                 }
-                
             }
+        }.padding(.horizontal, 32)
         }
-        .padding(.horizontal, 32)
     }
 }
 
@@ -152,6 +143,8 @@ struct SignUpView: View {
             }.padding(.horizontal, 32)
     }
 }
+
+
 
 
 struct LoginView: View {

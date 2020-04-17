@@ -24,6 +24,7 @@
 		E2561357243F0061008E9613 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2561356243F0061008E9613 /* MessageView.swift */; };
 		E259C19B2443DF6100D6321F /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E259C19A2443DF6100D6321F /* PostCell.swift */; };
 		E259C19E2443F48C00D6321F /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = E259C19D2443F48C00D6321F /* SDWebImageSwiftUI */; };
+		E2A3DD452446B52A00067884 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A3DD442446B52A00067884 /* MessageCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		E2561354243F0052008E9613 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E2561356243F0061008E9613 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		E259C19A2443DF6100D6321F /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		E2A3DD442446B52A00067884 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				E2561352243EFD53008E9613 /* MapView.swift */,
 				E256134E243EE7B9008E9613 /* HomeView.swift */,
 				E259C19A2443DF6100D6321F /* PostCell.swift */,
+				E2A3DD442446B52A00067884 /* MessageCell.swift */,
 				E2561350243EFD04008E9613 /* AppView.swift */,
 				E256134C243ED59B008E9613 /* LoginView.swift */,
 				E256133A243E917D008E9613 /* Assets.xcassets */,
@@ -269,6 +272,7 @@
 				E2561353243EFD53008E9613 /* MapView.swift in Sources */,
 				E2561337243E917C008E9613 /* SceneDelegate.swift in Sources */,
 				E2561357243F0061008E9613 /* MessageView.swift in Sources */,
+				E2A3DD452446B52A00067884 /* MessageCell.swift in Sources */,
 				E256134B243ED06E008E9613 /* SessionStore.swift in Sources */,
 				E2561351243EFD04008E9613 /* AppView.swift in Sources */,
 				E256134F243EE7B9008E9613 /* HomeView.swift in Sources */,
