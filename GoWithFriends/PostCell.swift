@@ -13,6 +13,7 @@ import SDWebImageSwiftUI
 struct PostCell: View {
     
     let id: String
+    //let user: User
     let name: String
     let image: String
     let postBody: String

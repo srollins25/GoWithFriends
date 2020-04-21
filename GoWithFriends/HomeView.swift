@@ -24,30 +24,36 @@ struct HomeView: View {
     var body: some View {
         
         NavigationView{
-
+            
             ZStack(alignment: .bottomTrailing){
-               
-                    VStack{
-                         List{
+                
+                VStack{
+                    List{
                         if(postsObserver.posts.isEmpty)
                         {
                             Text("No posts").fontWeight(.heavy)
                         }
-
+                            
                         else
                         {
                             ForEach(postsObserver.posts.reversed()){ i in
                                 PostCell(id: i.id, name: i.name, image: i.image, postBody: i.postBody, comments: i.comments, favorites: i.favorites, createdAt: i.createdAt)
+                                //                                Text("user: \((Auth.auth().currentUser?.uid.description)!)")
+                                //                                Text("id: \(i.id)")
+                                //                                Text("id: \((Auth.auth().currentUser?.email)!)")
                             }
                         }
                     }
                 }
-
+                
                 Button(action: {
                     //new post
                     
                     let db = Firestore.firestore()
-                    let values = ["name": "user7", "image": "", "body": "testing", "comments": "0", "favorites": "0", "createdAt": Date().timeIntervalSince1970 as NSNumber] as [String : Any]
+                    //get username from
+//                    var user = User(uid: <#String#>, email: <#String?#>)
+                    let uid = Auth.auth().currentUser?.uid
+                    let values = ["userId": uid! ,"name": "", "image": "", "body": "testing", "comments": "0", "favorites": "0", "createdAt": Date().timeIntervalSince1970 as NSNumber] as [String : Any]
                     db.collection("posts").addDocument(data: values)
                 }){
                     Image(systemName: "plus.bubble").padding(.all)
@@ -61,93 +67,19 @@ struct HomeView: View {
             }){
                 Image(systemName: "person.circle").resizable().frame(width: 25, height: 25).shadow(color: .gray, radius: 5, x: 1, y: 1)
             }.accentColor(.white)
-            /*.sheet(isPresented: $showingSettings){
-                Settings()
-                }*/ , trailing: Button(action: {
+                /*.sheet(isPresented: $showingSettings){
+                 Settings()
+                 }*/ , trailing: Button(action: {
                     //self.showingAddAccount.toggle()
                     print("search button")
-                }){
+                 }){
                     Image(systemName: "magnifyingglass").resizable().frame(width: 25, height: 25).shadow(color: .gray, radius: 5, x: 1, y: 1)
-                }.accentColor(.white))
+                 }.accentColor(.white))
         }
     }
 }
 
-class PostObserver: ObservableObject {
-    
-    @Published var posts = [dataType]()
-    
-    init() {
-        let db = Firestore.firestore()
-        db.collection("posts").addSnapshotListener { (snap, error) in
-            
-            if error != nil{
-                print((error?.localizedDescription)!)
-                return
-            }
-            
-            for i in snap!.documentChanges {
-                
-                if(i.type == .added){
-                    
-                    let id = i.document.documentID
-                    let name = i.document.get("name") as! String
-                    let image = i.document.get("image") as! String
-                    let comments = i.document.get("comments") as! String
-                    let body = i.document.get("body") as! String
-                    let favorites = i.document.get("favorites") as! String
-                    let createdAt = i.document.get("createdAt") as! NSNumber
-                    
-                    self.posts.append(dataType(id: id, name: name, image: image, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt))
-                    self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
-                }
-                
-                if(i.type == .removed){
-                    
-                    let id = i.document.documentID
 
-                    for j in 0..<self.posts.count{
-                        if (self.posts[j].id == id){
-                            self.posts.remove(at: j)
-                            return
-                        }
-                    }
-                }
-                
-                if(i.type == .modified)
-                {
-                    let id = i.document.documentID
-                    let favorites = i.document.get("favorites") as! String
-                     let comments = i.document.get("comments") as! String
-                    
-                    for j in 0..<self.posts.count{
-                        if (self.posts[j].id == id){
-                            self.posts[j].favorites = favorites
-                            self.posts[j].comments = comments
-                            return
-                        }
-                    }
-                }
-                
-            }
-        
-        }
-    }
-    
-}
-
-struct dataType: Identifiable{
-    
-    //create seperate file for posts
-    
-    var id: String
-    var name: String
-    var image: String
-    var postBody: String
-    var comments: String
-    var favorites: String
-    var createdAt: NSNumber
-}
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
