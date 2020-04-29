@@ -112,7 +112,7 @@ struct SignUpView: View {
             {
                 guard let uid = result?.user.uid else { return }
                 let db = Firestore.firestore().document("users/\(uid)")
-                let values = ["name": self.username, "image": "", "email": self.email, "id": UUID().uuidString, "posts": [String].self] as [String : Any]
+                let values = ["name": self.username, "image": "", "email": self.email, "id": UUID().uuidString, "createdAt": Date().timeIntervalSince1970 as NSNumber,"posts": [String].self] as [String : Any]
                 db.setData(values)
                 self.email = ""
                 self.password = ""

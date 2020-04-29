@@ -12,6 +12,7 @@ import FirebaseFirestore
 class PostObserver: ObservableObject {
     
     @Published var posts = [Post]()
+    //@Published var users = [PokeUser]()
     
     init() {
         let db = Firestore.firestore()
@@ -55,7 +56,7 @@ class PostObserver: ObservableObject {
                 {
                     let id = i.document.documentID
                     let favorites = i.document.get("favorites") as! String
-                     let comments = i.document.get("comments") as! String
+                    let comments = i.document.get("comments") as! String
                     
                     for j in 0..<self.posts.count{
                         if (self.posts[j].id == id){
@@ -70,6 +71,5 @@ class PostObserver: ObservableObject {
         
         }
     }
-    
 }
 

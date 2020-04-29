@@ -38,9 +38,6 @@ struct HomeView: View {
                         {
                             ForEach(postsObserver.posts.reversed()){ i in
                                 PostCell(id: i.id, name: i.name, image: i.image, postBody: i.postBody, comments: i.comments, favorites: i.favorites, createdAt: i.createdAt)
-                                //                                Text("user: \((Auth.auth().currentUser?.uid.description)!)")
-                                //                                Text("id: \(i.id)")
-                                //                                Text("id: \((Auth.auth().currentUser?.email)!)")
                             }
                         }
                     }
@@ -49,12 +46,25 @@ struct HomeView: View {
                 Button(action: {
                     //new post
                     
-                    let db = Firestore.firestore()
-                    //get username from
-//                    var user = User(uid: <#String#>, email: <#String?#>)
                     let uid = Auth.auth().currentUser?.uid
-                    let values = ["userId": uid! ,"name": "", "image": "", "body": "testing", "comments": "0", "favorites": "0", "createdAt": Date().timeIntervalSince1970 as NSNumber] as [String : Any]
-                    db.collection("posts").addDocument(data: values)
+                    let db = Firestore.firestore()
+                    let ref = Firestore.firestore().document("users/\(uid!)")
+                    ref.getDocument{ (snapshot, error) in
+                        guard let snapshot = snapshot, snapshot.exists else { return }
+                        let data = snapshot.data()
+                        let name = (data!["name"] as? String)!
+                        let createdAt = Date().timeIntervalSince1970 as NSNumber
+                        print("name: ", name)
+                        
+                        let values = ["userId": uid! ,"name": name, "image": "", "body": "testing", "comments": "0", "favorites": "0", "createdAt": createdAt] as [String : Any]
+                        let collection = db.collection("posts")
+                        let doc = collection.document()
+                        let id = doc.documentID
+                        doc.setData(values)
+                        let userRef = db.collection("users/").document("\(uid!)")
+                        userRef.updateData([ "user_posts": FieldValue.arrayUnion([id]) ])
+                        
+                    }
                 }){
                     Image(systemName: "plus.bubble").padding(.all)
                 }
@@ -62,7 +72,9 @@ struct HomeView: View {
                 .background(Color.gray.opacity(0.75)).foregroundColor(.white).font(.title).frame(width:80, height: 80).clipShape(Circle()).padding(.trailing)
             }
             .navigationBarTitle(Text("Home"))
-            .navigationBarItems(leading: Button(action: { self.session.signOut()
+            .navigationBarItems(leading: Button(action: {
+                // clear 
+                self.session.signOut()
                 print("side menue")
             }){
                 Image(systemName: "person.circle").resizable().frame(width: 25, height: 25).shadow(color: .gray, radius: 5, x: 1, y: 1)

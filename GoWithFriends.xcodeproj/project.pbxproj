@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		470300D8DE1B04D6C471F857 /* Pods_GoWithFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D849B0A3BE991D8F279F70E8 /* Pods_GoWithFriends.framework */; };
-		E229E054244F1939001C8EFF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229E053244F1939001C8EFF /* User.swift */; };
+		E229E054244F1939001C8EFF /* PokeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229E053244F1939001C8EFF /* PokeUser.swift */; };
+		E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229E05524538379001C8EFF /* UserPostObserver.swift */; };
 		E2561335243E917B008E9613 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2561334243E917B008E9613 /* AppDelegate.swift */; };
 		E2561337243E917C008E9613 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2561336243E917C008E9613 /* SceneDelegate.swift */; };
 		E2561339243E917C008E9613 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2561338243E917C008E9613 /* ContentView.swift */; };
@@ -34,7 +35,8 @@
 		7414449C888550D14A6AF729 /* Pods-GoWithFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoWithFriends.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoWithFriends/Pods-GoWithFriends.debug.xcconfig"; sourceTree = "<group>"; };
 		8BA098D6E023F97BA184348D /* Pods-GoWithFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoWithFriends.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoWithFriends/Pods-GoWithFriends.release.xcconfig"; sourceTree = "<group>"; };
 		D849B0A3BE991D8F279F70E8 /* Pods_GoWithFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoWithFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E229E053244F1939001C8EFF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E229E053244F1939001C8EFF /* PokeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeUser.swift; sourceTree = "<group>"; };
+		E229E05524538379001C8EFF /* UserPostObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostObserver.swift; sourceTree = "<group>"; };
 		E2561331243E917B008E9613 /* GoWithFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoWithFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2561334243E917B008E9613 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E2561336243E917C008E9613 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,8 +110,9 @@
 				E2561352243EFD53008E9613 /* MapView.swift */,
 				E256134E243EE7B9008E9613 /* HomeView.swift */,
 				E2A3F113244AB55C004A0C4A /* PostObserver.swift */,
+				E229E05524538379001C8EFF /* UserPostObserver.swift */,
 				E2A3F111244AB287004A0C4A /* Post.swift */,
-				E229E053244F1939001C8EFF /* User.swift */,
+				E229E053244F1939001C8EFF /* PokeUser.swift */,
 				E259C19A2443DF6100D6321F /* PostCell.swift */,
 				E2A3DD442446B52A00067884 /* MessageCell.swift */,
 				E2561350243EFD04008E9613 /* AppView.swift */,
@@ -284,12 +287,13 @@
 				E2A3F112244AB287004A0C4A /* Post.swift in Sources */,
 				E2561357243F0061008E9613 /* MessageView.swift in Sources */,
 				E2A3DD452446B52A00067884 /* MessageCell.swift in Sources */,
-				E229E054244F1939001C8EFF /* User.swift in Sources */,
+				E229E054244F1939001C8EFF /* PokeUser.swift in Sources */,
 				E256134B243ED06E008E9613 /* SessionStore.swift in Sources */,
 				E2561351243EFD04008E9613 /* AppView.swift in Sources */,
 				E256134F243EE7B9008E9613 /* HomeView.swift in Sources */,
 				E259C19B2443DF6100D6321F /* PostCell.swift in Sources */,
 				E256134D243ED59B008E9613 /* LoginView.swift in Sources */,
+				E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */,
 				E2561339243E917C008E9613 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

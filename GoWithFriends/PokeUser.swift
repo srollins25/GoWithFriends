@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  PokeUser.swift
 //  GoWithFriends
 //
 //  Created by stephan rollins on 4/21/20.
@@ -10,13 +10,11 @@ import Foundation
 
 struct PokeUser: Identifiable{
     
-    //create seperate file for posts
-    
     var id: String
     var name: String
     var image: String
     var email: String
     var comments: [Post] = []
-    //var favorites: [String]
+    var posts: [Post] = []
     var createdAt: NSNumber
 }

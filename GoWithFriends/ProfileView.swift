@@ -12,8 +12,14 @@ import FirebaseFirestore
 
 struct ProfileView: View {
     
+
+    
     @EnvironmentObject var session: SessionStore
-    @ObservedObject var postsObserver = PostObserver()
+    @ObservedObject var userPostsObserver = UserPostObserver()
+    @State var arr: [Post] = []
+    @State var fetchPosts: Bool = true
+    
+    
     
     func getUser()
     {
@@ -21,7 +27,7 @@ struct ProfileView: View {
     }
     
     var body: some View {
-
+        
         VStack{
             HStack{
                 Spacer()
@@ -43,27 +49,53 @@ struct ProfileView: View {
         }
             Spacer()
             VStack{
-            List{
-//                if(postsObserver.posts.isEmpty)
-//                {
-//                    Text("No posts").fontWeight(.heavy)
-//                }
-//
-//                else
-//                {
-//                    ForEach(postsObserver.posts.reversed()){ i in
-//                        PostCell(id: i.id, name: i.name, image: i.image, postBody: i.postBody, comments: i.comments, favorites: i.favorites, createdAt: i.createdAt)
-//                    }
-//
-//                }
-                Text("test")
-                Text("test")
-                Text("test")
-                
+                List{
+                    if(userPostsObserver.posts.isEmpty)
+                    {
+                        Text("No posts").fontWeight(.heavy)
+                    }
+                        
+                    else
+                    {
+                        //if(self.fetchPosts == true) {
+                        ForEach(self.userPostsObserver.posts.reversed()) { post in
+                                PostCell(id: post.id, name: post.name, image: post.image, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt)
+                            }
+                            //self.fetchPosts = false
+                        //}
+
+                        
+                    }
+                    
+                }
             }
         }
-        }
-
+    .onAppear(perform: {
+            // query for postsview
+        //var db = CollectionReference.self
+        
+//        _ = Firestore.firestore().collection("posts").getDocuments { (snapshot, error) in
+//            if let error = error {
+//                print(error)
+//            }
+//            else
+//            {
+//                // check userdefaults logged in user posts array
+//                if self.fetchPosts == true {
+//                    for document in snapshot!.documents{
+//                        let doc = document.data()
+//                        print(doc["userId"] as! String)
+//                        if (doc["userId"] as! String) == Auth.auth().currentUser?.uid{
+//                            self.arr.append(Post(id: document.documentID, userID: doc["userId"] as! String, name: doc["name"] as! String, image: doc["image"] as! String, postBody: doc["body"] as! String, comments: doc["comments"] as! String, favorites: doc["favorites"] as! String, createdAt: doc["createdAt"] as! NSNumber))
+//                        }
+//                    }
+//                    self.arr.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+//                    self.arr.reverse()
+//                    self.fetchPosts.toggle()
+//                }
+//            }
+//        }
+    })
     }
 }
 
