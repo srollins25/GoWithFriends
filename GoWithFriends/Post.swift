@@ -10,14 +10,14 @@ import Foundation
 
 struct Post: Identifiable{
     
-    //create seperate file for posts
-    
     var id: String
     var userID: String
     var name: String
     var image: String
+    var profileimage: String
     var postBody: String
-    var comments: String
-    var favorites: String
+    var comments: NSArray
+    var favorites: NSNumber
     var createdAt: NSNumber
+    var parentPost: String
 }

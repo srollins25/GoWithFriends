@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/stef/Desktop/projects/GoWithFriends/GoWithFriends/Views/IsLoggedInView.swift">
+   </FileRef>
+   <FileRef
       location = "group:GoWithFriends.xcodeproj">
    </FileRef>
    <FileRef

@@ -35,19 +35,16 @@ struct MapView2: UIViewRepresentable {
             let span = MKCoordinateSpan(latitudeDelta: 0.009, longitudeDelta: 0.009)
             let region = MKCoordinateRegion(center: location, span: span)
             mapView.setRegion(region, animated: true)
-            }
-        
-//        else{
-//            manager.requestWhenInUseAuthorization()
-//        }
+        }
         
         return mapView
     }
     
-    func updateUIView(_ view: MKMapView, context: Context) {
+    func updateUIView(_ view: MKMapView, context: Context)
+    {
         
         view.showsUserLocation = true
-
+        
     }
     
     func makeCoordinator() -> Coordinator {

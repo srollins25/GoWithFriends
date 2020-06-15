@@ -14,7 +14,7 @@ struct PokeUser: Identifiable{
     var name: String
     var image: String
     var email: String
-    var comments: [Post] = []
-    var posts: [Post] = []
-    var createdAt: NSNumber
+    //var comments: [Post] = []
+    //var posts: [Post] = []
+    //var createdAt: NSNumber
 }

@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import SDWebImageSwiftUI
 
 struct MessageCell: View {
     
@@ -14,19 +16,26 @@ struct MessageCell: View {
     let name: String
     let image: String
     let message: String
+    let createdAt: NSNumber
     
     var body: some View {
         
-        HStack(alignment: .center, spacing: 15){
-            Image(systemName: "person.circle")
-            VStack(alignment: .leading){
-                Text(name)
-                Text(message)
+        VStack{
+            HStack(alignment: .center, spacing: 15){
+                //Image(systemName: "person.circle").resizable().frame(width: 30, height: 30).clipShape(Circle())
+                AnimatedImage(url: URL(string: image)).resizable().frame(width: 30, height: 30).clipShape(Circle())
+                VStack(alignment: .leading){
+                    Text(name)
+                    Text(message)
+                }
+                
+                Spacer()
+                Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: createdAt)), formatter: RelativeDateTimeFormatter())")
+                //                        Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: createdAt)), formatter: RelativeDateTimeFormatter())").font(.footnote).padding()
             }
-           
-            Spacer()
-            Text("time")
         }
+        
+        
         
         
     }
