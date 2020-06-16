@@ -38,6 +38,7 @@
 		E2AA381F247F7C4A0038D917 /* SearchUserObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */; };
 		E2AC6A8C2495592F003ABF8E /* FavoritePostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8B2495592F003ABF8E /* FavoritePostsObserver.swift */; };
 		E2AC6A8E24962D72003ABF8E /* CommentsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */; };
+		E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */; };
 		E2AD879A2493655F0000D52D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87992493655F0000D52D /* AlertView.swift */; };
 		E2AF0BD124861F9300E3D7E4 /* IsLoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */; };
 		E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDB248736CA006F2728 /* PostThreadView.swift */; };
@@ -118,6 +119,7 @@
 		E2AA385C2480BD2A0038D917 /* BarBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBuilder.swift; sourceTree = "<group>"; };
 		E2AC6A8B2495592F003ABF8E /* FavoritePostsObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavoritePostsObserver.swift; path = ../../../../../.Trash/FavoritePostsObserver.swift; sourceTree = "<group>"; };
 		E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsObserver.swift; sourceTree = "<group>"; };
+		E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		E2AD87992493655F0000D52D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IsLoggedInView.swift; path = /Users/stef/Desktop/projects/GoWithFriends/GoWithFriends/Views/IsLoggedInView.swift; sourceTree = "<absolute>"; };
 		E2B50FDB248736CA006F2728 /* PostThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostThreadView.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				E229E05D245FFB9A001C8EFF /* ChatView.swift */,
 				E2561338243E917C008E9613 /* ContentView.swift */,
 				E2B50FDF2487375C006F2728 /* CreatePostView.swift */,
+				E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */,
 				E256134E243EE7B9008E9613 /* HomeView.swift */,
 				E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */,
 				E256134C243ED59B008E9613 /* LoginView.swift */,
@@ -602,6 +605,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E229E05E245FFB9A001C8EFF /* ChatView.swift in Sources */,
+				E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */,
 				E2561335243E917B008E9613 /* AppDelegate.swift in Sources */,
 				E2A3F114244AB55C004A0C4A /* PostObserver.swift in Sources */,
 				E2561355243F0052008E9613 /* ProfileView.swift in Sources */,

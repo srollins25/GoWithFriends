@@ -34,15 +34,65 @@ struct ProfileView: View {
                     Spacer()
                     VStack{
                         
-                        AnimatedImage(url: URL(string: user.profileimage))
-                            .resizable()
-                            .renderingMode(.original)
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .clipped()
-                            .padding(.top, 40)
-                        Text("\(user.name) hello")
+                        HStack{
+                            AnimatedImage(url: URL(string: user.profileimage))
+                                .resizable()
+                                .renderingMode(.original)
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .clipped()
+                                .padding(.top, 40)
+                        }
+                        
+
+                        
+                        
+                        Text("\(user.name)")
+                        //check if from search or not
+                        
+                        if(self.fromSearch)
+                        {
+                            HStack{
+                                    
+                                    VStack{
+                                        Button(action: {
+                                            
+                                        }){
+                                            
+                                            //check to see if in friends list
+                                            Image(systemName: "person.crop.circle.badge.plus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                            
+                                        }
+                                        Text("Follow").font(.footnote)
+                                    }
+                                    
+                            VStack{
+                                Button(action: {
+                                    
+                                }){
+                                    
+                                    Image(systemName: "envelope").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                    
+                                }
+                                Text("Message").font(.footnote)
+                            }
+                                    
+                                    VStack{
+                                        Button(action: {
+                                            
+                                        }){
+                                            
+                                            Image(systemName: "line.horizontal.3.decrease.circle").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                            
+                                        }
+                                        Text("More").font(.footnote)
+                                    }
+                                }.padding()
+                        }
+                        
+                        
+                        //
                     }
                     Spacer()
                 }
@@ -58,7 +108,7 @@ struct ProfileView: View {
                         
                     else
                     {
-    
+                        
                         List{
                             
                             Picker(selection: $profileArrIndex, label: Text("")) {
@@ -111,7 +161,7 @@ struct ProfileView: View {
                                     }
                                     
                                     
-
+                                    
                                 }
                             }
                         }
@@ -153,12 +203,12 @@ struct ProfileView: View {
                 }
                 
                 guard let document = snap else {
-                  print("Error fetching document: \(error!)")
-                  return
+                    print("Error fetching document: \(error!)")
+                    return
                 }
                 guard let data = document.data() else {
-                  print("Document data was empty.")
-                  return
+                    print("Document data was empty.")
+                    return
                 }
                 
                 favorites = ((data["favorites"] as? [String])!)
@@ -167,17 +217,17 @@ struct ProfileView: View {
             }
             
             
-//            ref.getDocument{ (snap, error) in
-//
-//                if(error != nil){
-//                    print((error?.localizedDescription)!)
-//                    return
-//                }
-//
-//                let data = snap?.data()
-//                favorites = (data!["favorites"] as? [String])!
-//
-//            }
+            //            ref.getDocument{ (snap, error) in
+            //
+            //                if(error != nil){
+            //                    print((error?.localizedDescription)!)
+            //                    return
+            //                }
+            //
+            //                let data = snap?.data()
+            //                favorites = (data!["favorites"] as? [String])!
+            //
+            //            }
             
             db.collection("posts").addSnapshotListener { (snap, error) in
                 
@@ -243,7 +293,7 @@ struct ProfileView: View {
                             }
                         }
                         
-
+                        
                     }
                     
                     if(i.type == .modified){
@@ -269,7 +319,7 @@ struct ProfileView: View {
                                 }
                             }
                         }
-   
+                        
                     }
                 }
             }     
@@ -277,64 +327,7 @@ struct ProfileView: View {
     }
 }
 
-struct CustomNavBar: View {
-    
-    @Binding var closeView: Bool
-    
-    var body: some View{
-        
-        ZStack{
-            
-            CustomNavBarBack()
-            
-            VStack(spacing: 0){
-                HStack(alignment: .top, spacing: 8){
-                    Button(action: {
-                        
-                        withAnimation(.easeOut(duration: 0.5)){
-                            self.closeView.toggle()
-                        }
-                    }){
-                        Text("Back").foregroundColor(Color.black.opacity(0.5)).padding(9)
-                    }
-                    .background(Color.white)
-                    .shadow(color: .gray, radius: 7, x: 1, y: 1)
-                    .clipShape(Capsule())
-                    Spacer()
-                }
-                .padding(.top , (UIApplication.shared.windows.first?.safeAreaInsets.top)! )
-                .padding(.horizontal)
-                .padding(.bottom, 5)
-                    
-                .background(Color.black.opacity(0.3))
-                
-                //Spacer()
-            }
-        }
-    }
-    
-    struct CustomNavBarBack: View {
-        
-        
-        var body: some View{
-            
-            VStack(spacing: 0){
-                HStack(alignment: .top,spacing: 8){
-                    
-                    Text("")
-                    Spacer()
-                }
-                .padding(.top , (UIApplication.shared.windows.first?.safeAreaInsets.top)! )
-                .padding(.horizontal)
-                .padding(.bottom, 5)
-                    
-                .background(Color.white)
-                
-                //Spacer()
-            }
-        }
-    }
-}
+
 
 //struct ProfileView_Previews: PreviewProvider {
 //    static var previews: some View {

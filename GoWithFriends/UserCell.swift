@@ -22,7 +22,7 @@ struct UserCell: View {
         VStack{
             HStack(alignment: .center, spacing: 15){
 
-                AnimatedImage(url: URL(string: image)).resizable().frame(width: 48, height: 48).clipShape(Circle())
+                AnimatedImage(url: URL(string: image)).resizable().aspectRatio(contentMode: .fill).frame(width: 48, height: 48).clipShape(Circle())
                 VStack(alignment: .leading){
                     Text(name).bold()
                 }

@@ -28,13 +28,11 @@ struct PostCell: View {
     @State var show = false
     @State var showCreatePost = false
     
-    
     var body: some View {
-        
         
         HStack(alignment: .top){
             //image
-            AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).frame(width: 60, height: 60).clipShape(Circle())
+            AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle())
             //(vastack: name, text, image)
             VStack(alignment: .leading){
                 //name, text
@@ -86,15 +84,6 @@ struct PostCell: View {
                     HStack{
                         Button(action: {
                             print("reply")
-                            //                            let db = Firestore.firestore()
-                            //                            let comments = Int.init(self.comments)
-                            //                            db.collection("posts").document(self.id).updateData(["comments": "\(comments! + 1)"]) { (error) in
-                            //                                if error != nil {
-                            //                                    print(error!)
-                            //                                    return
-                            //                                }
-                            //                            }
-                            // present createPostView
                             self.showCreatePost.toggle()
                             
                         }){
@@ -162,9 +151,11 @@ struct PostCell: View {
                         Image(systemName: "paperplane")
                     }.buttonStyle(BorderlessButtonStyle())
                     
+                    Spacer()
+                    
                     Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: self.createdAt)), formatter: RelativeDateTimeFormatter())").font(.footnote)//.padding()
                     
-                }
+                }.padding(.bottom, 2)
             }
             
         }.padding(.top)
@@ -183,7 +174,6 @@ struct PopOver: View {
     var body: some View{
         
         Text("Delete").foregroundColor(.red)
-            
             .frame(width: 70, height: 30)
             .background(Color.white)
             .onTapGesture {
@@ -201,17 +191,82 @@ struct PopOver: View {
                     self.show.toggle()
                 }
                 
+                // when deleting a post remove from all users who have it as a favorite, remove it from the current users posts array, and change all posts that havee it as a parent post to empty string
+                
                 let db = Firestore.firestore()
                 
-                // delete from comments
-                if(self.parentPost != "")
-                {
-                    let ref = db.collection("posts").document("\(self.parentPost)")
-                    ref.updateData(["comments": FieldValue.arrayRemove([self.postId])])
+                // delete from favorites
+                db.collection("users").whereField("favorites", arrayContains: self.postId).getDocuments { (snap, error) in
                     
+                    if(error != nil)
+                    {
+                        print((error?.localizedDescription)!)
+                        return
+                    }
                     
+                    for document in snap!.documents {
+
+                        let ref = db.collection("users").document("\(document.documentID)")
+                        ref.updateData(["favorites": FieldValue.arrayRemove([self.postId])])
+                    }
                 }
                 
+                // delete from user_posts
+                let uid = Auth.auth().currentUser?.uid
+                var ref = db.collection("users").document(uid!)
+                ref.getDocument { (snap, error) in
+                    
+                    if(error != nil)
+                    {
+                        print((error?.localizedDescription)!)
+                        return
+                    }
+                    ref.updateData(["user_posts": FieldValue.arrayRemove([self.postId])])
+                }
+                
+                // delete from comments
+                db.collection("posts").whereField("comments", arrayContains: self.postId).getDocuments { (snap, error) in
+                        
+                        if(error != nil)
+                        {
+                            print((error?.localizedDescription)!)
+                            return
+                        }
+                        
+                        for document in snap!.documents {
+                            
+                            let ref = db.collection("posts").document("\(document.documentID)")
+                            ref.updateData(["comments": FieldValue.arrayRemove([self.postId])])
+                        }
+                    }
+                
+                // change all posts that have as parent to empty string
+                db.collection("posts").whereField("parentPost", isEqualTo: self.postId).getDocuments { (snap, error) in
+                    if(error != nil)
+                    {
+                        print((error?.localizedDescription)!)
+                        return
+                    }
+                    
+                    for document in snap!.documents {
+                        
+                        let ref = db.collection("posts").document("\(document.documentID)")
+                        ref.updateData(["parentPost": ""])
+                    }
+                }
+                
+                ref = db.collection("users").document(uid!)
+                ref.getDocument { (snap, error) in
+                    
+                    if(error != nil)
+                    {
+                        print((error?.localizedDescription)!)
+                        return
+                    }
+                    ref.updateData(["user_posts": FieldValue.arrayRemove([self.postId])])
+                }
+
+                // delete from posts
                 db.collection("posts").document(self.postId).delete() { err in
                     if let err = err {
                         print("Error removing document: \(err)")
@@ -219,27 +274,11 @@ struct PopOver: View {
                         print("Document successfully removed!")
                     }
                 }
-                
-                
-                
                 print("deleting post")
             }))
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -41,7 +41,7 @@ struct SearchView: View {
                                     UserDefaults.standard.set(self.post.id, forKey: "parentPost")
                                     self.show.toggle()
                                 }
-                                
+                                 
                             }){
                                 PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost)
                             }

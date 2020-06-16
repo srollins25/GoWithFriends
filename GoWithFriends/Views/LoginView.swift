@@ -216,11 +216,13 @@ struct LoginView: View {
                                     let name = data!["name"] as? String
                                     let image = data!["image"] as? String
                                     let favorites = data!["favorites"] as? [String]
-                                    
+                                    let friends = data!["friends"] as? [String]
+                                     
                                     UserDefaults.standard.set(uid, forKey: "userid")
                                     UserDefaults.standard.set(name, forKey: "username")
                                     UserDefaults.standard.set(image, forKey: "image")
                                     UserDefaults.standard.set(favorites, forKey: "favorites")
+                                    UserDefaults.standard.set(friends, forKey: "friends")
                                     self.email = ""
                                     self.password = ""
                                     self.isloggedin.toggle()

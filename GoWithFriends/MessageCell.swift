@@ -23,7 +23,7 @@ struct MessageCell: View {
         VStack{
             HStack(alignment: .center, spacing: 15){
                 //Image(systemName: "person.circle").resizable().frame(width: 30, height: 30).clipShape(Circle())
-                AnimatedImage(url: URL(string: image)).resizable().frame(width: 30, height: 30).clipShape(Circle())
+                AnimatedImage(url: URL(string: image)).resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).clipShape(Circle())
                 VStack(alignment: .leading){
                     Text(name)
                     Text(message)

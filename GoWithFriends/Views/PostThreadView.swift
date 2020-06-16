@@ -25,7 +25,6 @@ struct PostThreadView: View {
             
             VStack{
                 CustomNavBar(closeView: $closeView)
-                Text("test")
 //                VStack{
 //
 //                    HStack(alignment: .top){
@@ -74,14 +73,13 @@ struct PostThreadView: View {
 //                    }
 //                }.padding()
                 
-    
+
+                PostCell(id: self.mainPost.id, user: self.mainPost.userID, name: self.mainPost.name, image: self.mainPost.image, profileimage: self.mainPost.profileimage, postBody: self.mainPost.postBody, comments: self.mainPost.comments, favorites: self.mainPost.favorites, createdAt:  self.mainPost.createdAt, parentPost: self.mainPost.parentPost).padding()
+                Divider()
                 List{
                     ForEach(commentsObserver.comments) { post in
                         
-                        if((post.id == self.commentsObserver.comments[0].id) || self.commentsObserver.comments.isEmpty)
-                        {
-                            PostCell(id: self.mainPost.id, user: self.mainPost.userID, name: self.mainPost.name, image: self.mainPost.image, profileimage: self.mainPost.profileimage, postBody: self.mainPost.postBody, comments: self.mainPost.comments, favorites: self.mainPost.favorites, createdAt:  self.mainPost.createdAt, parentPost: self.mainPost.parentPost)
-                        }
+
                         
                         PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost)
                     }

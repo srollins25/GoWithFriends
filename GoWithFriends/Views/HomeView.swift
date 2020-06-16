@@ -17,19 +17,26 @@ struct HomeView: View {
     @EnvironmentObject var session: SessionStore
     @ObservedObject var postsObserver = PostObserver()
     @State var show = false
+    @State var showPostThread = false
     @State var shouldFetch = false
     @State var showSearchBar = false
-    @State var searchtxt = ""//TextBindingManager(limit: 30)
+    @State var searchtxt = ""
+    @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @Binding var isLoggedIn: Bool
+    let transition = AnyTransition.move(edge: .trailing)
     
     
     var body: some View {
         
         
         ZStack{
+            
+            
             NavigationView{
                 
                 ZStack(alignment: .bottomTrailing){
+                    
+                    
                     
                     VStack{
                         List{
@@ -41,14 +48,20 @@ struct HomeView: View {
                             else
                             {
                                 ForEach(postsObserver.posts.reversed()){ post in
-                                    PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost) //.onTapGesture {
-                                        //print("post tap")
-                                    //}
+                                    
+                                    Button(action: {
+                                        
+                                        self.post = post
+                                        withAnimation(.easeIn(duration: 0.5)){
+                                            self.showPostThread.toggle()
+                                        }
+                                    }){
+                                        PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost)
+                                    }
                                 }
                             }
                         }
                     }
-                    
                     
                     GeometryReader{_ in
                         
@@ -71,7 +84,7 @@ struct HomeView: View {
 
                         Button(action: {
                             
-                            withAnimation(.easeIn(duration: 0.5)){
+                            withAnimation(.easeInOut(duration: 0.5)){
                                 self.showSearchBar.toggle()
                             }
                             
@@ -82,7 +95,11 @@ struct HomeView: View {
                 )
             }
             
-            //Text("hello world")
+            if(self.showPostThread == true)
+            {
+                PostThreadView(closeView: self.$showPostThread, mainPost: self.$post).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition).edgesIgnoringSafeArea(.all)
+                
+            }
             
             ZStack{
                 SearchView(closeView: self.$showSearchBar)
@@ -90,6 +107,7 @@ struct HomeView: View {
             }
             .edgesIgnoringSafeArea(.all)
             .offset(x: self.showSearchBar ? 0 : UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.frame.width ?? 0, y: 0)
+
         }
             
         .onAppear(perform: {
@@ -147,6 +165,7 @@ struct SideMenu: View {
                 UserDefaults.standard.set("", forKey: "userid")
                 let emptyArr = [String]()
                 UserDefaults.standard.set(emptyArr, forKey: "favorites")
+                UserDefaults.standard.set(emptyArr, forKey: "friends")
                 self.isLoggedIn.toggle()
                 UserDefaults.standard.set(self.isLoggedIn, forKey: "isloggedin")
                 
@@ -175,30 +194,6 @@ struct SideMenu: View {
 //        HomeView()
 //    }
 //}
-
-
-//new post
-//
-//                    let uid = Auth.auth().currentUser?.uid
-//                    let db = Firestore.firestore()
-//                    let ref = Firestore.firestore().document("users/\(uid!)")
-//                    ref.getDocument{ (snapshot, error) in
-//                        guard let snapshot = snapshot, snapshot.exists else { return }
-//                        let data = snapshot.data()
-//                        let name = (data!["name"] as? String)!
-//                        let profileimage = UserDefaults.standard.string(forKey: "image")!
-//                        let createdAt = Date().timeIntervalSince1970 as NSNumber
-//                        print("name: ", name)
-//
-//                        let values = ["userId": uid! ,"name": name, "image": "", "profileimage": profileimage , "body": "testing", "": "0", "favorites": "0", "createdAt": createdAt] as [String : Any]
-//                        let collection = db.collection("posts")
-//                        let doc = collection.document()
-//                        let id = doc.documentID
-//                        doc.setData(values)
-//                        let userRef = db.collection("users/").document("\(uid!)")
-//                        userRef.updateData([ "user_posts": FieldValue.arrayUnion([id]) ])
-
-
 
 
 

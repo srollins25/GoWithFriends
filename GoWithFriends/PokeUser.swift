@@ -7,14 +7,25 @@
 //
 
 import Foundation
+import Combine
 
 struct PokeUser: Identifiable{
     
     var id: String
     var name: String
-    var image: String
+    var profileimage: String
     var email: String
     //var comments: [Post] = []
-    //var posts: [Post] = []
-    //var createdAt: NSNumber
+    var user_posts: [String] = []
+    var createdAt: NSNumber
+    
+    init(id: String, name: String, profileimage: String, email: String,  user_posts: [String], createdAt: NSNumber){
+        self.id = id
+        self.name = name
+        self.profileimage = profileimage
+        self.email = email
+        self.user_posts = user_posts
+        self.createdAt = createdAt
+        
+    }
 }
