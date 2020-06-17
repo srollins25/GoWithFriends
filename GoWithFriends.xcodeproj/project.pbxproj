@@ -46,6 +46,7 @@
 		E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDF2487375C006F2728 /* CreatePostView.swift */; };
 		E2C5B2D72499653D00F563BE /* Raid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D62499653D00F563BE /* Raid.swift */; };
 		E2C5B2D92499654B00F563BE /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D82499654B00F563BE /* Pokemon.swift */; };
+		E2C5B2DB249A455A00F563BE /* PokemonObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2DA249A455A00F563BE /* PokemonObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -129,6 +130,7 @@
 		E2B50FDF2487375C006F2728 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
 		E2C5B2D62499653D00F563BE /* Raid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raid.swift; sourceTree = "<group>"; };
 		E2C5B2D82499654B00F563BE /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
+		E2C5B2DA249A455A00F563BE /* PokemonObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */,
 				E2AC6A8B2495592F003ABF8E /* FavoritePostsObserver.swift */,
 				E2A97C51246E6BEF00E70081 /* FriendsObserver.swift */,
+				E2C5B2DA249A455A00F563BE /* PokemonObserver.swift */,
 				E2A3F113244AB55C004A0C4A /* PostObserver.swift */,
 				E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */,
 				E229E05524538379001C8EFF /* UserPostObserver.swift */,
@@ -641,6 +644,7 @@
 				E256134D243ED59B008E9613 /* LoginView.swift in Sources */,
 				E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */,
 				E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */,
+				E2C5B2DB249A455A00F563BE /* PokemonObserver.swift in Sources */,
 				E2561339243E917C008E9613 /* ContentView.swift in Sources */,
 				E2A97C4E2461160B00E70081 /* UserCell.swift in Sources */,
 			);

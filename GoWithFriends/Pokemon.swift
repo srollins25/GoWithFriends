@@ -11,13 +11,12 @@ import SwiftUI
 
 struct Pokemon : Identifiable
 {
-    var id: ObjectIdentifier
+    var id: String
     var user: String
     var lat: Double?
     var lon: Double?
     var name: String?
     var cp: NSNumber?
     var sighted: NSNumber
-    //var timeTillEnd: NSNumber
     var dexnum: String?
 }

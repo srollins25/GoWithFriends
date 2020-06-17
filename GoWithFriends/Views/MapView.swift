@@ -15,7 +15,7 @@ struct MapView: View {
     @State var showAddToMapView = false
     
     var body: some View {
-        
+         
         
         ZStack(alignment: .topTrailing){
             
@@ -35,9 +35,10 @@ struct MapView: View {
     }
 }
 
-struct MapView2: UIViewRepresentable {
+struct MapView2: UIViewRepresentable, View {
     
     @Binding var manager: CLLocationManager
+    @ObservedObject var pokomenObserver = PokomenObserver()
     
     func makeUIView(context: Context) -> MKMapView {
         let locationManager = CLLocationManager()
