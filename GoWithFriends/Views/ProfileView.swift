@@ -17,6 +17,7 @@ struct ProfileView: View {
     @ObservedObject var favoritePostsObserver = FavoritePostsObserver()
     @State var userPosts: [Post] = []
     @State var userFavorites: [Post] = []
+    @State var currentUserFriends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
     @State var fetchPosts: Bool = true
     @State private var name: String = ""
     @State private var image: String = ""
@@ -24,7 +25,10 @@ struct ProfileView: View {
     @Binding var user: User
     @Binding var show: Bool
     @Binding var fromSearch: Bool
-    
+    @State var showMoreMenu = false
+    @State var buttonImage: Image = Image(systemName: "person.circle")
+    @State var buttonText = ""
+    @State var isFriend: Bool = false
     
     var body: some View {
         
@@ -45,42 +49,46 @@ struct ProfileView: View {
                                 .padding(.top, 40)
                         }
                         
-
-                        
-                        
                         Text("\(user.name)")
                         //check if from search or not
                         
                         if(self.fromSearch)
                         {
                             HStack{
-                                    
-                                    VStack{
-                                        Button(action: {
-                                            
-                                        }){
-                                            
-                                            //check to see if in friends list
-                                            Image(systemName: "person.crop.circle.badge.plus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                            
-                                        }
-                                        Text("Follow").font(.footnote)
+                                
+                                VStack{
+                                    Button(action: {
+                                        
+                                        self.currentUserFriends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
+                                        /*!(self.currentUserFriends.contains(self.user.id))*/ self.isFriend == false ? self.addFriend() :  self.deleteFriend()
+                                        print("friend button pressed")
+                                        print("contains friend: ", self.currentUserFriends.contains(self.user.id))
+                                    }){
+                                        
+                                        self.buttonImage.resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                        
+                                        //check to see if in friends list
                                     }
                                     
-                            VStack{
-                                Button(action: {
-                                    
-                                }){
-                                    
-                                    Image(systemName: "envelope").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                    
+                                      Text(buttonText).font(.footnote)
                                 }
-                                Text("Message").font(.footnote)
-                            }
+                                
+                                VStack{
+                                    Button(action: {
+                                        
+                                    }){
+                                        
+                                        Image(systemName: "envelope").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                        
+                                    }
+                                    Text("Message").font(.footnote)
+                                }
+                                
+                                ZStack{
                                     
                                     VStack{
                                         Button(action: {
-                                            
+                                            self.showMoreMenu.toggle()
                                         }){
                                             
                                             Image(systemName: "line.horizontal.3.decrease.circle").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
@@ -88,7 +96,18 @@ struct ProfileView: View {
                                         }
                                         Text("More").font(.footnote)
                                     }
-                                }.padding()
+                                    
+                                    if(self.showMoreMenu)
+                                    {
+                                        MoreMenu(show: self.$showMoreMenu, user: self.$user)
+                                    }
+                                    
+                                   
+                                    
+                                }
+                                
+                                
+                            }.padding()
                         }
                         
                         
@@ -159,9 +178,6 @@ struct ProfileView: View {
                                             
                                         }
                                     }
-                                    
-                                    
-                                    
                                 }
                             }
                         }
@@ -177,6 +193,7 @@ struct ProfileView: View {
             
         .background(Color.white)
         .onAppear(perform: {
+            
             print("userid1: ", self.user.id)
             print("username: ", self.user.name)
             if(self.user.id != UserDefaults.standard.string(forKey: "userid"))
@@ -184,7 +201,71 @@ struct ProfileView: View {
                 // this gets posts for the user thats been searched for
                 self.getUserPosts()
             }
+            
+            
+            if(/*!self.currentUserFriends.contains(self.user.id)*/ self.isFriend == false)
+            {
+                self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
+                self.buttonText = "Follow"
+                self.isFriend = false
+            }
+            else
+            {
+                self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
+                self.buttonText = "Unfollow"
+                self.isFriend = true
+            }
         })
+    }
+    
+    func addFriend()
+    {
+        print("entering add friend method")
+        let uid = Auth.auth().currentUser?.uid
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(uid!)
+        ref.getDocument { (snap, error) in
+            
+            if(error != nil)
+            {
+                print((error?.localizedDescription)!)
+                return
+            }
+            ref.updateData(["friends": FieldValue.arrayUnion([self.user.id])])
+            print("friend added")
+            let data = snap?.data()
+            var friends = data!["friends"] as? [String]
+            UserDefaults.standard.set(friends, forKey: "friends")
+            self.currentUserFriends = friends!
+            self.buttonImage =  Image(systemName: "person.crop.circle.badge.minus")
+            self.buttonText = "Unfollow"
+            self.isFriend = true
+        }
+    }
+    
+    func deleteFriend()
+    {
+        print("entering delete friend method")
+        let uid = Auth.auth().currentUser?.uid
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(uid!)
+        ref.getDocument { (snap, error) in
+            
+            if(error != nil)
+            {
+                print((error?.localizedDescription)!)
+                return
+            }
+            ref.updateData(["friends": FieldValue.arrayRemove([self.user.id])])
+            print("friend deleted")
+            let data = snap?.data()
+            var friends = data!["friends"] as? [String]
+            UserDefaults.standard.set(friends, forKey: "friends")
+            self.currentUserFriends = friends!
+            self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
+            self.buttonText = "Follow"
+            self.isFriend = false
+        }
     }
     
     func getUserPosts()
@@ -329,11 +410,73 @@ struct ProfileView: View {
 
 
 
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView()
-//    }
-//}
+struct MoreMenu: View {
+    
+    @Binding var show: Bool
+    @State var showAlert = false
+    @Binding var user: User
+    
+    
+    var body: some View {
+        
+        HStack{
+            
+            
+            Button(action: {
+                self.showAlert.toggle()
+            }){
+                Text("Block user").foregroundColor(.red)
+            }
+            .alert(isPresented: $showAlert){
+                
+                Alert(title: Text("Block user"), message: Text("Continue blocking user?"), primaryButton: .cancel(Text("Cancel"), action: {
+                    withAnimation(.spring()){
+                        self.showAlert.toggle()
+                    }}),
+                      secondaryButton: .destructive(Text("Block"), action: {
+                        
+                        let uid = Auth.auth().currentUser?.uid
+                        let db = Firestore.firestore()
+                        
+                        let ref = db.collection("users").document(uid!)
+                        ref.getDocument{ (snap, error) in
+                            
+                            if(error != nil)
+                            {
+                                print((error?.localizedDescription)!)
+                                return
+                            }
+                            
+                            
+                            //check if from search and if user is equal to current user
+                            ref.updateData(["blocked": FieldValue.arrayUnion([self.user.id])])
+                            
+                            
+                            let ref2 = db.collection("users").document(self.user.id)
+                            ref2.getDocument{ (snap, error) in
+                                
+                                ref2.updateData(["friends": FieldValue.arrayRemove([uid!])])
+                                
+                            }
+                            //remove posts from blocked user posts array
+                            //remove user from blocked user messages
+                            //remove favorite posts from blocked user favorites
+                            //
+                            
+                        }
+                        
+                        withAnimation(.spring()){
+                            self.showAlert.toggle()
+                        }
+                      }))
+                
+            }
+            
+            
+        }
+        
+    }
+}
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {

@@ -44,6 +44,8 @@
 		E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDB248736CA006F2728 /* PostThreadView.swift */; };
 		E2B50FDE24873722006F2728 /* AddToMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDD24873722006F2728 /* AddToMapView.swift */; };
 		E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDF2487375C006F2728 /* CreatePostView.swift */; };
+		E2C5B2D72499653D00F563BE /* Raid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D62499653D00F563BE /* Raid.swift */; };
+		E2C5B2D92499654B00F563BE /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D82499654B00F563BE /* Pokemon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +127,8 @@
 		E2B50FDB248736CA006F2728 /* PostThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostThreadView.swift; sourceTree = "<group>"; };
 		E2B50FDD24873722006F2728 /* AddToMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToMapView.swift; sourceTree = "<group>"; };
 		E2B50FDF2487375C006F2728 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
+		E2C5B2D62499653D00F563BE /* Raid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raid.swift; sourceTree = "<group>"; };
+		E2C5B2D82499654B00F563BE /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +219,8 @@
 				E229E05C245FE55D001C8EFF /* Views */,
 				E229E05B245D069E001C8EFF /* Observers */,
 				E2A97C4D2461160B00E70081 /* UserCell.swift */,
+				E2C5B2D62499653D00F563BE /* Raid.swift */,
+				E2C5B2D82499654B00F563BE /* Pokemon.swift */,
 				E2561334243E917B008E9613 /* AppDelegate.swift */,
 				E2561336243E917C008E9613 /* SceneDelegate.swift */,
 				E259C19A2443DF6100D6321F /* PostCell.swift */,
@@ -609,6 +615,7 @@
 				E2561335243E917B008E9613 /* AppDelegate.swift in Sources */,
 				E2A3F114244AB55C004A0C4A /* PostObserver.swift in Sources */,
 				E2561355243F0052008E9613 /* ProfileView.swift in Sources */,
+				E2C5B2D72499653D00F563BE /* Raid.swift in Sources */,
 				E229E05A245A5AF3001C8EFF /* Message.swift in Sources */,
 				E2561353243EFD53008E9613 /* MapView.swift in Sources */,
 				E2B50FDE24873722006F2728 /* AddToMapView.swift in Sources */,
@@ -620,6 +627,7 @@
 				E2A3F112244AB287004A0C4A /* Post.swift in Sources */,
 				E2561357243F0061008E9613 /* MessageView.swift in Sources */,
 				E2AA381D247F4C4C0038D917 /* SearchView.swift in Sources */,
+				E2C5B2D92499654B00F563BE /* Pokemon.swift in Sources */,
 				E229E060245FFC3F001C8EFF /* NewMessageView.swift in Sources */,
 				E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */,
 				E2AC6A8C2495592F003ABF8E /* FavoritePostsObserver.swift in Sources */,

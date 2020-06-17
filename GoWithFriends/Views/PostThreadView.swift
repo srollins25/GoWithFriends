@@ -14,6 +14,10 @@ struct PostThreadView: View {
     
     @Binding var closeView: Bool
     @Binding var mainPost: Post
+    @State var showSubThread = false
+    @Binding var subParentPost: Post
+    @State var subPost2 = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    let transition = AnyTransition.move(edge: .trailing)
     
     @ObservedObject var commentsObserver = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
     
@@ -80,14 +84,44 @@ struct PostThreadView: View {
                     ForEach(commentsObserver.comments) { post in
                         
 
-                        
-                        PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost)
+                        Button(action: {
+                            
+                            self.subParentPost = post
+                            UserDefaults.standard.set(self.subParentPost.id, forKey: "parentPost")
+                            withAnimation(.easeInOut(duration: 0.5)){
+                            
+                            self.showSubThread.toggle()
+                            }
+                            
+                        }){
+                            PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost)
+                        }
                     }
                 }
             }
+            
+            if(self.showSubThread == true)
+            {
+                PostThreadView(closeView: self.$showSubThread, mainPost: self.$subParentPost, subParentPost: self.$subPost2).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)//.edgesIgnoringSafeArea(.all)
+                
+            }
         }.edgesIgnoringSafeArea(.all)
+        .onAppear(perform: {
+            
+        })
         .onDisappear(perform: {
-            UserDefaults.standard.set("", forKey: "parentPost")
+            
+            if(self.showSubThread == false)
+            {
+                UserDefaults.standard.set("", forKey: "parentPost")
+            }
+            
+            else
+            {
+                UserDefaults.standard.set(self.mainPost.id, forKey: "parentPost")
+            }
+            
+            
             print("parent post close: ", UserDefaults.standard.string(forKey: "parentPost")!)
         })
     }

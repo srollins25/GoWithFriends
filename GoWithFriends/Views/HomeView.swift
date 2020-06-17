@@ -22,6 +22,7 @@ struct HomeView: View {
     @State var showSearchBar = false
     @State var searchtxt = ""
     @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var subParentPost = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @Binding var isLoggedIn: Bool
     let transition = AnyTransition.move(edge: .trailing)
     
@@ -38,6 +39,8 @@ struct HomeView: View {
                     
                     
                     
+
+                     
                     VStack{
                         List{
                             if(postsObserver.posts.isEmpty)
@@ -52,6 +55,8 @@ struct HomeView: View {
                                     Button(action: {
                                         
                                         self.post = post
+                                        print("Post: ",  self.post.id, "Postbody: ",  self.post.postBody, "Comments: ",  self.post.comments.description)
+                                        UserDefaults.standard.set(self.post.id, forKey: "parentPost")
                                         withAnimation(.easeIn(duration: 0.5)){
                                             self.showPostThread.toggle()
                                         }
@@ -97,7 +102,7 @@ struct HomeView: View {
             
             if(self.showPostThread == true)
             {
-                PostThreadView(closeView: self.$showPostThread, mainPost: self.$post).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition).edgesIgnoringSafeArea(.all)
+                PostThreadView(closeView: self.$showPostThread, mainPost: self.$post, subParentPost: self.$subParentPost).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition).edgesIgnoringSafeArea(.all)
                 
             }
             

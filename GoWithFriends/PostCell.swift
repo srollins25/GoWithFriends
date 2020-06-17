@@ -32,7 +32,9 @@ struct PostCell: View {
         
         HStack(alignment: .top){
             //image
-            AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle())
+            AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle()).onTapGesture {
+                
+            }
             //(vastack: name, text, image)
             VStack(alignment: .leading){
                 //name, text
@@ -213,7 +215,7 @@ struct PopOver: View {
                 
                 // delete from user_posts
                 let uid = Auth.auth().currentUser?.uid
-                var ref = db.collection("users").document(uid!)
+                var ref = db.collection("users").document(uid!) 
                 ref.getDocument { (snap, error) in
                     
                     if(error != nil)

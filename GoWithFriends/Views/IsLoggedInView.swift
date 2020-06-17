@@ -39,6 +39,7 @@ struct IsLoggedInView: View {
                 
             else
             {
+                
                 ProfileView(user: self.$user, show:  self.$show, fromSearch: self.$fromSearch)
                 
             }

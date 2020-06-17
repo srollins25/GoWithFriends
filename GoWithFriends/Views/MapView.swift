@@ -12,10 +12,26 @@ import MapKit
 struct MapView: View {
     
     @State private var manager = CLLocationManager()
+    @State var showAddToMapView = false
     
     var body: some View {
         
-        MapView2(manager: $manager).edgesIgnoringSafeArea(.all)
+        
+        ZStack(alignment: .topTrailing){
+            
+            MapView2(manager: $manager).edgesIgnoringSafeArea(.all)
+            
+            
+            Button(action: {
+                self.showAddToMapView.toggle()
+            }){
+                Image(systemName: "plus.circle").resizable().frame(width: 25, height: 25).padding(.all, 20)
+            }.sheet(isPresented: self.$showAddToMapView){
+                AddToMapView(showAddToMapView: self.$showAddToMapView)
+            }
+        }
+        
+        
     }
 }
 

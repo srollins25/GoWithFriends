@@ -21,6 +21,7 @@ struct NewMessageView: View{
     @Binding var chat: Bool
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var openchat = false
+    @State var isFriend: Bool = false
     
     var body: some View{
         
@@ -65,7 +66,10 @@ class getFriends: ObservableObject{
     
     init(){
         let db = Firestore.firestore()
+        
+        var friends = UserDefaults.standard.array(forKey: "friends") as? [String]
         db.collection("users").getDocuments{ (snapshot, error) in //user friends
+            
             
             if(error != nil)
             {
@@ -79,7 +83,15 @@ class getFriends: ObservableObject{
                 //let email = i.get("email") as! String
                 let image = i.get("image") as! String
                 
-                self.users.append(User(id: id, email: "", name: name, profileimage: image))
+                print("friends: ", friends?.description)
+                print("checking if id is in friends: ", id)
+                if(friends!.contains(id))
+                {
+                    print("id was friend")
+                    self.users.append(User(id: id, email: "", name: name, profileimage: image))
+                }
+                
+                
                 
             }
         }

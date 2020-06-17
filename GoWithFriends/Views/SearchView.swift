@@ -22,6 +22,7 @@ struct SearchView: View {
     @State var fromSearch = true
     @State var searchIndex = 0
     let transition = AnyTransition.move(edge: .trailing)
+    @State var subParentPost = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     
     var body: some View {
         ZStack(){
@@ -77,7 +78,7 @@ struct SearchView: View {
                 }
                 else
                 {
-                    PostThreadView(closeView: self.$show, mainPost: self.$post).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)
+                    PostThreadView(closeView: self.$show, mainPost: self.$post, subParentPost: self.$subParentPost).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)
                 }
             }
         }.offset(x: self.closeView ? 0 : UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.frame.width ?? 0, y: 0)
