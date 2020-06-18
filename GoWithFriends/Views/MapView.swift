@@ -38,7 +38,7 @@ struct MapView: View {
 struct MapView2: UIViewRepresentable, View {
     
     @Binding var manager: CLLocationManager
-    @ObservedObject var pokomenObserver = PokomenObserver()
+    @ObservedObject var pokomenObserver = PokemonObserver()
     
     func makeUIView(context: Context) -> MKMapView {
         let locationManager = CLLocationManager()

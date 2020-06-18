@@ -36,7 +36,6 @@
 		E2A97C52246E6BEF00E70081 /* FriendsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A97C51246E6BEF00E70081 /* FriendsObserver.swift */; };
 		E2AA381D247F4C4C0038D917 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AA381C247F4C4C0038D917 /* SearchView.swift */; };
 		E2AA381F247F7C4A0038D917 /* SearchUserObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */; };
-		E2AC6A8C2495592F003ABF8E /* FavoritePostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8B2495592F003ABF8E /* FavoritePostsObserver.swift */; };
 		E2AC6A8E24962D72003ABF8E /* CommentsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */; };
 		E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */; };
 		E2AD879A2493655F0000D52D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87992493655F0000D52D /* AlertView.swift */; };
@@ -46,8 +45,21 @@
 		E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDF2487375C006F2728 /* CreatePostView.swift */; };
 		E2C5B2D72499653D00F563BE /* Raid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D62499653D00F563BE /* Raid.swift */; };
 		E2C5B2D92499654B00F563BE /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D82499654B00F563BE /* Pokemon.swift */; };
-		E2C5B2DB249A455A00F563BE /* PokemonObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2DA249A455A00F563BE /* PokemonObserver.swift */; };
+		E2C5B2DD249AA64B00F563BE /* PokemonObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */; };
+		E2C5B2E2249AB19E00F563BE /* FavoritePostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E2C5B2DE249AA94300F563BE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7414449C888550D14A6AF729 /* Pods-GoWithFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoWithFriends.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoWithFriends/Pods-GoWithFriends.debug.xcconfig"; sourceTree = "<group>"; };
@@ -120,7 +132,6 @@
 		E2AA385A2480BD2A0038D917 /* BottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBar.swift; sourceTree = "<group>"; };
 		E2AA385B2480BD2A0038D917 /* BottomBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBarItem.swift; sourceTree = "<group>"; };
 		E2AA385C2480BD2A0038D917 /* BarBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBuilder.swift; sourceTree = "<group>"; };
-		E2AC6A8B2495592F003ABF8E /* FavoritePostsObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavoritePostsObserver.swift; path = ../../../../../.Trash/FavoritePostsObserver.swift; sourceTree = "<group>"; };
 		E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsObserver.swift; sourceTree = "<group>"; };
 		E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		E2AD87992493655F0000D52D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
@@ -130,7 +141,8 @@
 		E2B50FDF2487375C006F2728 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
 		E2C5B2D62499653D00F563BE /* Raid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raid.swift; sourceTree = "<group>"; };
 		E2C5B2D82499654B00F563BE /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
-		E2C5B2DA249A455A00F563BE /* PokemonObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonObserver.swift; sourceTree = "<group>"; };
+		E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonObserver.swift; sourceTree = "<group>"; };
+		E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePostsObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,12 +174,12 @@
 			isa = PBXGroup;
 			children = (
 				E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */,
-				E2AC6A8B2495592F003ABF8E /* FavoritePostsObserver.swift */,
+				E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */,
 				E2A97C51246E6BEF00E70081 /* FriendsObserver.swift */,
-				E2C5B2DA249A455A00F563BE /* PokemonObserver.swift */,
 				E2A3F113244AB55C004A0C4A /* PostObserver.swift */,
 				E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */,
 				E229E05524538379001C8EFF /* UserPostObserver.swift */,
+				E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */,
 			);
 			path = Observers;
 			sourceTree = "<group>";
@@ -490,6 +502,7 @@
 				E256132F243E917B008E9613 /* Resources */,
 				018B7B41A20E84869A91C8E7 /* [CP] Embed Pods Frameworks */,
 				2B80EE3D74B62EC0F7D578AD /* [CP] Copy Pods Resources */,
+				E2C5B2DE249AA94300F563BE /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -630,10 +643,10 @@
 				E2A3F112244AB287004A0C4A /* Post.swift in Sources */,
 				E2561357243F0061008E9613 /* MessageView.swift in Sources */,
 				E2AA381D247F4C4C0038D917 /* SearchView.swift in Sources */,
+				E2C5B2E2249AB19E00F563BE /* FavoritePostsObserver.swift in Sources */,
 				E2C5B2D92499654B00F563BE /* Pokemon.swift in Sources */,
 				E229E060245FFC3F001C8EFF /* NewMessageView.swift in Sources */,
 				E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */,
-				E2AC6A8C2495592F003ABF8E /* FavoritePostsObserver.swift in Sources */,
 				E2A3DD452446B52A00067884 /* MessageCell.swift in Sources */,
 				E229E054244F1939001C8EFF /* PokeUser.swift in Sources */,
 				E2AF0BD124861F9300E3D7E4 /* IsLoggedInView.swift in Sources */,
@@ -644,7 +657,7 @@
 				E256134D243ED59B008E9613 /* LoginView.swift in Sources */,
 				E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */,
 				E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */,
-				E2C5B2DB249A455A00F563BE /* PokemonObserver.swift in Sources */,
+				E2C5B2DD249AA64B00F563BE /* PokemonObserver.swift in Sources */,
 				E2561339243E917C008E9613 /* ContentView.swift in Sources */,
 				E2A97C4E2461160B00E70081 /* UserCell.swift in Sources */,
 			);
