@@ -19,4 +19,5 @@ struct Pokemon : Identifiable
     var cp: NSNumber?
     var sighted: NSNumber
     var dexnum: String?
+    var timeToRemove: NSNumber
 }

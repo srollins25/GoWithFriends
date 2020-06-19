@@ -34,11 +34,13 @@ class PokemonObserver: ObservableObject {
                     let cp = i.document.get("cp") as! NSNumber
                     let sighted = i.document.get("sighted") as! NSNumber
                     let dexnum = i.document.get("dexnum") as! String
-
-                    //if pokemon sighted time is greater than 10 min remove
-                    
-                    if(sighted.doubleValue >= sighted.doubleValue + 600)
+                    let timeToRemove = i.document.get("timeToRemove") as! NSNumber
+                    print("sighted: ", sighted)
+                    print("sighted time to delete: ", (sighted.doubleValue + 600))
+                    print("current time: ", Date().timeIntervalSince1970 as NSNumber)
+                    if((Date().timeIntervalSince1970 as NSNumber).doubleValue >= timeToRemove.doubleValue)
                     {
+                        
                         let db = Firestore.firestore()
                         
                         db.collection("pokemon").document(id_).delete() { err in
@@ -52,13 +54,9 @@ class PokemonObserver: ObservableObject {
                     else
                     {
                         //else add to array
-                        
-                        self.pokemon.append(Pokemon(id: id_, user: user, lat: lat, lon: lon, name: name, cp: cp, sighted: sighted, dexnum: dexnum))
+                        self.pokemon.append(Pokemon(id: id_, user: user, lat: lat, lon: lon, name: name, cp: cp, sighted: sighted, dexnum: dexnum, timeToRemove: timeToRemove))
+                        print("pokemon arr: ", self.pokemon.description)
                     }
-                    
-
-                    //self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
-                    
                 }
                 
                 if(i.type == .removed){

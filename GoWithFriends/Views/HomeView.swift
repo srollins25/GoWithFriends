@@ -51,7 +51,7 @@ struct HomeView: View {
                             else
                             {
                                 ForEach(postsObserver.posts.reversed()){ post in
-                                    
+                                     
                                     Button(action: {
                                         
                                         self.post = post
@@ -80,7 +80,7 @@ struct HomeView: View {
                 .navigationBarTitle(Text("Home"))
                 .navigationBarItems(leading: Button(action: {
                     self.show.toggle()
-                    print("side menue")
+                    
                 }){
                     Image(systemName: "person.circle").resizable().frame(width: 30, height: 30).shadow(color: .gray, radius: 5, x: 1, y: 1)
                 }.accentColor(.white)
@@ -116,11 +116,11 @@ struct HomeView: View {
         }
             
         .onAppear(perform: {
-            print("testing home")
+            
             
             
             if(self.shouldFetch == false){
-                print("testing home1: false - inside if")
+                
                 self.shouldFetch = true
             }
         })
