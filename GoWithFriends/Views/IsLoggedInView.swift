@@ -17,6 +17,7 @@ struct IsLoggedInView: View {
     @State var showCreatePost = false
     @State var parentPost = ""
     var pokemon = PokemonObserver()
+    var raids = RaidObserver()
     
     
     var body: some View{
@@ -30,7 +31,7 @@ struct IsLoggedInView: View {
                 
             else if(index == 1)
             {
-                MapView().environmentObject(pokemon)
+                MapView().environmentObject(pokemon).environmentObject(raids)
             }
                 
             else if(index == 2)

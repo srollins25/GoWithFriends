@@ -829,7 +829,11 @@ struct AddRaidView: View {
     var body: some View{
         VStack(spacing: 9){
             Image(systemName: "questionmark.circle").resizable().frame(width: 120, height: 120).foregroundColor(.gray).onTapGesture {
-                self.showRaidPicker.toggle()
+                
+                if(self.isActive == 0)
+                {
+                    self.showRaidPicker.toggle()
+                }
             }.sheet(isPresented: self.$showRaidPicker){
                 
                 NavigationView{
@@ -867,9 +871,9 @@ struct AddRaidView: View {
                     
                     if(isActive == 0)
                     {
-                        TextField("Name...", text: self.$pokename)
+                        TextField("Name...", text: self.$pokename).disabled(true)
                         Divider()
-                        TextField("CP...", text: self.$cp)
+                        TextField("CP...", text: self.$cp).keyboardType(.numberPad)
                         Divider()
                         Form{
                             DatePicker("Remaing time...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute).background(Color.white)
@@ -1114,7 +1118,6 @@ struct AddRaidView: View {
             //not active raid
             values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": "", "cp": "", "dexnum": "", "timeToStart": timeToStart.timeIntervalSince1970 as NSNumber] as [String : Any]
         }
-        
         
         doc.setData(values)
         //show alert

@@ -15,7 +15,8 @@ struct MapView: View {
     @State var showAddToMapView = false
     @State var pins: [MapPin] = []
     @State var selectedPin: MapPin?
-    @EnvironmentObject var pokomenObserver: PokemonObserver
+    @EnvironmentObject var pokemonObserver: PokemonObserver
+    @EnvironmentObject var raidObserver: RaidObserver
     @State var plotPokemon = true
     
     var body: some View {
@@ -39,17 +40,31 @@ struct MapView: View {
             {
                 var i = 0
                 
-                while (i < self.pokomenObserver.pokemon.count) {
+                while (i < self.pokemonObserver.pokemon.count) {
                     print("index: ", i)
                     self.pins.append(MapPin(
-                        coordinate: CLLocationCoordinate2D(latitude: self.pokomenObserver.pokemon[i].lat!, longitude: self.pokomenObserver.pokemon[i].lon!),
-                        title: self.pokomenObserver.pokemon[i].name,
-                        subtitle: "cp: \((self.pokomenObserver.pokemon[i].cp)!.stringValue)",
-                        action: { print(self.pokomenObserver.pokemon[i].name!) }))
+                        coordinate: CLLocationCoordinate2D(latitude: self.pokemonObserver.pokemon[i].lat!, longitude: self.pokemonObserver.pokemon[i].lon!),
+                        title: self.pokemonObserver.pokemon[i].name,
+                        subtitle: "cp: \((self.pokemonObserver.pokemon[i].cp)!.stringValue)",
+                        action: { print(self.pokemonObserver.pokemon[i].name!) }))
                     
                     i = i + 1
                 }
                 i = 0
+                
+                while (i < self.raidObserver.raids.count) {
+                    print("index: ", i)
+                    self.pins.append(MapPin(
+                        coordinate: CLLocationCoordinate2D(latitude: self.raidObserver.raids[i].lat, longitude: self.raidObserver.raids[i].lon),
+                        title: self.raidObserver.raids[i].name /*check dex num if "" put time remaining else put name*/,
+                        subtitle: "cp: \((self.raidObserver.raids[i].cp).stringValue)",
+                        action: { print(self.raidObserver.raids[i].name) }))
+                    
+                    i = i + 1
+                }
+                i = 0
+                
+                
                 self.plotPokemon = false
             }
             
@@ -62,7 +77,8 @@ struct MapView2: UIViewRepresentable, View {
     @Binding var manager: CLLocationManager
     @Binding var pins: [MapPin]
     @Binding var selectedPin: MapPin?
-    @EnvironmentObject var pokomenObserver: PokemonObserver
+    @EnvironmentObject var pokemonObserver: PokemonObserver
+    @EnvironmentObject var raidObserver: RaidObserver
     @State var plotPokemon = true
     
     func makeUIView(context: Context) -> MKMapView {
@@ -91,13 +107,13 @@ struct MapView2: UIViewRepresentable, View {
         
         var i = 0
         self.pins.removeAll()
-        while (i < self.pokomenObserver.pokemon.count) {
+        while (i < self.pokemonObserver.pokemon.count) {
             print("index: ", i)
             self.pins.append(MapPin(
-                coordinate: CLLocationCoordinate2D(latitude: self.pokomenObserver.pokemon[i].lat!, longitude: self.pokomenObserver.pokemon[i].lon!),
-                               title: self.pokomenObserver.pokemon[i].name,
-                               subtitle: "cp: \((self.pokomenObserver.pokemon[i].cp)!.stringValue)",
-                               action: { print(self.pokomenObserver.pokemon[i].name!) }))
+                coordinate: CLLocationCoordinate2D(latitude: self.pokemonObserver.pokemon[i].lat!, longitude: self.pokemonObserver.pokemon[i].lon!),
+                               title: self.pokemonObserver.pokemon[i].name,
+                               subtitle: "cp: \((self.pokemonObserver.pokemon[i].cp)!.stringValue)",
+                               action: { print(self.pokemonObserver.pokemon[i].name!) }))
                            
                            i = i + 1
                        }
@@ -142,7 +158,7 @@ struct MapView2: UIViewRepresentable, View {
             mapView.removeOverlays(mapView.overlays)
             let manager = CLLocationManager()
             let sourceCoords = manager.location?.coordinate
-            let destinationCoords = selectedPin?.coordinate
+            //let destinationCoords = selectedPin?.coordinate
             
             let sourcePlacemarck = MKPlacemark(coordinate: sourceCoords!)
             let destPlackmark = MKPlacemark(coordinate: pin.coordinate)
