@@ -13,13 +13,7 @@ struct MapView: View {
     
     @State private var manager = CLLocationManager()
     @State var showAddToMapView = false
-    @State var pins: [MapPin] = [
-         MapPin(coordinate: CLLocationCoordinate2D(latitude: 37.13,
-         longitude: -117.07),
-         title: "Pin",
-         subtitle: "Big Smoke",
-         action: { print("Hey mate!") } )
-    ]
+    @State var pins: [MapPin] = []
     @State var selectedPin: MapPin?
     @EnvironmentObject var pokomenObserver: PokemonObserver
     @State var plotPokemon = true
@@ -90,8 +84,25 @@ struct MapView2: UIViewRepresentable, View {
     
     func updateUIView(_ view: MKMapView, context: Context)
     {
-        updateAnnotations(from: view)
+        //updateAnnotations(from: view)
         view.showsUserLocation = true
+        
+        view.removeAnnotations(pins)
+        
+        var i = 0
+        self.pins.removeAll()
+        while (i < self.pokomenObserver.pokemon.count) {
+            print("index: ", i)
+            self.pins.append(MapPin(
+                coordinate: CLLocationCoordinate2D(latitude: self.pokomenObserver.pokemon[i].lat!, longitude: self.pokomenObserver.pokemon[i].lon!),
+                               title: self.pokomenObserver.pokemon[i].name,
+                               subtitle: "cp: \((self.pokomenObserver.pokemon[i].cp)!.stringValue)",
+                               action: { print(self.pokomenObserver.pokemon[i].name!) }))
+                           
+                           i = i + 1
+                       }
+                       i = 0
+        view.addAnnotations(pins)
         
         if let selectedPin = selectedPin {
             view.selectAnnotation(selectedPin, animated: false)
@@ -100,9 +111,7 @@ struct MapView2: UIViewRepresentable, View {
     
     private func updateAnnotations(from view: MKMapView)
     {
-        view.removeAnnotations(pins)
-        let newAnnotations = self.pins.map{ $0 }
-        view.addAnnotations(newAnnotations)
+
     }
     
     func makeCoordinator() -> Coordinator {
@@ -130,6 +139,47 @@ struct MapView2: UIViewRepresentable, View {
             
             pin.action?()
             selectedPin = pin
+            mapView.removeOverlays(mapView.overlays)
+            let manager = CLLocationManager()
+            let sourceCoords = manager.location?.coordinate
+            let destinationCoords = selectedPin?.coordinate
+            
+            let sourcePlacemarck = MKPlacemark(coordinate: sourceCoords!)
+            let destPlackmark = MKPlacemark(coordinate: pin.coordinate)
+           
+            let sourceItem = MKMapItem(placemark: sourcePlacemarck)
+            let destItem = MKMapItem(placemark: destPlackmark)
+            
+            let directionRequest = MKDirections.Request()
+            directionRequest.source = sourceItem
+            directionRequest.destination = destItem
+            directionRequest.transportType = .walking
+            
+            let directions = MKDirections(request: directionRequest)
+            directions.calculate(completionHandler: {
+                response, error in
+                
+                guard let response = response else {
+                    if let error = error{
+                        print("Error: ", error)
+                    }
+                    return
+                }
+                
+                let route = response.routes[0]
+                mapView.addOverlay(route.polyline, level: .aboveRoads)
+                
+                let rect = route.polyline.boundingMapRect
+                mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+            })
+        }
+        
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            let renderer = MKPolylineRenderer(overlay: overlay)
+            renderer.strokeColor = .blue
+            renderer.lineWidth = 5.0
+            
+            return renderer
         }
         
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
@@ -137,7 +187,11 @@ struct MapView2: UIViewRepresentable, View {
                 return
             }
             selectedPin = nil
+            
+            mapView.removeOverlays(mapView.overlays)
         }
+        
+        
     }
 }
 
@@ -157,7 +211,6 @@ class MapPin: NSObject, MKAnnotation {
         self.subtitle = subtitle
         self.action = action
     }
-    
 }
 
 //struct MapView_Previews: PreviewProvider {

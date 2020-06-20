@@ -69,16 +69,8 @@ struct AddPokemonView: View {
     @State var showAlert = false
     let locationManager = CLLocationManager()
     
-    
     @State var pokemon: [MapPkm] = []
-//        [
-//
-//        "",
-//        "charmander",
-//        "pikachu",
-//        "squirtle",
-//        "bulbasoare"
-//    ]
+    
     
     var body: some View{
         
@@ -88,14 +80,13 @@ struct AddPokemonView: View {
             }.sheet(isPresented: self.$showPokePicker){
                 
                 NavigationView{
-                    
+                    //place search bar
                     Form{
                         Section{
                             Picker(selection: self.$selectedPokemon, label: Text("Select a pokemon")){
                                 ForEach(0 ..< self.pokemon.count){
                                     
                                     Text(self.pokemon[$0].name).tag($0)
-                                    
                                 }
                             }.onReceive([self.selectedPokemon].publisher.first()){ (i) in
                                 self.pokename = self.pokemon[i].name
@@ -104,7 +95,6 @@ struct AddPokemonView: View {
                         }
                     }
                     .navigationBarItems(leading:
-                        
                         
                         Button(action: {
                             self.showPokePicker.toggle()
@@ -117,7 +107,6 @@ struct AddPokemonView: View {
             VStack(spacing: 15){
                 
                 VStack{
-                    
                     TextField("Name...", text: self.$pokename).disabled(true)
                     Divider()
                     TextField("CP...", text: self.$cp).keyboardType(.numberPad)
@@ -129,7 +118,6 @@ struct AddPokemonView: View {
                     if(self.pokename == "" || self.cp == "")
                     {
                         self.showAlert.toggle()
-                        
                     }
                     else
                     {
@@ -151,7 +139,6 @@ struct AddPokemonView: View {
     
     func getPokemon()
     {
-        
         self.pokemon.append(MapPkm(name: "", dexnum: ""))
         self.pokemon.append(MapPkm(name: "Bulbasaur", dexnum: "001"))
         self.pokemon.append(MapPkm(name: "Ivysaur", dexnum: "002"))
@@ -448,7 +435,7 @@ struct AddPokemonView: View {
         self.pokemon.append(MapPkm(name: "Meditite", dexnum: "307"))
         self.pokemon.append(MapPkm(name: "Medicham", dexnum: "308"))
         self.pokemon.append(MapPkm(name: "Electrike", dexnum: "309"))
-        self.pokemon.append(MapPkm(name: "Manetric", dexnum: "310"))
+        self.pokemon.append(MapPkm(name: "Manectric", dexnum: "310"))
         self.pokemon.append(MapPkm(name: "Plusle", dexnum: "311"))
         self.pokemon.append(MapPkm(name: "Minun", dexnum: "312"))
         self.pokemon.append(MapPkm(name: "Volbeat", dexnum: "313"))
@@ -751,48 +738,48 @@ struct AddPokemonView: View {
         self.pokemon.append(MapPkm(name: "Hydreigon", dexnum: "5"))
         self.pokemon.append(MapPkm(name: "Larvesta", dexnum: "6"))
         self.pokemon.append(MapPkm(name: "Volcarona", dexnum: "7"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
-//        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
         
         
         self.pokemon.sort(by: {$0.name.compare($1.name) == .orderedAscending})
@@ -810,33 +797,64 @@ struct AddPokemonView: View {
         let createdAt = Date().timeIntervalSince1970 as NSNumber
         let lat = location.latitude
         let lon = location.longitude
-        let timeToRemove = createdAt.doubleValue + Double(600)
+        let timeToRemove = createdAt.doubleValue + Double(900)
         
         let values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": self.pokename, "cp": (self.cp as NSString).integerValue, "dexnum": self.dexnum, "sighted": createdAt, "timeToRemove": timeToRemove] as [String : Any]
         doc.setData(values)
         //show alert
         self.show.toggle()
     }
-    
-    struct MapPkm {
-        var name: String
-        var dexnum: String
-    }
+}
+
+struct MapPkm {
+    var name: String
+    var dexnum: String
 }
 
 struct AddRaidView: View {
     
     @State var pokename = ""
     @State var isActive = 0
-    @State var difficulty = "" //convert to nsnumber
+    @State var difficulty = 1 //convert to nsnumber
     @State var cp = "" //convert to nsnumber
-    @State var timeLeft = "" //convert to nsnumber
+    @State private var timeLeft = Date() //convert to nsnumber
+    @State var dexnum = ""
     @Binding var show: Bool
+    @State var showAlert = false
+    @State var showRaidPicker = false
+    @State var selectedPokemon = 0
+    @State var raids: [MapPkm] = []
+    let locationManager = CLLocationManager()
     
     var body: some View{
-        VStack(spacing: 10){
+        VStack(spacing: 9){
             Image(systemName: "questionmark.circle").resizable().frame(width: 120, height: 120).foregroundColor(.gray).onTapGesture {
-                print("present scroll picker")
+                self.showRaidPicker.toggle()
+            }.sheet(isPresented: self.$showRaidPicker){
+                
+                NavigationView{
+                    //place search bar
+                    Form{
+                        Section{
+                            Picker(selection: self.$selectedPokemon, label: Text("Select a pokemon")){
+                                ForEach(0 ..< self.raids.count){
+                                    
+                                    Text(self.raids[$0].name).tag($0)
+                                }
+                            }.onReceive([self.selectedPokemon].publisher.first()){ (i) in
+                                self.pokename = self.raids[i].name
+                                self.dexnum = self.raids[i].dexnum
+                            }
+                        }
+                    }
+                    .navigationBarItems(leading:
+                        
+                        Button(action: {
+                            self.showRaidPicker.toggle()
+                        }){
+                            Text("Done")
+                    })
+                }
             }
             
             VStack(spacing: 15){
@@ -847,28 +865,260 @@ struct AddRaidView: View {
                         Text("Inctive").tag(1)
                     }.pickerStyle(SegmentedPickerStyle())
                     
-                    TextField("Name...", text: self.$pokename)
-                    Divider()
+                    if(isActive == 0)
+                    {
+                        TextField("Name...", text: self.$pokename)
+                        Divider()
+                        TextField("CP...", text: self.$cp)
+                        Divider()
+                        Form{
+                            DatePicker("Remaing time...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute).background(Color.white)
+                        }
+                        
+                        //TextField("Remaining time...", text: self.$timeLeft)//needs to be date picker
+                        Divider()
+                    }
+                    else
+                    {
+                        Spacer().frame(height: 8)
+                        Picker(selection: $difficulty, label: Text("")) {
+                            Text("1").tag(1)
+                            Text("2").tag(2)
+                            Text("3").tag(3)
+                            Text("4").tag(4)
+                        }.pickerStyle(SegmentedPickerStyle())
+                        Divider()
+                        Form{
+                            DatePicker("Time raid starts...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute)
+                        }
+                        
+                        //TextField("Time raid starts...", text: self.$timeLeft)//needs to be date picker
+                        Divider()
+                    }
                     
-                    (isActive == 0 ? TextField("CP...", text: self.$cp) : TextField("Difficulty...", text: self.$difficulty))
-                    Divider()
-                    
-                    TextField("Remaining time...", text: self.$timeLeft)
-                    Divider()
                 }
                 
                 Button(action: {
-                    self.AddRaid()
+                    
+                    if(self.pokename == "" || self.cp == "" /* || self.timeLeft == "" */)
+                    {
+                        self.showAlert.toggle()
+                    }
+                    else
+                    {
+                        self.AddRaid()
+                    }
+                    
                 }){
                     Text("Create")
+                }.alert(isPresented: self.$showAlert){
+                    Alert(title: Text("Invalid form"), message: Text("All fields must be filled."), dismissButton: .cancel())
                 }
             }
         }
+        .onAppear(perform: {
+            
+            self.getPokemon()
+            print(self.raids.description)
+        })
+    }
+    
+    func getPokemon()
+    {
+        self.raids.append(MapPkm(name: "", dexnum: ""))
+        self.raids.append(MapPkm(name: "Bulbasaur", dexnum: "001"))
+        self.raids.append(MapPkm(name: "Ivysaur", dexnum: "002"))
+        self.raids.append(MapPkm(name: "Charmeleon", dexnum: "005"))
+        self.raids.append(MapPkm(name: "Squirtle", dexnum: "007"))
+        self.raids.append(MapPkm(name: "Wartortle", dexnum: "008"))
+        self.raids.append(MapPkm(name: "Magnemite", dexnum: "081"))
+        self.raids.append(MapPkm(name: "Seel", dexnum: "086"))
+        self.raids.append(MapPkm(name: "Shellder", dexnum: "090"))
+        self.raids.append(MapPkm(name: "Drowzee", dexnum: "096"))
+        self.raids.append(MapPkm(name: "Magikarp", dexnum: "129"))
+        self.raids.append(MapPkm(name: "Omanyte", dexnum: "138"))
+        self.raids.append(MapPkm(name: "Kabuto", dexnum: "140"))
+        self.raids.append(MapPkm(name: "Dratini", dexnum: "147"))
+        self.raids.append(MapPkm(name: "Vaporeon", dexnum: "134"))
+        self.raids.append(MapPkm(name: "Umbreon", dexnum: "197"))
+        self.raids.append(MapPkm(name: "Venusaur", dexnum: "003"))
+        self.raids.append(MapPkm(name: "Victreebel", dexnum: "071"))
+        self.raids.append(MapPkm(name: "Ursaring", dexnum: "217"))
+        self.raids.append(MapPkm(name: "Walrein", dexnum: "365"))
+        self.raids.append(MapPkm(name: "Zapdos", dexnum: "145"))
+        self.raids.append(MapPkm(name: "Zekrom", dexnum: "644"))
+        self.raids.append(MapPkm(name: "Uxie", dexnum: "480"))
+        self.raids.append(MapPkm(name: "Tornadus", dexnum: "641"))
+        self.raids.append(MapPkm(name: "Typhlosion", dexnum: "157"))
+        self.raids.append(MapPkm(name: "Tyranitar", dexnum: "248"))
+        self.raids.append(MapPkm(name: "Terrakion", dexnum: "248"))
+        self.raids.append(MapPkm(name: "Thundurus", dexnum: "248"))
+        self.raids.append(MapPkm(name: "Landorus", dexnum: "645"))
+        self.raids.append(MapPkm(name: "Togetic", dexnum: "176"))
+        self.raids.append(MapPkm(name: "Starmie", dexnum: "121"))
+        self.raids.append(MapPkm(name: "Suicune", dexnum: "121"))
+        self.raids.append(MapPkm(name: "Tangela", dexnum: "114"))
+        self.raids.append(MapPkm(name: "Slowbro", dexnum: "080"))
+        self.raids.append(MapPkm(name: "Snorlax", dexnum: "143"))
+        self.raids.append(MapPkm(name: "Deoxys", dexnum: "143"))
+        self.raids.append(MapPkm(name: "Shuckle", dexnum: "213"))
+        self.raids.append(MapPkm(name: "Skarmory", dexnum: "227"))
+        self.raids.append(MapPkm(name: "Skuntank", dexnum: "435"))
+        self.raids.append(MapPkm(name: "Scyther", dexnum: "123"))
+        self.raids.append(MapPkm(name: "Sharpedo", dexnum: "319"))
+        self.raids.append(MapPkm(name: "Shiftry", dexnum: "275"))
+        self.raids.append(MapPkm(name: "Registeel", dexnum: "379"))
+        self.raids.append(MapPkm(name: "Reshiram", dexnum: "643"))
+        self.raids.append(MapPkm(name: "Rhydon", dexnum: "112"))
+        self.raids.append(MapPkm(name: "Regigigas", dexnum: "486"))
+        self.raids.append(MapPkm(name: "Regirock", dexnum: "377"))
+        self.raids.append(MapPkm(name: "Regice", dexnum: "378"))
+        self.raids.append(MapPkm(name: "Raikou", dexnum: "243"))
+        self.raids.append(MapPkm(name: "Rayquaza", dexnum: "384"))
+        self.raids.append(MapPkm(name: "Pinsir", dexnum: "127"))
+        self.raids.append(MapPkm(name: "Poliwag", dexnum: "060"))
+        self.raids.append(MapPkm(name: "Porygon", dexnum: "137"))
+        self.raids.append(MapPkm(name: "Onix", dexnum: "095"))
+        self.raids.append(MapPkm(name: "Palkia", dexnum: "095"))
+        self.raids.append(MapPkm(name: "Piloswine", dexnum: "221"))
+        self.raids.append(MapPkm(name: "Ninetales", dexnum: "038"))
+        self.raids.append(MapPkm(name: "Ninjask", dexnum: "291"))
+        self.raids.append(MapPkm(name: "Omastar", dexnum: "139"))
+        self.raids.append(MapPkm(name: "Moltres", dexnum: "146"))
+        self.raids.append(MapPkm(name: "Nidoking", dexnum: "034"))
+        self.raids.append(MapPkm(name: "Nidoqueen", dexnum: "031"))
+        self.raids.append(MapPkm(name: "Metagross", dexnum: "376"))
+        self.raids.append(MapPkm(name: "Mewtwo", dexnum: "376"))
+        self.raids.append(MapPkm(name: "Miltank", dexnum: "241"))
+        self.raids.append(MapPkm(name: "Marowak", dexnum: "105"))
+        self.raids.append(MapPkm(name: "Mawile", dexnum: "303"))
+        self.raids.append(MapPkm(name: "Mesprit", dexnum: "481"))
+        self.raids.append(MapPkm(name: "Machamp", dexnum: "068"))
+        self.raids.append(MapPkm(name: "Manectric", dexnum: "310"))
+        self.raids.append(MapPkm(name: "Latios", dexnum: "381"))
+        self.raids.append(MapPkm(name: "Lugia", dexnum: "249"))
+        self.raids.append(MapPkm(name: "Lunatone", dexnum: "337"))
+        self.raids.append(MapPkm(name: "Kyogre", dexnum: "382"))
+        self.raids.append(MapPkm(name: "Latias", dexnum: "380"))
+        self.raids.append(MapPkm(name: "Jynx", dexnum: "124"))
+        self.raids.append(MapPkm(name: "Kabutops", dexnum: "141"))
+        self.raids.append(MapPkm(name: "Kirlia", dexnum: "281"))
+        self.raids.append(MapPkm(name: "Houndoom", dexnum: "229"))
+        self.raids.append(MapPkm(name: "Hypno", dexnum: "097"))
+        self.raids.append(MapPkm(name: "Jolteon", dexnum: "135"))
+        self.raids.append(MapPkm(name: "Hitmonlee", dexnum: "106"))
+        self.raids.append(MapPkm(name: "Hitmonchan", dexnum: "107"))
+        self.raids.append(MapPkm(name: "Ho-Oh", dexnum: "250"))
+        self.raids.append(MapPkm(name: "Grandbull", dexnum: "210"))
+        self.raids.append(MapPkm(name: "Groudon", dexnum: "383"))
+        self.raids.append(MapPkm(name: "Heatran", dexnum: "485"))
+        self.raids.append(MapPkm(name: "Golem", dexnum: "076"))
+        self.raids.append(MapPkm(name: "Flareon", dexnum: "136"))
+        self.raids.append(MapPkm(name: "Gengar", dexnum: "094"))
+        self.raids.append(MapPkm(name: "Exeggutor", dexnum: "103"))
+        self.raids.append(MapPkm(name: "Feraligatr", dexnum: "160"))
+        self.raids.append(MapPkm(name: "Flaaffy", dexnum: "180"))
+        self.raids.append(MapPkm(name: "Entei", dexnum: "244"))
+        self.raids.append(MapPkm(name: "Espeon", dexnum: "196"))
+        self.raids.append(MapPkm(name: "Excadrill", dexnum: "530"))
+        self.raids.append(MapPkm(name: "Dialga", dexnum: "483"))
+        self.raids.append(MapPkm(name: "Donphan", dexnum: "232"))
+        self.raids.append(MapPkm(name: "Dragonite", dexnum: "149"))
+        self.raids.append(MapPkm(name: "Cresselia", dexnum: "488"))
+        self.raids.append(MapPkm(name: "Darkrai", dexnum: "491"))
+        self.raids.append(MapPkm(name: "Cloyster", dexnum: "091"))
+        self.raids.append(MapPkm(name: "Crawdaunt", dexnum: "342"))
+        self.raids.append(MapPkm(name: "Chansey", dexnum: "113"))
+        self.raids.append(MapPkm(name: "Charizard", dexnum: "006"))
+        self.raids.append(MapPkm(name: "Claydol", dexnum: "344"))
+        self.raids.append(MapPkm(name: "Azumarill", dexnum: "184"))
+        self.raids.append(MapPkm(name: "Blastoise", dexnum: "009"))
+        self.raids.append(MapPkm(name: "Breloom", dexnum: "286"))
+        self.raids.append(MapPkm(name: "Articuno", dexnum: "144"))
+        self.raids.append(MapPkm(name: "Azelf", dexnum: "482"))
+        self.raids.append(MapPkm(name: "Raichu", dexnum: "026"))
+        self.raids.append(MapPkm(name: "Arcanine", dexnum: "059"))
+        self.raids.append(MapPkm(name: "Alakazam", dexnum: "065"))
+        self.raids.append(MapPkm(name: "Absol", dexnum: "359"))
+        self.raids.append(MapPkm(name: "Aerodactyl", dexnum: "142"))
+        self.raids.append(MapPkm(name: "Aggron", dexnum: "306"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "0"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "1"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "2"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "3"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "4"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "5"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "6"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "7"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "8"))
+        //        self.pokemon.append(MapPkm(name: "", dexnum: "9"))
+        
+        
+        self.raids.sort(by: {$0.name.compare($1.name) == .orderedAscending})
     }
     
     func AddRaid()
     {
+        //if a raid is active the timetostart
         
+        print("adding raid")
+        let location: CLLocationCoordinate2D = locationManager.location!.coordinate
+        
+        let db = Firestore.firestore()
+        let collection = db.collection("raids")
+        let doc = collection.document()
+        let id = doc.documentID
+        let timeToStart = self.timeLeft
+        let lat = location.latitude
+        let lon = location.longitude
+        let timeToRemove = self.timeLeft
+        var values = [String: Any]()
+        if(isActive == 0)
+        {
+            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": self.pokename, "cp": (self.cp as NSString).integerValue, "dexnum": self.dexnum, "timeToRemove": timeToRemove.timeIntervalSince1970 as NSNumber] as [String : Any]
+        }
+        else
+        {
+            //not active raid
+            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": "", "cp": "", "dexnum": "", "timeToStart": timeToStart.timeIntervalSince1970 as NSNumber] as [String : Any]
+        }
+        
+        
+        doc.setData(values)
+        //show alert
+        self.show.toggle()
     }
 }
 

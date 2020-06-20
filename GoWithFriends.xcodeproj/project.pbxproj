@@ -47,6 +47,7 @@
 		E2C5B2D92499654B00F563BE /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2D82499654B00F563BE /* Pokemon.swift */; };
 		E2C5B2DD249AA64B00F563BE /* PokemonObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */; };
 		E2C5B2E2249AB19E00F563BE /* FavoritePostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */; };
+		E2C5B304249DB3E500F563BE /* RaidObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B303249DB3E500F563BE /* RaidObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -143,6 +144,7 @@
 		E2C5B2D82499654B00F563BE /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonObserver.swift; sourceTree = "<group>"; };
 		E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePostsObserver.swift; sourceTree = "<group>"; };
+		E2C5B303249DB3E500F563BE /* RaidObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaidObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 			children = (
 				E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */,
 				E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */,
+				E2C5B303249DB3E500F563BE /* RaidObserver.swift */,
 				E2A97C51246E6BEF00E70081 /* FriendsObserver.swift */,
 				E2A3F113244AB55C004A0C4A /* PostObserver.swift */,
 				E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */,
@@ -639,6 +642,7 @@
 				E2A97C52246E6BEF00E70081 /* FriendsObserver.swift in Sources */,
 				E2AC6A8E24962D72003ABF8E /* CommentsObserver.swift in Sources */,
 				E2AD879A2493655F0000D52D /* AlertView.swift in Sources */,
+				E2C5B304249DB3E500F563BE /* RaidObserver.swift in Sources */,
 				E2AA381F247F7C4A0038D917 /* SearchUserObserver.swift in Sources */,
 				E2A3F112244AB287004A0C4A /* Post.swift in Sources */,
 				E2561357243F0061008E9613 /* MessageView.swift in Sources */,

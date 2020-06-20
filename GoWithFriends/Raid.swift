@@ -11,14 +11,15 @@ import SwiftUI
 
 struct Raid : Identifiable
 {
-    var id: ObjectIdentifier
-    var lat: Double?
-    var lon: Double?
-    var name: String?
-    var cp: NSNumber?
-    var timeTillStart: String?
-    var timeTillEnd: String?
-    var difficulty: NSNumber?
-    var dexnum: String?
+    var id: String
+    var user: String
+    var lat: Double
+    var lon: Double
+    var name: String
+    var cp: NSNumber
+    var timeTillStart: NSNumber?
+    var timeToRemove: NSNumber?
+    var difficulty: NSNumber
+    var dexnum: String
 }
 
