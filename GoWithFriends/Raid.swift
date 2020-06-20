@@ -17,8 +17,8 @@ struct Raid : Identifiable
     var lon: Double
     var name: String
     var cp: NSNumber
-    var timeTillStart: NSNumber?
-    var timeToRemove: NSNumber?
+    var timeTillStart: NSNumber
+    var timeToRemove: NSNumber
     var difficulty: NSNumber
     var dexnum: String
 }

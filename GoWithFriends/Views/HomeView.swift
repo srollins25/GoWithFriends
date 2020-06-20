@@ -15,7 +15,7 @@ import SDWebImageSwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var session: SessionStore
-    @ObservedObject var postsObserver = PostObserver()
+    @EnvironmentObject var postsObserver: PostObserver
     @State var show = false
     @State var showPostThread = false
     @State var shouldFetch = false
@@ -37,10 +37,6 @@ struct HomeView: View {
                 
                 ZStack(alignment: .bottomTrailing){
                     
-                    
-                    
-
-                     
                     VStack{
                         List{
                             if(postsObserver.posts.isEmpty)

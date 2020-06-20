@@ -28,7 +28,7 @@ struct MapView: View {
             Button(action: {
                 self.showAddToMapView.toggle()
             }){
-                Image(systemName: "plus.circle").resizable().frame(width: 25, height: 25).padding(.all, 20)
+                Image(systemName: "plus.circle").resizable().frame(width: 25, height: 25).padding(.top, 55).padding(.trailing, 20)
             }.sheet(isPresented: self.$showAddToMapView){
                 AddToMapView(showAddToMapView: self.$showAddToMapView)
             }
@@ -52,22 +52,23 @@ struct MapView: View {
                 }
                 i = 0
                 
+                let formatter = DateFormatter()
+                formatter.dateFormat = "h:mm a"
+                
                 while (i < self.raidObserver.raids.count) {
                     print("index: ", i)
                     self.pins.append(MapPin(
                         coordinate: CLLocationCoordinate2D(latitude: self.raidObserver.raids[i].lat, longitude: self.raidObserver.raids[i].lon),
-                        title: self.raidObserver.raids[i].name /*check dex num if "" put time remaining else put name*/,
-                        subtitle: "cp: \((self.raidObserver.raids[i].cp).stringValue)",
-                        action: { print(self.raidObserver.raids[i].name) }))
+                        title: (self.raidObserver.raids[i].dexnum == "") ? "Raid\nStarts: \(formatter.string(from: NSDate(timeIntervalSince1970: TimeInterval(truncating: self.raidObserver.raids[i].timeTillStart)) as Date ))" : "Raid: " + self.raidObserver.raids[i].name,
+                        subtitle: (self.raidObserver.raids[i].dexnum == "") ? "Difficulty: " + self.raidObserver.raids[i].difficulty.stringValue : "CP: " + self.raidObserver.raids[i].cp.stringValue + "\nEnds: \(formatter.string(from: NSDate(timeIntervalSince1970: TimeInterval(truncating: self.raidObserver.raids[i].timeToRemove)) as Date ))",
+                        action: { print("name: ", self.raidObserver.raids[i].name) }))
                     
                     i = i + 1
                 }
                 i = 0
                 
-                
                 self.plotPokemon = false
             }
-            
         })
     }
 }
@@ -100,25 +101,8 @@ struct MapView2: UIViewRepresentable, View {
     
     func updateUIView(_ view: MKMapView, context: Context)
     {
-        //updateAnnotations(from: view)
-        view.showsUserLocation = true
-        
-        view.removeAnnotations(pins)
-        
-        var i = 0
-        self.pins.removeAll()
-        while (i < self.pokemonObserver.pokemon.count) {
-            print("index: ", i)
-            self.pins.append(MapPin(
-                coordinate: CLLocationCoordinate2D(latitude: self.pokemonObserver.pokemon[i].lat!, longitude: self.pokemonObserver.pokemon[i].lon!),
-                               title: self.pokemonObserver.pokemon[i].name,
-                               subtitle: "cp: \((self.pokemonObserver.pokemon[i].cp)!.stringValue)",
-                               action: { print(self.pokemonObserver.pokemon[i].name!) }))
-                           
-                           i = i + 1
-                       }
-                       i = 0
-        view.addAnnotations(pins)
+        updateAnnotations(from: view)
+
         
         if let selectedPin = selectedPin {
             view.selectAnnotation(selectedPin, animated: false)
@@ -127,7 +111,38 @@ struct MapView2: UIViewRepresentable, View {
     
     private func updateAnnotations(from view: MKMapView)
     {
-
+        view.showsUserLocation = true
+        view.removeAnnotations(pins)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        var i = 0
+        self.pins.removeAll()
+        while (i < self.raidObserver.raids.count) {
+            print("index: ", i)
+            self.pins.append(MapPin(
+                coordinate: CLLocationCoordinate2D(latitude: self.raidObserver.raids[i].lat, longitude: self.raidObserver.raids[i].lon),
+                title: (self.raidObserver.raids[i].dexnum == "") ? "Raid\nStarts: \(formatter.string(from: NSDate(timeIntervalSince1970: TimeInterval(truncating: self.raidObserver.raids[i].timeTillStart)) as Date ))" : "Raid: " +  self.raidObserver.raids[i].name,
+                subtitle: (self.raidObserver.raids[i].dexnum == "") ? "Difficulty: " + self.raidObserver.raids[i].difficulty.stringValue : "CP: " + self.raidObserver.raids[i].cp.stringValue + "\nEnds: \(formatter.string(from: NSDate(timeIntervalSince1970: TimeInterval(truncating: self.raidObserver.raids[i].timeToRemove)) as Date ))",
+                action: { print("name: ", self.raidObserver.raids[i].name) }))
+            
+            i = i + 1
+        }
+        i = 0
+        
+        while (i < self.pokemonObserver.pokemon.count) {
+            print("index: ", i)
+            self.pins.append(MapPin(
+                coordinate: CLLocationCoordinate2D(latitude: self.pokemonObserver.pokemon[i].lat!, longitude: self.pokemonObserver.pokemon[i].lon!),
+                title: "Raid: " + self.pokemonObserver.pokemon[i].name!,
+                subtitle: "cp: \((self.pokemonObserver.pokemon[i].cp)!.stringValue)",
+                action: { print(self.pokemonObserver.pokemon[i].name!) }))
+            
+            i = i + 1
+        }
+        i = 0
+        
+        view.addAnnotations(pins)
     }
     
     func makeCoordinator() -> Coordinator {
@@ -162,7 +177,7 @@ struct MapView2: UIViewRepresentable, View {
             
             let sourcePlacemarck = MKPlacemark(coordinate: sourceCoords!)
             let destPlackmark = MKPlacemark(coordinate: pin.coordinate)
-           
+            
             let sourceItem = MKMapItem(placemark: sourcePlacemarck)
             let destItem = MKMapItem(placemark: destPlackmark)
             
@@ -206,8 +221,6 @@ struct MapView2: UIViewRepresentable, View {
             
             mapView.removeOverlays(mapView.overlays)
         }
-        
-        
     }
 }
 

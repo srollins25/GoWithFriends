@@ -828,7 +828,7 @@ struct AddRaidView: View {
     
     var body: some View{
         VStack(spacing: 9){
-            Image(systemName: "questionmark.circle").resizable().frame(width: 120, height: 120).foregroundColor(.gray).onTapGesture {
+            Image(systemName: "questionmark.circle").resizable().frame(width: 110, height: 110).foregroundColor(.gray).onTapGesture {
                 
                 if(self.isActive == 0)
                 {
@@ -876,7 +876,7 @@ struct AddRaidView: View {
                         TextField("CP...", text: self.$cp).keyboardType(.numberPad)
                         Divider()
                         Form{
-                            DatePicker("Remaing time...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute).background(Color.white)
+                            DatePicker("Set remaing time...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute).background(Color.white)
                         }
                         
                         //TextField("Remaining time...", text: self.$timeLeft)//needs to be date picker
@@ -904,7 +904,7 @@ struct AddRaidView: View {
                 
                 Button(action: {
                     
-                    if(self.pokename == "" || self.cp == "" /* || self.timeLeft == "" */)
+                    if((self.pokename == "" || self.cp == "") && self.isActive == 0/* || self.timeLeft == "" */)
                     {
                         self.showAlert.toggle()
                     }
@@ -1111,12 +1111,12 @@ struct AddRaidView: View {
         var values = [String: Any]()
         if(isActive == 0)
         {
-            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": self.pokename, "cp": (self.cp as NSString).integerValue, "dexnum": self.dexnum, "timeToRemove": timeToRemove.timeIntervalSince1970 as NSNumber] as [String : Any]
+            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": self.pokename, "cp": (self.cp as NSString).integerValue, "dexnum": self.dexnum, "difficulty": 0, "timeToStart": 0, "timeToRemove": timeToRemove.timeIntervalSince1970 as NSNumber] as [String : Any]
         }
         else
         {
             //not active raid
-            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": "", "cp": "", "dexnum": "", "timeToStart": timeToStart.timeIntervalSince1970 as NSNumber] as [String : Any]
+            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": "", "cp": 0, "dexnum": "", "difficulty": self.difficulty, "timeToStart": timeToStart.timeIntervalSince1970 as NSNumber, "timeToRemove": 0] as [String : Any]
         }
         
         doc.setData(values)

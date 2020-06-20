@@ -13,11 +13,12 @@ import SDWebImageSwiftUI
 
 struct ProfileView: View {
     
+    @EnvironmentObject var passedPosts: PostObserver
     @ObservedObject var currentUserPostsObserver = UserPostObserver()
     @ObservedObject var favoritePostsObserver = FavoritePostsObserver()
     @State var userPosts: [Post] = []
     @State var userFavorites: [Post] = []
-    @State var currentUserFriends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
+    @State var currentUserFriends = (UserDefaults.standard.object(forKey: "friends")! as? [String])!
     @State var fetchPosts: Bool = true
     @State private var name: String = ""
     @State private var image: String = ""
@@ -196,6 +197,8 @@ struct ProfileView: View {
             
             print("userid1: ", self.user.id)
             print("username: ", self.user.name)
+            //let friends = UserDefaults.standard.array(forKey: "friends") as? [String]
+            self.isFriend = self.currentUserFriends.contains(self.user.id)
             if(self.user.id != UserDefaults.standard.string(forKey: "userid"))
             {
                 // this gets posts for the user thats been searched for
@@ -232,9 +235,11 @@ struct ProfileView: View {
                 return
             }
             ref.updateData(["friends": FieldValue.arrayUnion([self.user.id])])
+            self.passedPosts.posts.append(contentsOf: self.userPosts)
+            self.passedPosts.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
             print("friend added")
             let data = snap?.data()
-            var friends = data!["friends"] as? [String]
+            let friends = data!["friends"] as? [String]
             UserDefaults.standard.set(friends, forKey: "friends")
             self.currentUserFriends = friends!
             self.buttonImage =  Image(systemName: "person.crop.circle.badge.minus")
@@ -257,9 +262,10 @@ struct ProfileView: View {
                 return
             }
             ref.updateData(["friends": FieldValue.arrayRemove([self.user.id])])
+            self.passedPosts.posts.removeAll(where: { $0.userID == self.user.id })
             print("friend deleted")
             let data = snap?.data()
-            var friends = data!["friends"] as? [String]
+            let friends = data!["friends"] as? [String]
             UserDefaults.standard.set(friends, forKey: "friends")
             self.currentUserFriends = friends!
             self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")

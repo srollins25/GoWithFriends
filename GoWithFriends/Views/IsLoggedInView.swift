@@ -18,7 +18,7 @@ struct IsLoggedInView: View {
     @State var parentPost = ""
     var pokemon = PokemonObserver()
     var raids = RaidObserver()
-    
+    var posts = PostObserver()
     
     var body: some View{
         
@@ -26,7 +26,7 @@ struct IsLoggedInView: View {
             
             if(index == 0)
             {
-                HomeView(isLoggedIn: self.$isLoggedIn)
+                HomeView(isLoggedIn: self.$isLoggedIn).environmentObject(posts)
             }
                 
             else if(index == 1)
@@ -42,7 +42,7 @@ struct IsLoggedInView: View {
             else
             {
                 
-                ProfileView(user: self.$user, show:  self.$show, fromSearch: self.$fromSearch)
+                ProfileView(user: self.$user, show:  self.$show, fromSearch: self.$fromSearch).environmentObject(posts)
                 
             }
             Group{
