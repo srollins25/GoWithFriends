@@ -78,7 +78,7 @@ struct HomeView: View {
                     self.show.toggle()
                     
                 }){
-                    Image(systemName: "person.circle").resizable().frame(width: 30, height: 30).shadow(color: .gray, radius: 5, x: 1, y: 1)
+                    AnimatedImage(url: URL(string: UserDefaults.standard.string(forKey: "image")!)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 35, height: 35).shadow(color: .gray, radius: 5, x: 1, y: 1).clipShape(Circle())
                 }.accentColor(.white)
                     
                     , trailing:

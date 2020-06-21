@@ -22,7 +22,7 @@ struct CustomNavBar: View {
             VStack(spacing: 0){
                 HStack(alignment: .top, spacing: 8){
                     Button(action: {
-                        
+                        UserDefaults.standard.set("", forKey: "friendId")
                         withAnimation(.easeInOut(duration: 0.7)){
                             self.closeView.toggle()
                         }

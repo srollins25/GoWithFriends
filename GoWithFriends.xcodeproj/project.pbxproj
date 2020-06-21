@@ -48,6 +48,7 @@
 		E2C5B2DD249AA64B00F563BE /* PokemonObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */; };
 		E2C5B2E2249AB19E00F563BE /* FavoritePostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */; };
 		E2C5B304249DB3E500F563BE /* RaidObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B303249DB3E500F563BE /* RaidObserver.swift */; };
+		E2C5B306249DEE4100F563BE /* SearchPostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -145,6 +146,7 @@
 		E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonObserver.swift; sourceTree = "<group>"; };
 		E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePostsObserver.swift; sourceTree = "<group>"; };
 		E2C5B303249DB3E500F563BE /* RaidObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaidObserver.swift; sourceTree = "<group>"; };
+		E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPostsObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */,
+				E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */,
 				E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */,
 				E2C5B303249DB3E500F563BE /* RaidObserver.swift */,
 				E2A97C51246E6BEF00E70081 /* FriendsObserver.swift */,
@@ -652,6 +655,7 @@
 				E229E060245FFC3F001C8EFF /* NewMessageView.swift in Sources */,
 				E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */,
 				E2A3DD452446B52A00067884 /* MessageCell.swift in Sources */,
+				E2C5B306249DEE4100F563BE /* SearchPostsObserver.swift in Sources */,
 				E229E054244F1939001C8EFF /* PokeUser.swift in Sources */,
 				E2AF0BD124861F9300E3D7E4 /* IsLoggedInView.swift in Sources */,
 				E256134B243ED06E008E9613 /* SessionStore.swift in Sources */,

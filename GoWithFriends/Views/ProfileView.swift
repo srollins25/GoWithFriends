@@ -29,7 +29,7 @@ struct ProfileView: View {
     @State var showMoreMenu = false
     @State var buttonImage: Image = Image(systemName: "person.circle")
     @State var buttonText = ""
-    @State var isFriend: Bool = false
+    @State var isFriend: Bool = (UserDefaults.standard.object(forKey: "friends")! as? [String])!.contains(UserDefaults.standard.string(forKey: "friendId")!)
     
     var body: some View {
         
@@ -102,17 +102,9 @@ struct ProfileView: View {
                                     {
                                         MoreMenu(show: self.$showMoreMenu, user: self.$user)
                                     }
-                                    
-                                   
-                                    
                                 }
-                                
-                                
                             }.padding()
                         }
-                        
-                        
-                        //
                     }
                     Spacer()
                 }
@@ -151,8 +143,6 @@ struct ProfileView: View {
                                     }
                                 }
                             }
-                                
-                                
                                 
                             else
                             {
@@ -197,16 +187,15 @@ struct ProfileView: View {
             
             print("userid1: ", self.user.id)
             print("username: ", self.user.name)
-            //let friends = UserDefaults.standard.array(forKey: "friends") as? [String]
-            self.isFriend = self.currentUserFriends.contains(self.user.id)
+
+            
             if(self.user.id != UserDefaults.standard.string(forKey: "userid"))
             {
-                // this gets posts for the user thats been searched for
+
                 self.getUserPosts()
             }
-            
-            
-            if(/*!self.currentUserFriends.contains(self.user.id)*/ self.isFriend == false)
+
+            if(self.isFriend == false)
             {
                 self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
                 self.buttonText = "Follow"
@@ -223,7 +212,7 @@ struct ProfileView: View {
     
     func addFriend()
     {
-        print("entering add friend method")
+        
         let uid = Auth.auth().currentUser?.uid
         let db = Firestore.firestore()
         let ref = db.collection("users").document(uid!)
@@ -241,6 +230,8 @@ struct ProfileView: View {
             let data = snap?.data()
             let friends = data!["friends"] as? [String]
             UserDefaults.standard.set(friends, forKey: "friends")
+            //print("friends after butten press: ", UserDefaults.standard.string(forKey: "friends")?.description)
+            //UserDefaults.standard.synchronize()
             self.currentUserFriends = friends!
             self.buttonImage =  Image(systemName: "person.crop.circle.badge.minus")
             self.buttonText = "Unfollow"
@@ -267,6 +258,8 @@ struct ProfileView: View {
             let data = snap?.data()
             let friends = data!["friends"] as? [String]
             UserDefaults.standard.set(friends, forKey: "friends")
+            //print("friends after butten press: ", UserDefaults.standard.string(forKey: "friends")?.description)
+            //UserDefaults.standard.synchronize()
             self.currentUserFriends = friends!
             self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
             self.buttonText = "Follow"

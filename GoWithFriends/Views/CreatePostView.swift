@@ -11,6 +11,7 @@ import Firebase
 import UIKit
 import FirebaseFirestore
 import SDWebImageSwiftUI
+import FirebaseAuth
 
 struct CreatePostView: View {
     

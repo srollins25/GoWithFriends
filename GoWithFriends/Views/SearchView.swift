@@ -12,7 +12,7 @@ import SDWebImageSwiftUI
 
 struct SearchView: View {
     
-    @ObservedObject var postSearchObserver = PostObserver()
+    @ObservedObject var postSearchObserver = SearchPostsObserver()
     @ObservedObject var userSearchObserver = SearchUserObserver()
     @State var user: User = User(id: "", email: "", name: "", profileimage: "")
     @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
@@ -29,14 +29,14 @@ struct SearchView: View {
             
             Group{
                 VStack{
-                    
+                    Spacer().frame(height: 140)
                     if(self.searchIndex == 0)
                     {
                         List(postSearchObserver.posts.filter{$0.postBody.lowercased().contains(self.txt.lowercased())}){ post in
                             
                             Button(action: {
                                 self.post = post
-                                
+                                UIApplication.shared.endEditing()
                                 withAnimation(.easeIn(duration: 0.5)){
                                     print(self.show)
                                     UserDefaults.standard.set(self.post.id, forKey: "parentPost")
@@ -54,7 +54,8 @@ struct SearchView: View {
                             
                             Button(action: {
                                 self.user = user
-                                
+                                UserDefaults.standard.set(self.user.id, forKey: "friendId")
+                                UIApplication.shared.endEditing()
                                 withAnimation(.easeIn(duration: 0.5)){
                                     print(self.show)
                                     self.show.toggle()
@@ -65,7 +66,7 @@ struct SearchView: View {
                             }
                         }
                     }
-                }.offset(y: 0)
+                }.offset(y: 0).background(Color.white)
             }
             
             CustomSearchBar(closeView: self.$closeView, txt: self.$txt, searchIndex: self.$searchIndex)
@@ -99,7 +100,7 @@ struct CustomSearchBar: View {
             VStack{
                 HStack(spacing: 8){
                     Button(action: {
-                        
+                        UIApplication.shared.endEditing()
                         withAnimation(.easeOut(duration: 0.5)){
                             self.txt = ""
                             self.closeView.toggle()
@@ -147,7 +148,11 @@ struct CustomSearchBar: View {
     }
 }
 
-
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 //struct SearchView_Previews: PreviewProvider {
 //    static var previews: some View {

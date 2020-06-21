@@ -67,7 +67,7 @@ class getFriends: ObservableObject{
     init(){
         let db = Firestore.firestore()
         
-        var friends = UserDefaults.standard.array(forKey: "friends") as? [String]
+        let friends = UserDefaults.standard.array(forKey: "friends") as? [String]
         db.collection("users").getDocuments{ (snapshot, error) in //user friends
             
             
@@ -83,7 +83,7 @@ class getFriends: ObservableObject{
                 //let email = i.get("email") as! String
                 let image = i.get("image") as! String
                 
-                print("friends: ", friends?.description)
+                //print("friends: ", friends?.description)
                 print("checking if id is in friends: ", id)
                 if(friends!.contains(id))
                 {

@@ -42,8 +42,9 @@ struct IsLoggedInView: View {
             else
             {
                 
-                ProfileView(user: self.$user, show:  self.$show, fromSearch: self.$fromSearch).environmentObject(posts)
-                
+                ProfileView(user: self.$user,
+                            show:  self.$show,
+                            fromSearch: self.$fromSearch).environmentObject(posts)
             }
             Group{
                 ZStack(alignment: .center){

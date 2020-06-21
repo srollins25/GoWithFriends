@@ -1,21 +1,21 @@
 //
-//  PostObserver.swift
+//  SearchPostsObserver.swift
 //  GoWithFriends
-// Test5@emil.com
-//  Created by stephan rollins on 4/17/20.
+//
+//  Created by stephan rollins on 6/20/20.
 //  Copyright © 2020 OmniStack. All rights reserved.
 //
 
 import Foundation
 import FirebaseFirestore
 
-class PostObserver: ObservableObject {
+class SearchPostsObserver: ObservableObject {
     
     @Published var posts = [Post]()
     
     init() {
         let db = Firestore.firestore()
-        let friends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
+        
         db.collection("posts").addSnapshotListener { (snap, error) in
             
             if error != nil{
@@ -26,16 +26,10 @@ class PostObserver: ObservableObject {
             for i in snap!.documentChanges {
                 
                 if(i.type == .added){
-                    //for pulling posts from friends
-                    //let userID = (i.document.get("userId") as! String)
                     
-                    
-                    
-                    let userId = i.document.get("userId") as! String
-                    if(friends.contains(userId) || userId == UserDefaults.standard.string(forKey: "userid"))
-                    {
-                        //print("array contains friend")
+
                         let id = i.document.documentID
+                        let userId = i.document.get("userId") as! String
                         let name = i.document.get("name") as! String
                         let profileimage = i.document.get("profileimage") as! String
                         let image = i.document.get("image") as! String
@@ -47,7 +41,7 @@ class PostObserver: ObservableObject {
                         
                         self.posts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                         self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
-                    }
+                    
                 }
                 
                 if(i.type == .removed){

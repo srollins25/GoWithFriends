@@ -9,6 +9,8 @@
 import Foundation
 import Firebase
 import Combine
+import FirebaseAuth
+import FirebaseFirestore
 
 class SessionStore: ObservableObject {
     

@@ -35,9 +35,9 @@ class PokemonObserver: ObservableObject {
                     let sighted = i.document.get("sighted") as! NSNumber
                     let dexnum = i.document.get("dexnum") as! String
                     let timeToRemove = i.document.get("timeToRemove") as! NSNumber
-                    print("sighted: ", sighted)
-                    print("sighted time to delete: ", (sighted.doubleValue + 600))
-                    print("current time: ", Date().timeIntervalSince1970 as NSNumber)
+//                    print("sighted: ", sighted)
+//                    print("sighted time to delete: ", (sighted.doubleValue + 600))
+//                    print("current time: ", Date().timeIntervalSince1970 as NSNumber)
                     if((Date().timeIntervalSince1970 as NSNumber).doubleValue >= timeToRemove.doubleValue)
                     {
                         
@@ -55,7 +55,7 @@ class PokemonObserver: ObservableObject {
                     {
                         //else add to array
                         self.pokemon.append(Pokemon(id: id_, user: user, lat: lat, lon: lon, name: name, cp: cp, sighted: sighted, dexnum: dexnum, timeToRemove: timeToRemove))
-                        print("pokemon arr: ", self.pokemon.description)
+                        //print("pokemon arr: ", self.pokemon.description)
                     }
                 }
                 

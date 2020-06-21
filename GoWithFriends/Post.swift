@@ -21,3 +21,11 @@ struct Post: Identifiable{
     var createdAt: NSNumber
     var parentPost: String
 }
+
+//UserDefaults.standard.set(name, forKey: "username")
+//UserDefaults.standard.set("\(url!)", forKey: "image")
+//UserDefaults.standard.set(uid, forKey: "userid")
+//UserDefaults.standard.set(favorites, forKey: "favorites")
+//UserDefaults.standard.set(friends, forKey: "friends")
+//UserDefaults.standard.set("", forKey: "friendId")
+//UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
