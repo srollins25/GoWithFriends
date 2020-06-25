@@ -8,6 +8,7 @@
 
 import Foundation
 import FirebaseFirestore
+import Firebase
 
 class PostObserver: ObservableObject {
     
@@ -29,8 +30,6 @@ class PostObserver: ObservableObject {
                     //for pulling posts from friends
                     //let userID = (i.document.get("userId") as! String)
                     
-                    
-                    
                     let userId = i.document.get("userId") as! String
                     if(friends.contains(userId) || userId == UserDefaults.standard.string(forKey: "userid"))
                     {
@@ -45,8 +44,31 @@ class PostObserver: ObservableObject {
                         let parentPost = i.document.get("parentPost") as! String
                         let createdAt = i.document.get("createdAt") as! NSNumber
                         
-                        self.posts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
-                        self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+                        //check if in user blocked list
+                        let ref = db.collection("users").document(userId)
+                        
+                        ref.getDocument{ (snapshot, error) in
+                            
+                            if(error != nil){
+                                print((error?.localizedDescription)!)
+                                return
+                            }
+                                
+                            else{
+                                let data = snapshot?.data()
+                                let blocked = data!["blocked"] as? [String]
+                                
+                                
+                                if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
+                                {
+                                    self.posts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                                    self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+                                }
+                               
+                            }
+                        }
+                        
+                        
                     }
                 }
                 

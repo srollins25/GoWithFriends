@@ -14,7 +14,7 @@ import SDWebImageSwiftUI
 
 struct HomeView: View {
     
-    @EnvironmentObject var session: SessionStore
+
     @EnvironmentObject var postsObserver: PostObserver
     @State var show = false
     @State var showPostThread = false
@@ -126,7 +126,7 @@ struct HomeView: View {
 
 struct SideMenu: View {
     
-    @EnvironmentObject var session: SessionStore
+
     @Binding var isLoggedIn: Bool
     
     var body: some View {

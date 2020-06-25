@@ -23,6 +23,7 @@ struct SearchView: View {
     @State var searchIndex = 0
     let transition = AnyTransition.move(edge: .trailing)
     @State var subParentPost = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var isLoggedIn = true
     
     var body: some View {
         ZStack(){
@@ -66,7 +67,7 @@ struct SearchView: View {
                             }
                         }
                     }
-                }.offset(y: 0).background(Color.white)
+                }.offset(y: 0).background(Color(UIColor.systemBackground))
             }
             
             CustomSearchBar(closeView: self.$closeView, txt: self.$txt, searchIndex: self.$searchIndex)
@@ -75,7 +76,7 @@ struct SearchView: View {
             {
                 if(searchIndex == 1)
                 {
-                    ProfileView(user: self.$user, show: self.$show, fromSearch: self.$fromSearch).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)
+                    ProfileView(user: self.$user, show: self.$show, fromSearch: self.$fromSearch, isLoggedIn: self.$isLoggedIn).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)
                 }
                 else
                 {

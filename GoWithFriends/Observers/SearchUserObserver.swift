@@ -30,9 +30,29 @@ class SearchUserObserver: ObservableObject {
                 let name = i.get("name") as! String
                 let image = i.get("image") as! String
                 
+                let ref = db.collection("users").document(id)
+                
+                ref.getDocument{ (snapshot, error) in
+                    
+                    if(error != nil){
+                        print((error?.localizedDescription)!)
+                        return
+                    }
+                        
+                    else{
+                        let data = snapshot?.data()
+                        let blocked = data!["blocked"] as? [String]
+                        
+                        
+                        if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
+                        {
+                            self.users.append(User(id: id, email: "", name: name, profileimage: image))
+                        }
+                       
+                    }
+                }
                 
                 
-                self.users.append(User(id: id, email: "", name: name, profileimage: image))
                 
             }
             

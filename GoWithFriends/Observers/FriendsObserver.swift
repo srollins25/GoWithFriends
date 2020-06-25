@@ -34,7 +34,7 @@ class FriendsObserver: ObservableObject {
                     let createdAt = i.document.get("createdAt") as! NSNumber
                     
                     self.friends.append(Message(id: id, image: image, name: name, text: text, createdAt: createdAt))
-                    self.friends.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+                    self.friends.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedDescending})
                 }
                 
                 if(i.type == .modified){

@@ -10,69 +10,67 @@ import Foundation
 import SwiftUI
 import Firebase
 import SDWebImageSwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct ChatView: View{
     
-    var pic: String
-    var name: String
-    var uid: String //sendto user id?
+    @State var pic: String
+    @State var name: String
+    @State var uid: String
     @Binding var chat: Bool
-    @State var messages = [ChatMessage]()//MessagesObserver()
+    @State var messages = [ChatMessage]()
     @State var messageTextFeild = ""
+    @EnvironmentObject var showTabBar: ShowTabBar
+    let obj = observed()
+    @State var value: CGFloat = 0
     
     var body: some View{
         
-        
-        //UITableView.appearance().separatorColor = .clear
-        VStack{
+        ZStack{
+            Color("background").edgesIgnoringSafeArea(.all)
             
-            List{
-                if(messages.isEmpty)
-                {
-                    Text("No messages")
-                }
-                else
-                {
-                    ForEach(messages) { i in
-                        
-                        HStack{
-                            
-                            if(i.user == Auth.auth().currentUser?.uid){
-                                Spacer()
-                                Text(i.text).padding().background(Color.blue).clipShape(ChatBubble(myMessage: true)).foregroundColor(.white)
-                            }
-                            else{
-                                Text(i.text).padding().background(Color.gray).clipShape(ChatBubble(myMessage: false)).foregroundColor(.white)
-                                Spacer()
-                            }
-                        }
+            
+     
+                VStack(spacing: 0){
+
+                    chatTopView(pic: pic, name: name, showChatView: self.$chat).padding(.bottom, 10)
+
+                    GeometryReader{_ in
+
+                        ChatList(messages: self.$messages, offset: self.$value)
                     }
+                    
+                    chatBottomView(messageTextFeild: self.$messageTextFeild, name: self.$name, pic: self.$pic, uid: self.$uid).environmentObject(obj).offset(y: -self.value).animation(.spring())
                 }
-            }
-            
-            HStack{
-                TextField("Type Message", text: self.$messageTextFeild).textFieldStyle(RoundedBorderTextFieldStyle())
                 
-                Button(action: {
-                    let createdAt = Date().timeIntervalSince1970 as NSNumber
-                    
-                    //create message and send to database
-                    
-                    sendMessage(user: self.name, uid: self.uid, pic: self.pic, createdAt: createdAt, message: self.messageTextFeild)
-                    
-                    self.messageTextFeild = ""
-                    print("")
-                }){
-                    Image(systemName: "arrow.up.circle").frame(width: 32, height: 32)
-                }
-            }
+                
             
         }
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
         .onAppear(perform: {
             UITableView.appearance().separatorColor = .clear
             self.getMessages()
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main){ (notification) in
+                let value = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                let height = value.height
+                
+                self.value = height
+            }
+            
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main){ (notification) in
+
+                
+                self.value = 0
+            }
         })
-            .navigationBarTitle(Text(self.name), displayMode: .inline)
+            .onDisappear(perform: {
+                withAnimation(.easeInOut(duration: 0.5)){
+
+                    self.showTabBar.showTabBar = true
+                }
+            })
     }
     
     
@@ -105,6 +103,123 @@ struct ChatView: View{
     }
 }
 
+struct chatBottomView: View{
+
+    @Binding var messageTextFeild: String
+    @Binding var name: String
+    @Binding var pic: String
+    @Binding var uid: String
+    //@Binding var height: CGFloat
+    @EnvironmentObject var obj: observed
+
+    var body: some View{
+
+        HStack{
+
+//            MultiTextField().frame(height: self.obj.size < 150 ? self.obj.size : 150)
+//                    .padding(10)
+//                    .background(Color.yellow)
+//                .cornerRadius(10)
+            
+            Button(action: {
+
+            }){
+                Image(systemName: "camera.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 25, height: 25).padding(10).foregroundColor(Color.gray)
+            }
+            
+            
+            TextField("Type message...", text: self.$messageTextFeild).lineLimit(5)
+
+            Button(action: {
+                let createdAt = Date().timeIntervalSince1970 as NSNumber
+
+                //create message and send to database
+
+                sendMessage(user: self.name, uid: self.uid, pic: self.pic, createdAt: createdAt, message: self.messageTextFeild)
+
+                self.messageTextFeild = ""
+            }){
+                Image(systemName: "arrow.up.circle").resizable().frame(width: 30, height: 30).padding(10).foregroundColor(self.messageTextFeild == "" ? Color.gray : Color.green)
+            }.disabled(self.messageTextFeild == "" ? true : false)
+        }.padding().background(Color.white)
+    }
+}
+
+
+
+struct ChatList: View {
+    
+    @Binding var messages: [ChatMessage]
+    @Binding var offset: CGFloat
+    
+    var body: some View{
+        
+        List{
+            if(messages.isEmpty){
+                Text("No messages")
+            }
+            else{
+                ForEach(messages) { i in
+                    
+                    HStack{
+                        
+                        if(i.user == Auth.auth().currentUser?.uid){
+                            Spacer()
+                            Text(i.text).padding().background(Color.blue).clipShape(ChatBubble(myMessage: true)).foregroundColor(.white)
+                        }
+                        else{
+                            Text(i.text).padding().background(Color.gray).clipShape(ChatBubble(myMessage: false)).foregroundColor(.white)
+                            Spacer()
+                        }
+                    }
+                }
+            }
+        }.padding(.horizontal, 15).padding(.bottom, self.offset == 0 ? 0 : self.offset + 10)
+            .background(Color.white)
+            .clipShape(Rounded())
+    }
+}
+
+struct Rounded : Shape {
+    
+    func path(in rect: CGRect) -> Path {
+        
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: .topLeft, cornerRadii: CGSize(width: 55, height: 55))
+        return Path(path.cgPath)
+    }
+}
+
+struct chatTopView: View {
+    
+    var pic: String
+    var name: String
+    @Binding var showChatView: Bool
+    
+    var body: some View{
+        HStack{
+            
+            Button(action: {
+                UIApplication.shared.endEditing()
+                withAnimation(.easeIn(duration: 0.5)){
+                    self.showChatView.toggle()
+                }
+
+            }){
+                Image(systemName: "control").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 15, height: 15).font(.title).rotationEffect(.init(degrees: -90)).foregroundColor(.gray)
+                
+            }
+            
+            Spacer()
+            VStack(spacing: 5){
+                AnimatedImage(url: URL(string: pic)).resizable().frame(width:45, height: 45).clipShape(Circle())
+                Text(name).font(.system(size: 20)).bold().fontWeight(.heavy)
+            }
+            
+            Spacer()
+        }.foregroundColor(.white).padding(.horizontal, 10)
+    }
+}
+
 struct ChatMessage: Identifiable {
     var id: String
     var text: String
@@ -124,6 +239,55 @@ struct ChatBubble: Shape {
         return Path(path.cgPath)
     }
     
+}
+
+struct MultiTextField: UIViewRepresentable {
+    func makeCoordinator() -> Coordinator {
+        return MultiTextField.Coordinator(parent1: self)
+    }
+    
+    @EnvironmentObject var obj: observed
+    
+    func makeUIView(context: UIViewRepresentableContext<MultiTextField>) ->  UITextView {
+        
+        let view = UITextView()
+        view.font = .systemFont(ofSize: 19)
+        view.text = "Type message..."
+        view.textColor = UIColor.black.withAlphaComponent(0.35)
+        view.backgroundColor = .clear
+        view.delegate = context.coordinator
+        self.obj.size = view.contentSize.height
+        view.isEditable = true
+        view.isUserInteractionEnabled = true
+        view.isScrollEnabled = true
+        return view
+    }
+    
+    func updateUIView(_ uiView: MultiTextField.UIViewType, context: UIViewRepresentableContext<MultiTextField>) {
+        
+    }
+    
+    class Coordinator: NSObject,  UITextViewDelegate {
+        var parent: MultiTextField
+        
+        init(parent1: MultiTextField) {
+            parent = parent1
+        }
+        
+        func textViewDidBeginEditing(_ textView: UITextView) {
+            textView.text = ""
+            textView.textColor = .black
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            self.parent.obj.size = textView.contentSize.height
+        }
+    }
+    
+}
+
+class observed: ObservableObject{
+    @Published var size: CGFloat = 0
 }
 
 func sendMessage(user: String, uid: String, pic: String, createdAt: NSNumber, message: String) {
@@ -212,10 +376,6 @@ func updateRecents(uid: String, lastmessage: String, createdAt: NSNumber)
     
     db.collection("users").document(myuid!).collection("messages").document(uid).updateData(["message": lastmessage,  "createdAt": createdAt])
 }
-
-
-
-
 
 
 

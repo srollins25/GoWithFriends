@@ -41,8 +41,31 @@ class CommentsObserver: ObservableObject {
                         let favorites = i.document.get("favorites") as! NSNumber
                         let createdAt = i.document.get("createdAt") as! NSNumber
                         
-                        self.comments.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
-                        self.comments.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+                        //check if in user blocked list
+                        let ref = db.collection("users").document(userId)
+                        
+                        ref.getDocument{ (snapshot, error) in
+                            
+                            if(error != nil){
+                                print((error?.localizedDescription)!)
+                                return
+                            }
+                                
+                            else{
+                                let data = snapshot?.data()
+                                let blocked = data!["blocked"] as? [String]
+                                
+                                
+                                if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
+                                {
+                                    self.comments.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                                    self.comments.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+                                }
+                               
+                            }
+                        }
+                        
+
                         
                     }
                 }

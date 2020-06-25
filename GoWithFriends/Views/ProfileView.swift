@@ -10,6 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 import SDWebImageSwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
     
@@ -26,14 +27,19 @@ struct ProfileView: View {
     @Binding var user: User
     @Binding var show: Bool
     @Binding var fromSearch: Bool
+    @Binding var isLoggedIn: Bool
     @State var showMoreMenu = false
+    @State var showProfileSettings = false
     @State var buttonImage: Image = Image(systemName: "person.circle")
     @State var buttonText = ""
     @State var isFriend: Bool = (UserDefaults.standard.object(forKey: "friends")! as? [String])!.contains(UserDefaults.standard.string(forKey: "friendId")!)
+    @State var showDeleteVerify = false
+    
     
     var body: some View {
         
         ZStack(alignment: .top){
+            //Color.white.edgesIgnoringSafeArea(.all)
             VStack{
                 HStack{
                     Spacer()
@@ -53,25 +59,38 @@ struct ProfileView: View {
                         Text("\(user.name)")
                         //check if from search or not
                         
-                        if(self.fromSearch)
+                        if(self.fromSearch && user.id != Auth.auth().currentUser?.uid)
                         {
                             HStack{
                                 
                                 VStack{
-                                    Button(action: {
-                                        
-                                        self.currentUserFriends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
-                                        /*!(self.currentUserFriends.contains(self.user.id))*/ self.isFriend == false ? self.addFriend() :  self.deleteFriend()
-                                        print("friend button pressed")
-                                        print("contains friend: ", self.currentUserFriends.contains(self.user.id))
-                                    }){
-                                        
-                                        self.buttonImage.resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                        
-                                        //check to see if in friends list
+                                    
+                                    if(isFriend == true)
+                                    {
+                                        Button(action: {
+                                              self.deleteFriend()
+                                          }){
+                                              
+                                            Image(systemName: "person.crop.circle.badge.minus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                              
+                                              //check to see if in friends list
+                                          }
+                                          
+                                            Text("Unfollow").font(.footnote)
+                                    }
+                                    else
+                                    {
+                                        Button(action: {
+                                            self.addFriend()
+                                          }){
+                                              
+                                              Image(systemName: "person.crop.circle.badge.plus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                              
+                                              //check to see if in friends list
+                                          }
+                                            Text("Follow").font(.footnote)
                                     }
                                     
-                                      Text(buttonText).font(.footnote)
                                 }
                                 
                                 VStack{
@@ -96,6 +115,55 @@ struct ProfileView: View {
                                             
                                         }
                                         Text("More").font(.footnote)
+                                    }
+                                    
+                                    if(self.showMoreMenu)
+                                    {
+                                        MoreMenu(show: self.$showMoreMenu, user: self.$user).padding(.top, 8)
+                                    }
+                                }
+                            }.padding()
+                        }
+                        else
+                        {
+                            HStack{
+                                
+                                VStack{
+                                        Button(action: {
+                                            //present list of friends
+                                          }){
+                                              
+                                            Image(systemName: "person.2.fill").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                          }
+                                          
+                                            Text("Friends").font(.footnote)
+                                }
+                                
+                                VStack{
+                                    Button(action: {
+                                        //present notification view
+                                    }){
+                                        
+                                        Image(systemName: "bell.fill").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                        
+                                    }
+                                    Text("Notification").font(.footnote)
+                                }
+                                
+                                ZStack{
+                                    
+                                    VStack{
+                                        Button(action: {
+                                            //present profile change view
+                                            self.showProfileSettings.toggle()
+                                        }){
+                                            
+                                            Image(systemName: "line.horizontal.3.decrease.circle").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                            
+                                        }.sheet(isPresented: self.$showProfileSettings){
+                                            ProfileSettingsView(closeView: self.$showProfileSettings, showDeleteVerify: self.$showDeleteVerify)
+                                        }
+                                        Text("Settings").font(.footnote)
                                     }
                                     
                                     if(self.showMoreMenu)
@@ -180,14 +248,24 @@ struct ProfileView: View {
             {
                 CustomNavBar(closeView: self.$show).edgesIgnoringSafeArea(.top)
             }
+            
+            if(self.showDeleteVerify == true)
+            {
+                DeleteAccountVerifyView(closeView: self.$showDeleteVerify, isLoggedIn: self.$isLoggedIn)
+            }
+            
+            if(self.isLoggedIn == false)
+            {
+                LoginView(isloggedin: self.$isLoggedIn)
+            }
         }
             
-        .background(Color.white)
+        .background(Color(UIColor.systemBackground))
         .onAppear(perform: {
             
             print("userid1: ", self.user.id)
             print("username: ", self.user.name)
-
+            print("appearing view")
             
             if(self.user.id != UserDefaults.standard.string(forKey: "userid"))
             {
@@ -195,18 +273,18 @@ struct ProfileView: View {
                 self.getUserPosts()
             }
 
-            if(self.isFriend == false)
-            {
-                self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
-                self.buttonText = "Follow"
-                self.isFriend = false
-            }
-            else
-            {
-                self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
-                self.buttonText = "Unfollow"
-                self.isFriend = true
-            }
+//            if(self.isFriend == false)
+//            {
+//                self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
+//                self.buttonText = "Follow"
+//                self.isFriend = false
+//            }
+//            else
+//            {
+//                self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
+//                self.buttonText = "Unfollow"
+//                self.isFriend = true
+//            }
         })
     }
     

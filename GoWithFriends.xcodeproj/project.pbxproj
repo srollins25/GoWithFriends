@@ -20,7 +20,6 @@
 		E256133E243E917D008E9613 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E256133D243E917D008E9613 /* Preview Assets.xcassets */; };
 		E2561341243E917D008E9613 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E256133F243E917D008E9613 /* LaunchScreen.storyboard */; };
 		E2561349243ECC8F008E9613 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2561348243ECC8F008E9613 /* GoogleService-Info.plist */; };
-		E256134B243ED06E008E9613 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E256134A243ED06E008E9613 /* SessionStore.swift */; };
 		E256134D243ED59B008E9613 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E256134C243ED59B008E9613 /* LoginView.swift */; };
 		E256134F243EE7B9008E9613 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E256134E243EE7B9008E9613 /* HomeView.swift */; };
 		E2561351243EFD04008E9613 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2561350243EFD04008E9613 /* AppView.swift */; };
@@ -40,6 +39,10 @@
 		E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */; };
 		E2AD879A2493655F0000D52D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87992493655F0000D52D /* AlertView.swift */; };
 		E2AF0BD124861F9300E3D7E4 /* IsLoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */; };
+		E2B0BA4124A32ABE000819C6 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4024A32ABE000819C6 /* ProfileSettingsView.swift */; };
+		E2B0BA4324A34B69000819C6 /* BlankView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4224A34B69000819C6 /* BlankView.swift */; };
+		E2B0BA4524A34D8C000819C6 /* DeleteAccountVerifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */; };
+		E2B0BA4724A47C29000819C6 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4624A47C29000819C6 /* SessionStore.swift */; };
 		E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDB248736CA006F2728 /* PostThreadView.swift */; };
 		E2B50FDE24873722006F2728 /* AddToMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDD24873722006F2728 /* AddToMapView.swift */; };
 		E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDF2487375C006F2728 /* CreatePostView.swift */; };
@@ -81,7 +84,6 @@
 		E2561340243E917D008E9613 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E2561342243E917D008E9613 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2561348243ECC8F008E9613 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		E256134A243ED06E008E9613 /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
 		E256134C243ED59B008E9613 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E256134E243EE7B9008E9613 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E2561350243EFD04008E9613 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,10 @@
 		E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		E2AD87992493655F0000D52D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IsLoggedInView.swift; path = /Users/stef/Desktop/projects/GoWithFriends/GoWithFriends/Views/IsLoggedInView.swift; sourceTree = "<absolute>"; };
+		E2B0BA4024A32ABE000819C6 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
+		E2B0BA4224A34B69000819C6 /* BlankView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankView.swift; sourceTree = "<group>"; };
+		E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountVerifyView.swift; sourceTree = "<group>"; };
+		E2B0BA4624A47C29000819C6 /* SessionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
 		E2B50FDB248736CA006F2728 /* PostThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostThreadView.swift; sourceTree = "<group>"; };
 		E2B50FDD24873722006F2728 /* AddToMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToMapView.swift; sourceTree = "<group>"; };
 		E2B50FDF2487375C006F2728 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
@@ -200,6 +206,7 @@
 				E2B50FDF2487375C006F2728 /* CreatePostView.swift */,
 				E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */,
 				E256134E243EE7B9008E9613 /* HomeView.swift */,
+				E2B0BA4224A34B69000819C6 /* BlankView.swift */,
 				E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */,
 				E256134C243ED59B008E9613 /* LoginView.swift */,
 				E2561352243EFD53008E9613 /* MapView.swift */,
@@ -207,6 +214,8 @@
 				E229E05F245FFC3F001C8EFF /* NewMessageView.swift */,
 				E2B50FDB248736CA006F2728 /* PostThreadView.swift */,
 				E2561354243F0052008E9613 /* ProfileView.swift */,
+				E2B0BA4024A32ABE000819C6 /* ProfileSettingsView.swift */,
+				E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */,
 				E2AA381C247F4C4C0038D917 /* SearchView.swift */,
 			);
 			path = Views;
@@ -233,7 +242,7 @@
 		E2561333243E917B008E9613 /* GoWithFriends */ = {
 			isa = PBXGroup;
 			children = (
-				E256134A243ED06E008E9613 /* SessionStore.swift */,
+				E2B0BA4624A47C29000819C6 /* SessionStore.swift */,
 				E2A3F111244AB287004A0C4A /* Post.swift */,
 				E229E059245A5AF3001C8EFF /* Message.swift */,
 				E229E053244F1939001C8EFF /* PokeUser.swift */,
@@ -636,6 +645,7 @@
 				E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */,
 				E2561335243E917B008E9613 /* AppDelegate.swift in Sources */,
 				E2A3F114244AB55C004A0C4A /* PostObserver.swift in Sources */,
+				E2B0BA4124A32ABE000819C6 /* ProfileSettingsView.swift in Sources */,
 				E2561355243F0052008E9613 /* ProfileView.swift in Sources */,
 				E2C5B2D72499653D00F563BE /* Raid.swift in Sources */,
 				E229E05A245A5AF3001C8EFF /* Message.swift in Sources */,
@@ -657,8 +667,9 @@
 				E2A3DD452446B52A00067884 /* MessageCell.swift in Sources */,
 				E2C5B306249DEE4100F563BE /* SearchPostsObserver.swift in Sources */,
 				E229E054244F1939001C8EFF /* PokeUser.swift in Sources */,
+				E2B0BA4724A47C29000819C6 /* SessionStore.swift in Sources */,
+				E2B0BA4524A34D8C000819C6 /* DeleteAccountVerifyView.swift in Sources */,
 				E2AF0BD124861F9300E3D7E4 /* IsLoggedInView.swift in Sources */,
-				E256134B243ED06E008E9613 /* SessionStore.swift in Sources */,
 				E2561351243EFD04008E9613 /* AppView.swift in Sources */,
 				E256134F243EE7B9008E9613 /* HomeView.swift in Sources */,
 				E259C19B2443DF6100D6321F /* PostCell.swift in Sources */,
@@ -666,6 +677,7 @@
 				E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */,
 				E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */,
 				E2C5B2DD249AA64B00F563BE /* PokemonObserver.swift in Sources */,
+				E2B0BA4324A34B69000819C6 /* BlankView.swift in Sources */,
 				E2561339243E917C008E9613 /* ContentView.swift in Sources */,
 				E2A97C4E2461160B00E70081 /* UserCell.swift in Sources */,
 			);

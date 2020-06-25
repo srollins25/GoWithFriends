@@ -21,18 +21,17 @@ struct MessageView: View {
     @State var uid = ""
     @State var image = ""
     @State var shouldFetch = false
+    @EnvironmentObject var showTabBar: ShowTabBar
+    let transition = AnyTransition.move(edge: .trailing)
+    
     
     var body: some View {
         
+        
+        
         NavigationView{
             
-            
             ZStack{
-                
-                NavigationLink(destination: ChatView(pic: self.image, name: self.name, uid: self.uid, chat: self.$chat), isActive: self.$chat){
-                    Text("")
-                }
-                
                 VStack{
                     List{
                         
@@ -53,6 +52,12 @@ struct MessageView: View {
                                     self.image = i.image
                                     self.chat.toggle()
                                     
+                                    
+                                    withAnimation(.easeInOut(duration: 0.5)){
+                                   
+                                        self.showTabBar.showTabBar = false
+                                    }
+                                    
                                 }){
                                     MessageCell(id: i.id, name: i.name, image: i.image, message: i.text, createdAt: i.createdAt)
                                 }
@@ -61,6 +66,12 @@ struct MessageView: View {
                     }
                     
                 }
+                
+                if(self.chat == true)
+                {
+                    ChatView(pic: self.image, name: self.name, uid: self.uid, chat: self.$chat).environmentObject(showTabBar).transition(transition)
+                }
+                
             }
             .navigationBarTitle(Text("Messages"))
             .navigationBarItems(trailing: Button(action: {

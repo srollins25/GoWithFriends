@@ -187,11 +187,11 @@ struct PopOver: View {
                     self.show.toggle()
                 }
                 
-                print("cancel")
+                print("cancel") 
             }), secondaryButton: .destructive(Text("Delete"), action: {
                 withAnimation(.spring()){
-                    self.show.toggle()
-                }
+                    self.show.toggle() 
+                } 
                 
                 // when deleting a post remove from all users who have it as a favorite, remove it from the current users posts array, and change all posts that havee it as a parent post to empty string
                 

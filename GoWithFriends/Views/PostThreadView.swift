@@ -25,7 +25,7 @@ struct PostThreadView: View {
         
         ZStack{
             
-            Color.white
+            //Color.white
             
             VStack{
                 CustomNavBar(closeView: $closeView)
@@ -105,7 +105,7 @@ struct PostThreadView: View {
                 PostThreadView(closeView: self.$showSubThread, mainPost: self.$subParentPost, subParentPost: self.$subPost2).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)//.edgesIgnoringSafeArea(.all)
                 
             }
-        }.edgesIgnoringSafeArea(.all)
+            }.edgesIgnoringSafeArea(.all).background(Color(UIColor.systemBackground))
         .onAppear(perform: {
             
         })

@@ -19,52 +19,41 @@ struct IsLoggedInView: View {
     var pokemon = PokemonObserver()
     var raids = RaidObserver()
     var posts = PostObserver()
+    @EnvironmentObject var showTabBar: ShowTabBar
     
     var body: some View{
         
         Group{
             
-            if(index == 0)
-            {
-                HomeView(isLoggedIn: self.$isLoggedIn).environmentObject(posts)
-            }
+            
                 
-            else if(index == 1)
-            {
-                MapView().environmentObject(pokemon).environmentObject(raids)
-            }
-                
-            else if(index == 2)
-            {
-                MessageView()
-            }
-                
-            else
-            {
-                
-                ProfileView(user: self.$user,
-                            show:  self.$show,
-                            fromSearch: self.$fromSearch).environmentObject(posts)
-            }
-            Group{
-                ZStack(alignment: .center){
-                    //Spacer()
-                    //
-                    BottomBar(index: self.$index)
-                        .padding()
-                        .padding(.horizontal, 22)
-                    //.background(CurvedShape())
-                    
-                    Button(action: {
-                        self.showCreatePost.toggle()
-                    }){
-                        Image(systemName: "plus.circle.fill").resizable().frame(width: 40, height: 40).padding(10).background(Color.white).clipShape(Circle())
-                    }.offset(y: -25)
-                        .sheet(isPresented: $showCreatePost) {
-                            CreatePostView(closeView: self.$showCreatePost, parentPost: self.$parentPost)
-                    }
-                    //.shadow(radius: 5)
+                if(index == 0)
+                {
+                    HomeView(isLoggedIn: self.$isLoggedIn).environmentObject(posts)
                 }
+                    
+                else if(index == 1)
+                {
+                    MapView().environmentObject(pokemon).environmentObject(raids)
+                }
+                    
+                else if(index == 2)
+                {
+                    MessageView().environmentObject(showTabBar)
+                }
+                    
+                else
+                {
+                    
+                    ProfileView(user: self.$user,
+                                show:  self.$show,
+                                fromSearch: self.$fromSearch, isLoggedIn: self.$isLoggedIn).environmentObject(posts)
+                }
+                
+                
+            if(self.showTabBar.showTabBar == true)
+            {
+                TabBar(showCreatePost: self.$showCreatePost, index: self.$index, parentPost: self.$parentPost).edgesIgnoringSafeArea(.bottom)
             }
             
         }
@@ -86,6 +75,39 @@ struct IsLoggedInView: View {
         
     }
 }
+
+struct TabBar: View {
+    
+    @Binding var showCreatePost: Bool
+    @Binding var index: Int
+    @Binding var parentPost: String
+    
+    var body: some View{
+        
+        ZStack(alignment: .center){
+            //Spacer()
+            //
+            BottomBar(index: self.$index)
+                .padding()
+                .padding(.horizontal, 22)
+            //.background(CurvedShape())
+            
+            Button(action: {
+                self.showCreatePost.toggle()
+            }){
+                Image(systemName: "plus.circle.fill").resizable().frame(width: 40, height: 40).padding(10).background(Color.white).clipShape(Circle())
+            }.offset(y: -25)
+                .sheet(isPresented: $showCreatePost) {
+                    CreatePostView(closeView: self.$showCreatePost, parentPost: self.$parentPost)
+            }
+            //.shadow(radius: 5)
+        }
+        
+    }
+    
+}
+
+
 
 //struct IsLoggedInView_Previews: PreviewProvider {
 //    static var previews: some View {

@@ -12,10 +12,11 @@ import Firebase
 struct ContentView: View {
     
     @State var isLoggedIn: Bool = false
+    var showTabBar = ShowTabBar()
     
     var body: some View {
         
-        LoginView(isloggedin: self.$isLoggedIn).overlay(self.isLoggedIn ? IsLoggedInView(isLoggedIn: self.$isLoggedIn).background(Color.white).edgesIgnoringSafeArea(.bottom) : nil)
+        LoginView(isloggedin: self.$isLoggedIn).overlay(self.isLoggedIn ? IsLoggedInView(isLoggedIn: self.$isLoggedIn).background(Color.white).environmentObject(showTabBar).edgesIgnoringSafeArea(.bottom) : nil)
             
             .onAppear(perform: {
                 
@@ -25,6 +26,10 @@ struct ContentView: View {
                 }
             })
     }
+}
+
+class ShowTabBar: ObservableObject {
+    @Published var showTabBar = true
 }
 
 struct CurvedShape: View {
@@ -46,6 +51,8 @@ struct CurvedShape: View {
             .rotationEffect(.init(degrees: 180))
     }
 }
+
+
 
 struct BottomBar: View {
     

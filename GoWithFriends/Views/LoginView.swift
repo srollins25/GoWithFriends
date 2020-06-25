@@ -22,10 +22,11 @@ struct SignUpView: View {
     @State var validatePassword: String = ""
     @State var error: String = ""
     @Binding var isloggedin: Bool
-    @EnvironmentObject var session: SessionStore
     @Binding var index: Int
     @State var imagePicker = false
     @State var imageData: Data = .init(count: 0)
+    @State var showAlert = false
+
     
     var body: some View{
         VStack{
@@ -121,10 +122,31 @@ struct SignUpView: View {
                 
                 Button(action: {
                     print("singup tapp")
+                    
+                    if(self.email == "" || self.password == "" || self.validatePassword == "")
+                    {
+                        self.showAlert.toggle()
+                        self.error = "All fields must be filled."
+                    }
+                    else if(self.password != self.validatePassword)
+                    {
+                        self.showAlert.toggle()
+                        self.error = "Passwords do not match."
+                    }
+                    else if(self.imageData.count == 0)
+                    {
+                        self.showAlert.toggle()
+                        self.error = "Image must be selected."
+                    }
+                    else
+                    {
+                    
                     Auth.auth().createUser(withEmail: self.email, password: self.password){ authResult, error in
                         
                         if error != nil{
                             print((error?.localizedDescription)!)
+                            self.showAlert.toggle()
+                            self.error = (error?.localizedDescription)!
                             return
                         }
                         
@@ -136,6 +158,8 @@ struct SignUpView: View {
                             
                             if error != nil{
                                 print((error?.localizedDescription)!)
+                                self.showAlert.toggle()
+                                self.error = (error?.localizedDescription)!
                                 return
                             }
                             
@@ -143,6 +167,8 @@ struct SignUpView: View {
                                 
                                 if error != nil{
                                     print((error?.localizedDescription)!)
+                                    self.showAlert.toggle()
+                                    self.error = (error?.localizedDescription)!
                                     return
                                 }
                                 
@@ -159,8 +185,7 @@ struct SignUpView: View {
                                 self.imageData.count = 0
                             }
                         }
-                        
-                        
+                    }
                     }
 
                 }){
@@ -171,6 +196,9 @@ struct SignUpView: View {
                         .background(Color.green.opacity(0.8))
                         .clipShape(Capsule())
                         .shadow(color: Color.white.opacity(0.1), radius: 5, x: 0, y: 5)
+                }
+                .alert(isPresented: self.$showAlert){
+                    Alert(title: Text("Invalid Form"), message: Text(error), dismissButton: .cancel())
                 }
                 .offset(y: 25)
                 .opacity(self.index == 1 ? 1 : 0)
@@ -255,9 +283,6 @@ struct LoginView: View {
     
     @State var index = 0
     @Binding var isloggedin: Bool
-    
-    @EnvironmentObject var session: SessionStore
-    
     var body: some View{
         
         GeometryReader{_ in
@@ -268,9 +293,7 @@ struct LoginView: View {
                 ZStack{
                     
                     SignUpView(isloggedin: self.$isloggedin, index: self.$index).zIndex(Double(self.index))
-                    
                     LoginView2(isloggedin: self.$isloggedin, index: self.$index)
-                    
                 }
                 
                 HStack(spacing: 15){
@@ -308,6 +331,7 @@ struct LoginView2: View {
     @State var error: String = ""
     @Binding var isloggedin: Bool
     @Binding var index: Int
+    @State var showAlert = false
     
     var body: some View{
         
@@ -379,49 +403,64 @@ struct LoginView2: View {
             
             Button(action: {
                 print("login tapp")
-                Auth.auth().signIn(withEmail: self.email, password: self.password, completion: { (user, error) in
-                    
-                    if error != nil{
-                        print((error?.localizedDescription)!)
-                        return
-                    }
+                
+                if(self.email == "" || self.password == "")
+                {
+                    self.showAlert.toggle()
+                    self.error = "All fields must be filled."
+                }
+                else
+                {
+                    Auth.auth().signIn(withEmail: self.email, password: self.password, completion: { (user, error) in
                         
-                    else
-                    {
-                        UIApplication.shared.endEditing()
-                        let uid = Auth.auth().currentUser?.uid
-                        let db = Firestore.firestore()
-                        let ref = db.collection("users").document(uid!)
-                        
-                        ref.getDocument{ (snapshot, error) in
+                        if error != nil{
+                            print((error?.localizedDescription)!)
+                            self.showAlert.toggle()
+                            self.error = (error?.localizedDescription)!
+                            return
+                        }
                             
-                            if(error != nil){
-                                print((error?.localizedDescription)!)
-                                return
-                            }
+                        else
+                        {
+                            UIApplication.shared.endEditing()
+                            let uid = Auth.auth().currentUser?.uid
+                            let db = Firestore.firestore()
+                            let ref = db.collection("users").document(uid!)
+                            
+                            ref.getDocument{ (snapshot, error) in
                                 
-                            else{
-                                let data = snapshot?.data()
-                                let name = data!["name"] as? String
-                                let image = data!["image"] as? String
-                                let favorites = data!["favorites"] as? [String]
-                                let friends = data!["friends"] as? [String]
-                                
-                                UserDefaults.standard.set(uid, forKey: "userid")
-                                UserDefaults.standard.set(name, forKey: "username")
-                                UserDefaults.standard.set(image, forKey: "image")
-                                UserDefaults.standard.set(favorites, forKey: "favorites")
-                                UserDefaults.standard.set(friends, forKey: "friends")
-                                UserDefaults.standard.set("", forKey: "friendId")
-                                self.email = ""
-                                self.password = ""
-                                self.isloggedin.toggle()
-                                UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
-                                UserDefaults.standard.synchronize()
+                                if(error != nil){
+                                    print((error?.localizedDescription)!)
+                                    self.showAlert.toggle()
+                                    self.error = (error?.localizedDescription)!
+                                    return
+                                }
+                                    
+                                else{
+                                    let data = snapshot?.data()
+                                    let name = data!["name"] as? String
+                                    let image = data!["image"] as? String
+                                    let favorites = data!["favorites"] as? [String]
+                                    let friends = data!["friends"] as? [String]
+                                    
+                                    UserDefaults.standard.set(uid, forKey: "userid")
+                                    UserDefaults.standard.set(name, forKey: "username")
+                                    UserDefaults.standard.set(image, forKey: "image")
+                                    UserDefaults.standard.set(favorites, forKey: "favorites")
+                                    UserDefaults.standard.set(friends, forKey: "friends")
+                                    UserDefaults.standard.set("", forKey: "friendId")
+                                    self.email = ""
+                                    self.password = ""
+                                    self.isloggedin.toggle()
+                                    UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
+                                    UserDefaults.standard.synchronize()
+                                }
                             }
                         }
-                    }
-                })
+                    })
+                }
+                
+                
             }){
                 Text(" Login ").foregroundColor(.white)
                     .fontWeight(.bold)
@@ -430,6 +469,9 @@ struct LoginView2: View {
                     .background(Color.green.opacity(0.8))
                     .clipShape(Capsule())
                     .shadow(color: Color.white.opacity(0.1), radius: 5, x: 0, y: 5)
+            }
+            .alert(isPresented: self.$showAlert){
+                Alert(title: Text("Error"), message: Text(self.error), dismissButton: .cancel())
             }
             .offset(y: 25)
             .opacity(self.index == 0 ? 1 : 0)
