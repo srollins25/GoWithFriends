@@ -54,15 +54,12 @@ struct PostCell: View {
                                         withAnimation(.spring()){
                                             self.showDeleteButton.toggle()
                                             self.show.toggle()
-                                            print("ellipsis tapp")
-                                            print("   ")
                                         }
                                     }
                                     
                                     
                                     if(self.show == true)
                                     {
-                                        
                                         PopOver( showAlert: self.$showAlert, show: self.$show, postId: self.$id, parentPost: self.$parentPost).cornerRadius(5).shadow(radius: 6)
                                     }
                                 }
@@ -75,17 +72,14 @@ struct PostCell: View {
                         if(self.image != "")
                         {
                             AnimatedImage(url: URL(string: self.image)).resizable().renderingMode(.original).frame(height: 140).cornerRadius(8).onTapGesture {
-                                print("image tap")
                             }
                         }
                     }
-                    
                 }
                 //thread, fav, send, date
                 HStack(spacing: 20){
                     HStack{
                         Button(action: {
-                            print("reply")
                             self.showCreatePost.toggle()
                             
                         }){
@@ -99,9 +93,6 @@ struct PostCell: View {
                     HStack{
                         
                         Button(action: {
-                            print("fav")
-                            
-                            
                             let db = Firestore.firestore()
                             let favorites = self.favorites
                             var newArr = UserDefaults.standard.array(forKey: "favorites") as! [String]
@@ -187,7 +178,6 @@ struct PopOver: View {
                     self.show.toggle()
                 }
                 
-                print("cancel") 
             }), secondaryButton: .destructive(Text("Delete"), action: {
                 withAnimation(.spring()){
                     self.show.toggle() 
@@ -276,7 +266,6 @@ struct PopOver: View {
                         print("Document successfully removed!")
                     }
                 }
-                print("deleting post")
             }))
         }
     }

@@ -24,7 +24,7 @@ struct ProfileView: View {
     @State private var name: String = ""
     @State private var image: String = ""
     @State var profileArrIndex = 0
-    @Binding var user: User
+    @Binding var user: PokeUser
     @Binding var show: Bool
     @Binding var fromSearch: Bool
     @Binding var isLoggedIn: Bool
@@ -34,6 +34,7 @@ struct ProfileView: View {
     @State var buttonText = ""
     @State var isFriend: Bool = (UserDefaults.standard.object(forKey: "friends")! as? [String])!.contains(UserDefaults.standard.string(forKey: "friendId")!)
     @State var showDeleteVerify = false
+    @State var showFriends: Bool = false
     
     
     var body: some View {
@@ -131,10 +132,13 @@ struct ProfileView: View {
                                 VStack{
                                         Button(action: {
                                             //present list of friends
+                                            self.showFriends.toggle()
                                           }){
                                               
                                             Image(systemName: "person.2.fill").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                          }
+                                        }.sheet(isPresented: self.$showFriends){
+                                            FriendsView(closeView: self.$showFriends)
+                                    }
                                           
                                             Text("Friends").font(.footnote)
                                 }
@@ -262,10 +266,6 @@ struct ProfileView: View {
             
         .background(Color(UIColor.systemBackground))
         .onAppear(perform: {
-            
-            print("userid1: ", self.user.id)
-            print("username: ", self.user.name)
-            print("appearing view")
             
             if(self.user.id != UserDefaults.standard.string(forKey: "userid"))
             {
@@ -491,7 +491,7 @@ struct MoreMenu: View {
     
     @Binding var show: Bool
     @State var showAlert = false
-    @Binding var user: User
+    @Binding var user: PokeUser
     
     
     var body: some View {

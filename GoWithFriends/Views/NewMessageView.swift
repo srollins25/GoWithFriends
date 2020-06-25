@@ -50,7 +50,7 @@ struct NewMessageView: View{
             }){
                 Text("Cancel")
             })
-                .onDisappear(perform: {
+            .onDisappear(perform: {
                     if(self.openchat == true){
                         self.chat.toggle()
                     }
@@ -61,7 +61,7 @@ struct NewMessageView: View{
 
 class getFriends: ObservableObject{
     
-    @Published var users = [User]()
+    @Published var users = [PokeUser]()
     
     
     init(){
@@ -88,11 +88,8 @@ class getFriends: ObservableObject{
                 if(friends!.contains(id))
                 {
                     print("id was friend")
-                    self.users.append(User(id: id, email: "", name: name, profileimage: image))
-                }
-                
-                
-                
+                    self.users.append(PokeUser(id: id, name: "", profileimage: name, email: image, user_posts: [String](), createdAt: 0))
+                } 
             }
         }
     }

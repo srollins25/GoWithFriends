@@ -11,7 +11,7 @@ import Firebase
 
 class SearchUserObserver: ObservableObject {
 
-    @Published var users = [User]()
+    @Published var users = [PokeUser]()
     
     init() {
         
@@ -29,6 +29,7 @@ class SearchUserObserver: ObservableObject {
                 let id = i.documentID
                 let name = i.get("name") as! String
                 let image = i.get("image") as! String
+                let user_posts = i.get("user_posts") as! [String]
                 
                 let ref = db.collection("users").document(id)
                 
@@ -46,7 +47,7 @@ class SearchUserObserver: ObservableObject {
                         
                         if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
                         {
-                            self.users.append(User(id: id, email: "", name: name, profileimage: image))
+                            self.users.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: user_posts, createdAt: 0))
                         }
                        
                     }

@@ -141,7 +141,7 @@ struct chatBottomView: View{
             }){
                 Image(systemName: "arrow.up.circle").resizable().frame(width: 30, height: 30).padding(10).foregroundColor(self.messageTextFeild == "" ? Color.gray : Color.green)
             }.disabled(self.messageTextFeild == "" ? true : false)
-        }.padding().background(Color.white)
+        }.padding().background(Color.white).edgesIgnoringSafeArea(.top)
     }
 }
 

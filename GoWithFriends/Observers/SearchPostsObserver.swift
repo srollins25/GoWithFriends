@@ -28,7 +28,6 @@ class SearchPostsObserver: ObservableObject {
                 
                 if(i.type == .added){
                     
-                    
                     let id = i.document.documentID
                     let userId = i.document.get("userId") as! String
                     let name = i.document.get("name") as! String
@@ -39,8 +38,6 @@ class SearchPostsObserver: ObservableObject {
                     let favorites = i.document.get("favorites") as! NSNumber
                     let parentPost = i.document.get("parentPost") as! String
                     let createdAt = i.document.get("createdAt") as! NSNumber
-                    
-                    
                     
                     let ref = db.collection("users").document(userId)
                     
@@ -64,12 +61,6 @@ class SearchPostsObserver: ObservableObject {
                            
                         }
                     }
-                    
-                    
-                    
-                    
-
-                    
                 }
                 
                 if(i.type == .removed){

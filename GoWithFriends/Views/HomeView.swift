@@ -128,18 +128,21 @@ struct SideMenu: View {
     
 
     @Binding var isLoggedIn: Bool
+    @State var showSupport = false
     
     var body: some View {
         
         VStack(spacing: 25){
             
             Button(action: {
-                
+                self.showSupport.toggle()
             }){
                 VStack(spacing: 8){
                     Image(systemName: "questionmark.circle").renderingMode(.original).resizable().frame(width: 25, height: 25)
                     Text("Support")
                 }
+            }.sheet(isPresented: self.$showSupport){
+                SupportView(closeView: self.$showSupport)
             }
             
             Button(action: {

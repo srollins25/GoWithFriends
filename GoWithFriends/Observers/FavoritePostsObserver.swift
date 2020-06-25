@@ -33,12 +33,7 @@ class FavoritePostsObserver: ObservableObject {
                 if(i.type == .added)
                 {
                     
-                    
                     let id = i.document.documentID
-                    
-
-                    
-                    print("favorite posts2: ", self.favorites!.description)
 
                     //search id in posts
                     if(self.favorites!.contains(id))

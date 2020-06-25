@@ -14,7 +14,7 @@ struct SearchView: View {
     
     @ObservedObject var postSearchObserver = SearchPostsObserver()
     @ObservedObject var userSearchObserver = SearchUserObserver()
-    @State var user: User = User(id: "", email: "", name: "", profileimage: "")
+    @State var user: PokeUser = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0)
     @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @State var show = false
     @State var txt = ""

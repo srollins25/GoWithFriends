@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct IsLoggedInView: View {
-    @State var user = User(id: "", email: "", name: "", profileimage: "")
+    @State var user = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0)
     @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @State var index = 0
     @State var show = true

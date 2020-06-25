@@ -52,20 +52,6 @@ struct ProfileSettingsView: View {
                         }
                             ))
                     }
-
-                            
-//                    }
-//                    .alert(isPresented: self.$continueDeleteAlert){
-//                        Alert(title: Text("Verify Delete"), message: Text("Continue deleting your account, this action cant be undone."), primaryButton: .cancel(), secondaryButton: .destructive(Text("Delete"), action: {
-                            
-                            //self.presentationMode.wrappedValue.dismiss()
-                            //self.continueDeleteAlert = false
-                            
-
-//                        }
-//                    ))
-//                }
-
                     
                     Spacer()
                 }
