@@ -115,20 +115,18 @@ struct chatBottomView: View{
     var body: some View{
 
         HStack{
-
-//            MultiTextField().frame(height: self.obj.size < 150 ? self.obj.size : 150)
-//                    .padding(10)
-//                    .background(Color.yellow)
-//                .cornerRadius(10)
-            
             Button(action: {
 
             }){
                 Image(systemName: "camera.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 25, height: 25).padding(10).foregroundColor(Color.gray)
             }
             
+            MultiTextField().frame(height: self.obj.size < 150 ? self.obj.size + 15 : 150)
+                    .padding(10)
+                    .background(Color.yellow)
+                .cornerRadius(10)
             
-            TextField("Type message...", text: self.$messageTextFeild).lineLimit(5)
+            //TextField("Type message...", text: self.$messageTextFeild).lineLimit(5)
 
             Button(action: {
                 let createdAt = Date().timeIntervalSince1970 as NSNumber
@@ -226,8 +224,6 @@ struct ChatMessage: Identifiable {
     var user: String
     var createdAt: NSNumber
 }
-
-
 
 struct ChatBubble: Shape {
     

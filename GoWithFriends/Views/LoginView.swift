@@ -320,7 +320,7 @@ struct LoginView: View {
             }
             
         }
-        .background(Color("background")).edgesIgnoringSafeArea(.all)
+        .background(LinearGradient(gradient: Gradient(colors: [Color("gradient2"), Color("gradient1")]), startPoint: .top, endPoint: .bottom)).edgesIgnoringSafeArea(.all)
     }
 }
 
