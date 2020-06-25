@@ -27,8 +27,6 @@ struct MessageView: View {
     
     var body: some View {
         
-        
-        
         NavigationView{
             
             ZStack{
@@ -52,11 +50,10 @@ struct MessageView: View {
                                     self.image = i.image
                                     self.chat.toggle()
                                     
-                                    
-                                    withAnimation(.easeInOut(duration: 0.5)){
+                                    //withAnimation(.easeInOut(duration: 0.5)){
                                    
-                                        self.showTabBar.showTabBar = false
-                                    }
+                                        //self.showTabBar.showTabBar = false
+                                    //}
                                     
                                 }){
                                     MessageCell(id: i.id, name: i.name, image: i.image, message: i.text, createdAt: i.createdAt)
@@ -81,7 +78,7 @@ struct MessageView: View {
                 Image(systemName: "square.and.pencil").resizable().frame(width: 25, height: 25).shadow(color: .gray, radius: 5, x: 1, y: 1)
             }.accentColor(.white)
                 .sheet(isPresented: self.$show){
-                    NewMessageView(name: self.$name, uid: self.$uid, pic: self.$image, show: self.$show, chat: self.$chat)
+                    NewMessageView(name: self.$name, uid: self.$uid, pic: self.$image, show: self.$show, chat: self.$chat).environmentObject(self.showTabBar)
             })
         }
             

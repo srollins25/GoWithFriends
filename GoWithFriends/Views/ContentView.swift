@@ -54,74 +54,7 @@ struct CurvedShape: View {
 
 
 
-struct BottomBar: View {
-    
-    @Binding var index: Int
-    
-    var body: some View{
-        
-        
-        ZStack{
-            
-            HStack{
-                
-                Button(action: {
-                    self.index = 0
-                }){
-                    
-                    VStack{
-                        Image(systemName: "globe").resizable().frame(width: 25, height: 25)
-                        Text("Home").fontWeight(.light).font(.system(size: 10))
-                    }
-                }
-                .foregroundColor(Color.black.opacity(self.index == 0 ? 1 : 0.2))
-                
-                
-                Spacer(minLength: 12)
-                
-                Button(action: {
-                    self.index = 1
-                }){
-                    VStack{
-                        Image(systemName: "map").resizable().frame(width: 25, height: 25)
-                        Text("Map").fontWeight(.light).font(.system(size: 10))
-                    }
-                }
-                .foregroundColor(Color.black.opacity(self.index == 1 ? 1 : 0.2))
-                
-                Spacer().frame(width: 120)
-                
-                
-                Button(action: {
-                    self.index = 2
-                }){
-                    
-                    VStack{
-                        Image(systemName: "bubble.left.and.bubble.right").resizable().frame(width: 30, height: 25)
-                        Text("Inbox").fontWeight(.light).font(.system(size: 10))
-                    }
-                }
-                .foregroundColor(Color.black.opacity(self.index == 2 ? 1 : 0.2))
-                .offset(x: -10)
-                
-                Spacer(minLength: 12)
-                
-                Button(action: {
-                    self.index = 3
-                }){
-                    
-                    VStack{
-                        Image(systemName: "person").resizable().frame(width: 25, height: 25)
-                        Text("Profile").fontWeight(.light).font(.system(size: 10))
-                    }
-                }
-                .foregroundColor(Color.black.opacity(self.index == 3 ? 1 : 0.2))
-            }
-            .background(Color.white)
-        }
-        .background(Color.white)
-    }
-}
+
 
 
 

@@ -44,6 +44,7 @@
 		E2B0BA4524A34D8C000819C6 /* DeleteAccountVerifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */; };
 		E2B0BA4924A490B6000819C6 /* SupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4824A490B6000819C6 /* SupportView.swift */; };
 		E2B0BA4B24A49FEB000819C6 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4A24A49FEB000819C6 /* FriendsView.swift */; };
+		E2B0BA4D24A50F18000819C6 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4C24A50F18000819C6 /* ForgotPasswordView.swift */; };
 		E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDB248736CA006F2728 /* PostThreadView.swift */; };
 		E2B50FDE24873722006F2728 /* AddToMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDD24873722006F2728 /* AddToMapView.swift */; };
 		E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDF2487375C006F2728 /* CreatePostView.swift */; };
@@ -146,6 +147,7 @@
 		E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountVerifyView.swift; sourceTree = "<group>"; };
 		E2B0BA4824A490B6000819C6 /* SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportView.swift; sourceTree = "<group>"; };
 		E2B0BA4A24A49FEB000819C6 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		E2B0BA4C24A50F18000819C6 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		E2B50FDB248736CA006F2728 /* PostThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostThreadView.swift; sourceTree = "<group>"; };
 		E2B50FDD24873722006F2728 /* AddToMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToMapView.swift; sourceTree = "<group>"; };
 		E2B50FDF2487375C006F2728 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */,
 				E2B0BA4A24A49FEB000819C6 /* FriendsView.swift */,
 				E256134E243EE7B9008E9613 /* HomeView.swift */,
+				E2B0BA4C24A50F18000819C6 /* ForgotPasswordView.swift */,
 				E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */,
 				E256134C243ED59B008E9613 /* LoginView.swift */,
 				E2561352243EFD53008E9613 /* MapView.swift */,
@@ -661,6 +664,7 @@
 				E2AD879A2493655F0000D52D /* AlertView.swift in Sources */,
 				E2C5B304249DB3E500F563BE /* RaidObserver.swift in Sources */,
 				E2AA381F247F7C4A0038D917 /* SearchUserObserver.swift in Sources */,
+				E2B0BA4D24A50F18000819C6 /* ForgotPasswordView.swift in Sources */,
 				E2A3F112244AB287004A0C4A /* Post.swift in Sources */,
 				E2561357243F0061008E9613 /* MessageView.swift in Sources */,
 				E2B0BA4924A490B6000819C6 /* SupportView.swift in Sources */,

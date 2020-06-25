@@ -48,7 +48,6 @@ struct PostCell: View {
                             VStack(spacing: 10){
                                 if(self.user == Auth.auth().currentUser?.uid)
                                 {
-                                    
                                     Image(systemName: "ellipsis").onTapGesture {
                                         
                                         withAnimation(.spring()){

@@ -105,24 +105,29 @@ struct ProfileView: View {
                                     Text("Message").font(.footnote)
                                 }
                                 
-                                ZStack{
+                                //ZStack{
                                     
-                                    VStack{
+                                    VStack(spacing: 10){
                                         Button(action: {
-                                            self.showMoreMenu.toggle()
+                                            
+                                            withAnimation(.easeIn(duration: 0.3)){
+                                                 self.showMoreMenu.toggle()
+                                            }
                                         }){
                                             
                                             Image(systemName: "line.horizontal.3.decrease.circle").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
                                             
                                         }
                                         Text("More").font(.footnote)
+                                        
+                                        if(self.showMoreMenu)
+                                        {
+                                            MoreMenu(show: self.$showMoreMenu, user: self.$user)
+                                        }
                                     }
                                     
-                                    if(self.showMoreMenu)
-                                    {
-                                        MoreMenu(show: self.$showMoreMenu, user: self.$user).padding(.top, 8)
-                                    }
-                                }
+                                    
+                                //}
                             }.padding()
                         }
                         else
@@ -539,19 +544,14 @@ struct MoreMenu: View {
                             //remove user from blocked user messages
                             //remove favorite posts from blocked user favorites
                             //
-                            
                         }
                         
                         withAnimation(.spring()){
                             self.showAlert.toggle()
                         }
                       }))
-                
             }
-            
-            
-        }
-        
+        }.background(Color(UIColor.systemBackground))
     }
 }
 

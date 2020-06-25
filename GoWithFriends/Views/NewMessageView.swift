@@ -22,6 +22,7 @@ struct NewMessageView: View{
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var openchat = false
     @State var isFriend: Bool = false
+    @EnvironmentObject var showTabBar: ShowTabBar
     
     var body: some View{
         
@@ -50,8 +51,12 @@ struct NewMessageView: View{
             }){
                 Text("Cancel")
             })
+            .onAppear(perform: {
+                self.showTabBar.showTabBar = false
+            })
             .onDisappear(perform: {
                     if(self.openchat == true){
+                        
                         self.chat.toggle()
                     }
                 })
@@ -82,13 +87,9 @@ class getFriends: ObservableObject{
                 let name = i.get("name") as! String
                 //let email = i.get("email") as! String
                 let image = i.get("image") as! String
-                
-                //print("friends: ", friends?.description)
-                print("checking if id is in friends: ", id)
                 if(friends!.contains(id))
                 {
-                    print("id was friend")
-                    self.users.append(PokeUser(id: id, name: "", profileimage: name, email: image, user_posts: [String](), createdAt: 0))
+                    self.users.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: [String](), createdAt: 0))
                 } 
             }
         }

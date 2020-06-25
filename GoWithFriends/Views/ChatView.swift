@@ -34,7 +34,7 @@ struct ChatView: View{
      
                 VStack(spacing: 0){
 
-                    chatTopView(pic: pic, name: name, showChatView: self.$chat).padding(.bottom, 10)
+                    chatTopView(pic: pic, name: name, showChatView: self.$chat).padding(.bottom, 5)
 
                     GeometryReader{_ in
 
@@ -43,9 +43,6 @@ struct ChatView: View{
                     
                     chatBottomView(messageTextFeild: self.$messageTextFeild, name: self.$name, pic: self.$pic, uid: self.$uid).environmentObject(obj).offset(y: -self.value).animation(.spring())
                 }
-                
-                
-            
         }
         .navigationBarTitle("")
         .navigationBarHidden(true)
@@ -64,6 +61,9 @@ struct ChatView: View{
                 
                 self.value = 0
             }
+        })
+        .onAppear(perform: {
+            self.showTabBar.showTabBar = false
         })
             .onDisappear(perform: {
                 withAnimation(.easeInOut(duration: 0.5)){
@@ -103,47 +103,37 @@ struct ChatView: View{
     }
 }
 
-struct chatBottomView: View{
 
-    @Binding var messageTextFeild: String
-    @Binding var name: String
-    @Binding var pic: String
-    @Binding var uid: String
-    //@Binding var height: CGFloat
-    @EnvironmentObject var obj: observed
-
+struct chatTopView: View {
+    
+    var pic: String
+    var name: String
+    @Binding var showChatView: Bool
+    
     var body: some View{
-
         HStack{
+            
             Button(action: {
-
+                UIApplication.shared.endEditing()
+                withAnimation(.easeIn(duration: 0.5)){
+                    self.showChatView.toggle()
+                }
+                
             }){
-                Image(systemName: "camera.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 25, height: 25).padding(10).foregroundColor(Color.gray)
+                Image(systemName: "control").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 15, height: 15).font(.title).rotationEffect(.init(degrees: -90)).foregroundColor(.gray)
+                
             }
             
-            MultiTextField().frame(height: self.obj.size < 150 ? self.obj.size + 15 : 150)
-                    .padding(10)
-                    .background(Color.yellow)
-                .cornerRadius(10)
+            Spacer()
+            VStack(spacing: 5){
+                AnimatedImage(url: URL(string: pic)).resizable().frame(width:45, height: 45).clipShape(Circle())
+                Text(name).font(.system(size: 20)).bold().fontWeight(.heavy)
+            }
             
-            //TextField("Type message...", text: self.$messageTextFeild).lineLimit(5)
-
-            Button(action: {
-                let createdAt = Date().timeIntervalSince1970 as NSNumber
-
-                //create message and send to database
-
-                sendMessage(user: self.name, uid: self.uid, pic: self.pic, createdAt: createdAt, message: self.messageTextFeild)
-
-                self.messageTextFeild = ""
-            }){
-                Image(systemName: "arrow.up.circle").resizable().frame(width: 30, height: 30).padding(10).foregroundColor(self.messageTextFeild == "" ? Color.gray : Color.green)
-            }.disabled(self.messageTextFeild == "" ? true : false)
-        }.padding().background(Color.white).edgesIgnoringSafeArea(.top)
+            Spacer()
+        }.foregroundColor(.white).padding(.horizontal, 10)
     }
 }
-
-
 
 struct ChatList: View {
     
@@ -178,43 +168,51 @@ struct ChatList: View {
     }
 }
 
+struct chatBottomView: View{
+
+    @Binding var messageTextFeild: String
+    @Binding var name: String
+    @Binding var pic: String
+    @Binding var uid: String
+    //@Binding var height: CGFloat
+    @EnvironmentObject var obj: observed
+
+    var body: some View{
+
+        HStack{
+            Button(action: {
+
+            }){
+                Image(systemName: "camera.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 25, height: 25).padding(10).foregroundColor(Color.gray)
+            }
+            
+            MultiTextField(messageTextFeild: self.$messageTextFeild).frame(height: self.obj.size < 150 ? self.obj.size + 30 : 150).padding(10)
+                .background(Color.gray)
+                .cornerRadius(10)
+            
+            //TextField("Type message...", text: self.$messageTextFeild).lineLimit(5)
+
+            Button(action: {
+                let createdAt = Date().timeIntervalSince1970 as NSNumber
+
+                //create message and send to database
+
+                sendMessage(user: self.name, uid: self.uid, pic: self.pic, createdAt: createdAt, message: self.messageTextFeild)
+
+                self.messageTextFeild = ""
+            }){
+                Image(systemName: "arrow.up.circle").resizable().frame(width: 30, height: 30).padding(10).foregroundColor(self.messageTextFeild == "" ? Color.gray : Color.green)
+            }.disabled(self.messageTextFeild == "" ? true : false)
+        }.padding().background(Color(UIColor.systemBackground)).edgesIgnoringSafeArea(.top)
+    }
+}
+
 struct Rounded : Shape {
     
     func path(in rect: CGRect) -> Path {
         
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: .topLeft, cornerRadii: CGSize(width: 55, height: 55))
         return Path(path.cgPath)
-    }
-}
-
-struct chatTopView: View {
-    
-    var pic: String
-    var name: String
-    @Binding var showChatView: Bool
-    
-    var body: some View{
-        HStack{
-            
-            Button(action: {
-                UIApplication.shared.endEditing()
-                withAnimation(.easeIn(duration: 0.5)){
-                    self.showChatView.toggle()
-                }
-
-            }){
-                Image(systemName: "control").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 15, height: 15).font(.title).rotationEffect(.init(degrees: -90)).foregroundColor(.gray)
-                
-            }
-            
-            Spacer()
-            VStack(spacing: 5){
-                AnimatedImage(url: URL(string: pic)).resizable().frame(width:45, height: 45).clipShape(Circle())
-                Text(name).font(.system(size: 20)).bold().fontWeight(.heavy)
-            }
-            
-            Spacer()
-        }.foregroundColor(.white).padding(.horizontal, 10)
     }
 }
 
@@ -238,6 +236,9 @@ struct ChatBubble: Shape {
 }
 
 struct MultiTextField: UIViewRepresentable {
+    
+    @Binding var messageTextFeild: String
+    
     func makeCoordinator() -> Coordinator {
         return MultiTextField.Coordinator(parent1: self)
     }
@@ -249,13 +250,14 @@ struct MultiTextField: UIViewRepresentable {
         let view = UITextView()
         view.font = .systemFont(ofSize: 19)
         view.text = "Type message..."
-        view.textColor = UIColor.black.withAlphaComponent(0.35)
-        view.backgroundColor = .clear
+        view.textColor =  UIColor.black.withAlphaComponent(0.35)
+        view.backgroundColor = UIColor.clear
         view.delegate = context.coordinator
         self.obj.size = view.contentSize.height
         view.isEditable = true
         view.isUserInteractionEnabled = true
         view.isScrollEnabled = true
+        
         return view
     }
     
@@ -277,6 +279,7 @@ struct MultiTextField: UIViewRepresentable {
         
         func textViewDidChange(_ textView: UITextView) {
             self.parent.obj.size = textView.contentSize.height
+            self.parent.messageTextFeild = textView.text
         }
     }
     

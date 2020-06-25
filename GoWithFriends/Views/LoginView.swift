@@ -332,6 +332,7 @@ struct LoginView2: View {
     @Binding var isloggedin: Bool
     @Binding var index: Int
     @State var showAlert = false
+    @State var showForgotPass = false
     
     var body: some View{
         
@@ -378,9 +379,11 @@ struct LoginView2: View {
                     Spacer(minLength: 0)
                     
                     Button(action: {
-                        
+                        self.showForgotPass.toggle()
                     }){
                         Text("Forgot Password?").foregroundColor(Color.gray.opacity(0.6))
+                    }.sheet(isPresented: self.$showForgotPass){
+                        ForgotPasswordView()
                     }
                 }
                 .padding(.horizontal)
