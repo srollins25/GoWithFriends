@@ -33,6 +33,7 @@ class CommentsObserver: ObservableObject {
                     {
                         let id = i.document.documentID
                         let name = i.document.get("name") as! String
+                        let trainerId = i.document.get("trainerId") as! String
                         let userId = i.document.get("userId") as! String
                         let image = i.document.get("image") as! String
                         let profileimage = i.document.get("profileimage") as! String
@@ -58,15 +59,11 @@ class CommentsObserver: ObservableObject {
                                 
                                 if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
                                 {
-                                    self.comments.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                                    self.comments.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                                     self.comments.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                                 }
-                               
                             }
                         }
-                        
-
-                        
                     }
                 }
                 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		470300D8DE1B04D6C471F857 /* Pods_GoWithFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D849B0A3BE991D8F279F70E8 /* Pods_GoWithFriends.framework */; };
+		E226524724B5BE0300BC4A8F /* EditProfileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E226524624B5BE0300BC4A8F /* EditProfileInfo.swift */; };
 		E229E054244F1939001C8EFF /* PokeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229E053244F1939001C8EFF /* PokeUser.swift */; };
 		E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229E05524538379001C8EFF /* UserPostObserver.swift */; };
 		E229E05A245A5AF3001C8EFF /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229E059245A5AF3001C8EFF /* Message.swift */; };
@@ -37,6 +38,7 @@
 		E2AA381F247F7C4A0038D917 /* SearchUserObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */; };
 		E2AC6A8E24962D72003ABF8E /* CommentsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */; };
 		E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */; };
+		E2AC9DAD24A74CAE00AE743A /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC9DAC24A74CAE00AE743A /* Notification.swift */; };
 		E2AD879A2493655F0000D52D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87992493655F0000D52D /* AlertView.swift */; };
 		E2AF0BD124861F9300E3D7E4 /* IsLoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */; };
 		E2B0BA4124A32ABE000819C6 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4024A32ABE000819C6 /* ProfileSettingsView.swift */; };
@@ -45,6 +47,7 @@
 		E2B0BA4924A490B6000819C6 /* SupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4824A490B6000819C6 /* SupportView.swift */; };
 		E2B0BA4B24A49FEB000819C6 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4A24A49FEB000819C6 /* FriendsView.swift */; };
 		E2B0BA4D24A50F18000819C6 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0BA4C24A50F18000819C6 /* ForgotPasswordView.swift */; };
+		E2B0BA4F24A572FB000819C6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2B0BA4E24A572FB000819C6 /* Default-568h@2x.png */; };
 		E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDB248736CA006F2728 /* PostThreadView.swift */; };
 		E2B50FDE24873722006F2728 /* AddToMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDD24873722006F2728 /* AddToMapView.swift */; };
 		E2B50FE02487375C006F2728 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B50FDF2487375C006F2728 /* CreatePostView.swift */; };
@@ -54,6 +57,9 @@
 		E2C5B2E2249AB19E00F563BE /* FavoritePostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */; };
 		E2C5B304249DB3E500F563BE /* RaidObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B303249DB3E500F563BE /* RaidObserver.swift */; };
 		E2C5B306249DEE4100F563BE /* SearchPostsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */; };
+		E2F87D7524B97E2E004D1B90 /* ReAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F87D7424B97E2E004D1B90 /* ReAuthView.swift */; };
+		E2F87D7724BAEBE3004D1B90 /* LoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F87D7624BAEBE3004D1B90 /* LoaderView.swift */; };
+		E2F87D9924BD8085004D1B90 /* MessagesObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F87D9824BD8085004D1B90 /* MessagesObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,6 +78,7 @@
 		7414449C888550D14A6AF729 /* Pods-GoWithFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoWithFriends.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoWithFriends/Pods-GoWithFriends.debug.xcconfig"; sourceTree = "<group>"; };
 		8BA098D6E023F97BA184348D /* Pods-GoWithFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoWithFriends.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoWithFriends/Pods-GoWithFriends.release.xcconfig"; sourceTree = "<group>"; };
 		D849B0A3BE991D8F279F70E8 /* Pods_GoWithFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoWithFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E226524624B5BE0300BC4A8F /* EditProfileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfo.swift; sourceTree = "<group>"; };
 		E229E053244F1939001C8EFF /* PokeUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeUser.swift; sourceTree = "<group>"; };
 		E229E05524538379001C8EFF /* UserPostObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostObserver.swift; sourceTree = "<group>"; };
 		E229E059245A5AF3001C8EFF /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -140,6 +147,8 @@
 		E2AA385C2480BD2A0038D917 /* BarBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBuilder.swift; sourceTree = "<group>"; };
 		E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsObserver.swift; sourceTree = "<group>"; };
 		E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
+		E2AC9DAC24A74CAE00AE743A /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		E2AC9DAE24A9496700AE743A /* GoWithFriendsDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoWithFriendsDebug.entitlements; sourceTree = "<group>"; };
 		E2AD87992493655F0000D52D /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IsLoggedInView.swift; path = /Users/stef/Desktop/projects/GoWithFriends/GoWithFriends/Views/IsLoggedInView.swift; sourceTree = "<absolute>"; };
 		E2B0BA4024A32ABE000819C6 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
@@ -148,6 +157,7 @@
 		E2B0BA4824A490B6000819C6 /* SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportView.swift; sourceTree = "<group>"; };
 		E2B0BA4A24A49FEB000819C6 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		E2B0BA4C24A50F18000819C6 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		E2B0BA4E24A572FB000819C6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		E2B50FDB248736CA006F2728 /* PostThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostThreadView.swift; sourceTree = "<group>"; };
 		E2B50FDD24873722006F2728 /* AddToMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToMapView.swift; sourceTree = "<group>"; };
 		E2B50FDF2487375C006F2728 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
@@ -157,6 +167,9 @@
 		E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePostsObserver.swift; sourceTree = "<group>"; };
 		E2C5B303249DB3E500F563BE /* RaidObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaidObserver.swift; sourceTree = "<group>"; };
 		E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPostsObserver.swift; sourceTree = "<group>"; };
+		E2F87D7424B97E2E004D1B90 /* ReAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReAuthView.swift; sourceTree = "<group>"; };
+		E2F87D7624BAEBE3004D1B90 /* LoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderView.swift; sourceTree = "<group>"; };
+		E2F87D9824BD8085004D1B90 /* MessagesObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,14 +201,15 @@
 			isa = PBXGroup;
 			children = (
 				E2AC6A8D24962D72003ABF8E /* CommentsObserver.swift */,
-				E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */,
-				E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */,
-				E2C5B303249DB3E500F563BE /* RaidObserver.swift */,
+				E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */,
 				E2A97C51246E6BEF00E70081 /* FriendsObserver.swift */,
+				E2F87D9824BD8085004D1B90 /* MessagesObserver.swift */,
+				E2C5B2DC249AA64B00F563BE /* PokemonObserver.swift */,
 				E2A3F113244AB55C004A0C4A /* PostObserver.swift */,
+				E2C5B303249DB3E500F563BE /* RaidObserver.swift */,
+				E2C5B305249DEE4100F563BE /* SearchPostsObserver.swift */,
 				E2AA381E247F7C4A0038D917 /* SearchUserObserver.swift */,
 				E229E05524538379001C8EFF /* UserPostObserver.swift */,
-				E2C5B2E1249AB19E00F563BE /* FavoritePostsObserver.swift */,
 			);
 			path = Observers;
 			sourceTree = "<group>";
@@ -211,10 +225,12 @@
 				E2B50FDF2487375C006F2728 /* CreatePostView.swift */,
 				E2AC6A8F249878C9003ABF8E /* CustomNavBar.swift */,
 				E2B0BA4424A34D8C000819C6 /* DeleteAccountVerifyView.swift */,
+				E226524624B5BE0300BC4A8F /* EditProfileInfo.swift */,
 				E2B0BA4A24A49FEB000819C6 /* FriendsView.swift */,
 				E256134E243EE7B9008E9613 /* HomeView.swift */,
 				E2B0BA4C24A50F18000819C6 /* ForgotPasswordView.swift */,
 				E2AF0BD024861F9300E3D7E4 /* IsLoggedInView.swift */,
+				E2F87D7624BAEBE3004D1B90 /* LoaderView.swift */,
 				E256134C243ED59B008E9613 /* LoginView.swift */,
 				E2561352243EFD53008E9613 /* MapView.swift */,
 				E2561356243F0061008E9613 /* MessageView.swift */,
@@ -222,6 +238,7 @@
 				E2B50FDB248736CA006F2728 /* PostThreadView.swift */,
 				E2561354243F0052008E9613 /* ProfileView.swift */,
 				E2B0BA4024A32ABE000819C6 /* ProfileSettingsView.swift */,
+				E2F87D7424B97E2E004D1B90 /* ReAuthView.swift */,
 				E2AA381C247F4C4C0038D917 /* SearchView.swift */,
 				E2B0BA4824A490B6000819C6 /* SupportView.swift */,
 			);
@@ -231,6 +248,7 @@
 		E2561328243E917B008E9613 = {
 			isa = PBXGroup;
 			children = (
+				E2B0BA4E24A572FB000819C6 /* Default-568h@2x.png */,
 				E2561333243E917B008E9613 /* GoWithFriends */,
 				E2561332243E917B008E9613 /* Products */,
 				FFE9C576ABC1FF77F5C0D5D0 /* Pods */,
@@ -249,7 +267,9 @@
 		E2561333243E917B008E9613 /* GoWithFriends */ = {
 			isa = PBXGroup;
 			children = (
+				E2AC9DAE24A9496700AE743A /* GoWithFriendsDebug.entitlements */,
 				E2A3F111244AB287004A0C4A /* Post.swift */,
+				E2AC9DAC24A74CAE00AE743A /* Notification.swift */,
 				E229E059245A5AF3001C8EFF /* Message.swift */,
 				E229E053244F1939001C8EFF /* PokeUser.swift */,
 				E229E05C245FE55D001C8EFF /* Views */,
@@ -581,6 +601,7 @@
 				E2561341243E917D008E9613 /* LaunchScreen.storyboard in Resources */,
 				E256133E243E917D008E9613 /* Preview Assets.xcassets in Resources */,
 				E2561349243ECC8F008E9613 /* GoogleService-Info.plist in Resources */,
+				E2B0BA4F24A572FB000819C6 /* Default-568h@2x.png in Resources */,
 				E256133B243E917D008E9613 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -651,10 +672,12 @@
 				E2AC6A90249878C9003ABF8E /* CustomNavBar.swift in Sources */,
 				E2561335243E917B008E9613 /* AppDelegate.swift in Sources */,
 				E2A3F114244AB55C004A0C4A /* PostObserver.swift in Sources */,
+				E226524724B5BE0300BC4A8F /* EditProfileInfo.swift in Sources */,
 				E2B0BA4124A32ABE000819C6 /* ProfileSettingsView.swift in Sources */,
 				E2561355243F0052008E9613 /* ProfileView.swift in Sources */,
 				E2C5B2D72499653D00F563BE /* Raid.swift in Sources */,
 				E229E05A245A5AF3001C8EFF /* Message.swift in Sources */,
+				E2F87D9924BD8085004D1B90 /* MessagesObserver.swift in Sources */,
 				E2561353243EFD53008E9613 /* MapView.swift in Sources */,
 				E2B50FDE24873722006F2728 /* AddToMapView.swift in Sources */,
 				E2B0BA4B24A49FEB000819C6 /* FriendsView.swift in Sources */,
@@ -663,6 +686,7 @@
 				E2AC6A8E24962D72003ABF8E /* CommentsObserver.swift in Sources */,
 				E2AD879A2493655F0000D52D /* AlertView.swift in Sources */,
 				E2C5B304249DB3E500F563BE /* RaidObserver.swift in Sources */,
+				E2F87D7724BAEBE3004D1B90 /* LoaderView.swift in Sources */,
 				E2AA381F247F7C4A0038D917 /* SearchUserObserver.swift in Sources */,
 				E2B0BA4D24A50F18000819C6 /* ForgotPasswordView.swift in Sources */,
 				E2A3F112244AB287004A0C4A /* Post.swift in Sources */,
@@ -685,6 +709,8 @@
 				E229E05624538379001C8EFF /* UserPostObserver.swift in Sources */,
 				E2B50FDC248736CA006F2728 /* PostThreadView.swift in Sources */,
 				E2C5B2DD249AA64B00F563BE /* PokemonObserver.swift in Sources */,
+				E2F87D7524B97E2E004D1B90 /* ReAuthView.swift in Sources */,
+				E2AC9DAD24A74CAE00AE743A /* Notification.swift in Sources */,
 				E2B0BA4324A34B69000819C6 /* BlankView.swift in Sources */,
 				E2561339243E917C008E9613 /* ContentView.swift in Sources */,
 				E2A97C4E2461160B00E70081 /* UserCell.swift in Sources */,
@@ -824,15 +850,18 @@
 			baseConfigurationReference = 7414449C888550D14A6AF729 /* Pods-GoWithFriends.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = GoWithFriends/GoWithFriendsDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"GoWithFriends/Preview Content\"";
 				DEVELOPMENT_TEAM = KBSTWFQ9TX;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = GoWithFriends/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.GoWithFriends;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -850,10 +879,12 @@
 				DEVELOPMENT_TEAM = KBSTWFQ9TX;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = GoWithFriends/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.GoWithFriends;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

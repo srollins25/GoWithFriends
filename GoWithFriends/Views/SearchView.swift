@@ -14,76 +14,104 @@ struct SearchView: View {
     
     @ObservedObject var postSearchObserver = SearchPostsObserver()
     @ObservedObject var userSearchObserver = SearchUserObserver()
-    @State var user: PokeUser = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0)
-    @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var user: PokeUser = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0, trainerId: "")
+    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @State var show = false
     @State var txt = ""
-    @Binding var closeView: Bool
     @State var fromSearch = true
     @State var searchIndex = 0
     let transition = AnyTransition.move(edge: .trailing)
-    @State var subParentPost = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var subParentPost = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @State var isLoggedIn = true
+    //var qm = QueryModel()
+    @Environment(\.colorScheme) var scheme 
+    @State var favpic = Image(systemName: "star")
+    @State var favSubPic = Image(systemName: "star")
+    @State var isFavorite = false
+    @State var isSubFavorite = false
+    @State var comments = CommentsObserver(parentPost_: "")
+    @Binding var showDeleteView: Bool//
+    
     
     var body: some View {
+        
         ZStack(){
             
             Group{
                 VStack{
-                    Spacer().frame(height: 140)
+                    //Spacer().frame(height: 140)
+                    VStack{
+                        TextField("Search", text: self.$txt).padding(.vertical, 12).padding(.horizontal).background(Color.black.opacity(0.06)).clipShape(Capsule())
+                        
+                        Picker(selection: $searchIndex, label: Text("")) {
+                            Text("Posts").tag(0)
+                            Text("Accounts").tag(1)
+                        }.pickerStyle(SegmentedPickerStyle()).padding(.horizontal, 4).padding(.bottom, 2)
+                    }.padding([.top, .leading, .trailing], 8)
+                    .background(Color(UIColor.systemBackground))
+                    
+                    
                     if(self.searchIndex == 0)
                     {
                         List(postSearchObserver.posts.filter{$0.postBody.lowercased().contains(self.txt.lowercased())}){ post in
                             
+                           ZStack{
+                            
+                            PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                            
+                            NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).environmentObject(self.comments)){
+                                    
+                                    EmptyView()
+                            }
+
                             Button(action: {
                                 self.post = post
-                                UIApplication.shared.endEditing()
-                                withAnimation(.easeIn(duration: 0.5)){
-                                    print(self.show)
-                                    UserDefaults.standard.set(self.post.id, forKey: "parentPost")
-                                    self.show.toggle()
+                                self.show.toggle()
+                                self.isFavorite = (UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(post.id)
+                                if((UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(post.id))
+                                {
+                                    self.favpic = Image(systemName: "star.fill")
                                 }
-                                 
+                                UserDefaults.standard.set(self.post.id, forKey: "parentPost")
+                                self.comments = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
+                                UIApplication.shared.endEditing()
                             }){
-                                PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost)
+                                Text("")
+                            }
+
                             }
                         }
                     }
                     else
                     {
                         List(userSearchObserver.users.filter{$0.name.lowercased().contains(self.txt.lowercased())}){ user in
-                            
-                            Button(action: {
-                                self.user = user
-                                UserDefaults.standard.set(self.user.id, forKey: "friendId")
-                                UIApplication.shared.endEditing()
-                                withAnimation(.easeIn(duration: 0.5)){
-                                    print(self.show)
-                                    self.show.toggle()
-                                }
+                        
+                            ZStack{
+                             
+                                UserCell(id: user.id, name: user.name, image: user.profileimage).edgesIgnoringSafeArea(.all)
                                 
-                            }){
-                                UserCell(id: user.id, name: user.name, image: user.profileimage)
-                            }
+                                NavigationLink(destination: ProfileView(user: self.$user, show: self.$show, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).navigationBarTitle(user.name)){
+                                     
+                                     EmptyView()
+                                 }.frame(width: 0)
+
+                             
+                             Button(action: {
+                                 self.user = user
+                                 self.show.toggle()
+                                 UIApplication.shared.endEditing()
+                                 UserDefaults.standard.set(self.user.id, forKey: "friendId")
+                             }){
+                                 Text("")
+                             }
+
+                             }
                         }
                     }
                 }.offset(y: 0).background(Color(UIColor.systemBackground))
             }
             
-            CustomSearchBar(closeView: self.$closeView, txt: self.$txt, searchIndex: self.$searchIndex)
-            
-            if(self.show == true)
-            {
-                if(searchIndex == 1)
-                {
-                    ProfileView(user: self.$user, show: self.$show, fromSearch: self.$fromSearch, isLoggedIn: self.$isLoggedIn).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)
-                }
-                else
-                {
-                    PostThreadView(closeView: self.$show, mainPost: self.$post, subParentPost: self.$subParentPost).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)
-                }
-            }
-        }.offset(x: self.closeView ? 0 : UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.frame.width ?? 0, y: 0)
+        }.navigationBarTitle(Text("Search"), displayMode: .inline)
     }
 }
 
@@ -96,8 +124,7 @@ struct CustomSearchBar: View {
     var body: some View{
         
         VStack(spacing: 0){
-            
-
+        
             VStack{
                 HStack(spacing: 8){
                     Button(action: {

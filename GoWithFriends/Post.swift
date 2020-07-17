@@ -13,6 +13,7 @@ struct Post: Identifiable{
     var id: String
     var userID: String
     var name: String
+    var trainerId: String
     var image: String
     var profileimage: String
     var postBody: String

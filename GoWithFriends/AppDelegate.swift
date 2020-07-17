@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import GoogleMobileAds
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,9 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
         if (UserDefaults.standard.object(forKey: "isloggedin") == nil) {
             UserDefaults.standard.set(false, forKey: "isloggedin")
+        }
+        if (UserDefaults.standard.object(forKey: "parentPost") == nil) {
+            UserDefaults.standard.set("", forKey: "parentPost")
         }
         
         return true

@@ -8,11 +8,13 @@
 
 import Foundation
 import FirebaseFirestore
+import SwiftUI
 import Firebase
 
 class PostObserver: ObservableObject {
     
     @Published var posts = [Post]()
+    
     
     init() {
         let db = Firestore.firestore()
@@ -27,15 +29,14 @@ class PostObserver: ObservableObject {
             for i in snap!.documentChanges {
                 
                 if(i.type == .added){
-                    //for pulling posts from friends
-                    //let userID = (i.document.get("userId") as! String)
-                    
+
                     let userId = i.document.get("userId") as! String
                     if(friends.contains(userId) || userId == UserDefaults.standard.string(forKey: "userid"))
                     {
                         //print("array contains friend")
                         let id = i.document.documentID
                         let name = i.document.get("name") as! String
+                        let trainerId = i.document.get("trainerId") as! String
                         let profileimage = i.document.get("profileimage") as! String
                         let image = i.document.get("image") as! String
                         let comments = i.document.data()["comments"]! as! NSArray
@@ -61,14 +62,11 @@ class PostObserver: ObservableObject {
                                 
                                 if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
                                 {
-                                    self.posts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                                    self.posts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                                     self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                                 }
-                               
                             }
                         }
-                        
-                        
                     }
                 }
                 

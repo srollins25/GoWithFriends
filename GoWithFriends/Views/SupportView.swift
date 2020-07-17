@@ -16,7 +16,7 @@ struct SupportView: View {
         
         NavigationView{
             
-            VStack{
+            VStack(spacing: 10){
                 
                 Text("For questions, bug reports, or feature suggestions head to Twitter @0mn1Stack or send an email to omnistack49@gmail.com")
                 
@@ -26,7 +26,9 @@ struct SupportView: View {
                     Text("Done")
                     
                 }
+                 Spacer()
             }
+           
         }
     }
 }

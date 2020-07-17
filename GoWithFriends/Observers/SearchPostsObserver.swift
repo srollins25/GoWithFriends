@@ -31,6 +31,7 @@ class SearchPostsObserver: ObservableObject {
                     let id = i.document.documentID
                     let userId = i.document.get("userId") as! String
                     let name = i.document.get("name") as! String
+                    let trainerId = i.document.get("trainerId") as! String
                     let profileimage = i.document.get("profileimage") as! String
                     let image = i.document.get("image") as! String
                     let comments = i.document.data()["comments"]! as! NSArray
@@ -53,9 +54,9 @@ class SearchPostsObserver: ObservableObject {
                             let blocked = data!["blocked"] as? [String]
                             
                             
-                            if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
+                            if(!(blocked!.contains((Auth.auth().currentUser!.uid))))
                             {
-                                self.posts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                                self.posts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                                 self.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                             }
                            

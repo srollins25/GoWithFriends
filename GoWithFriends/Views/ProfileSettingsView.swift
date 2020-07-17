@@ -12,59 +12,59 @@ import Firebase
 struct ProfileSettingsView: View {
     
     @Binding var closeView: Bool
+    @Binding var closeProfileView: Bool
     @State var showAlert = false
     @Binding var showDeleteVerify: Bool
     @State var showAfterDismiss = false
-    @State var showDeleteView = false
+    //@State var showDeleteView = false
+    @Binding var showDeleteView: Bool//final delete screen
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         
+        NavigationView{
+        
         ZStack{
-            HStack{
-                Spacer()
                 VStack{
-                    
-                    HStack{
-                        Button(action: {
-                            self.closeView.toggle()
-                            
-                        }){
-                            Text("Cancel") 
-                        } 
-                        Spacer()
-                    }
-                    .padding(.top, (UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.safeAreaInsets.top)!)
-                    Spacer()
-                    Button(action: {
-                        self.showAlert = true
-                       
-                    }){
-                        Text("Delete Account").foregroundColor(.red)
-                    }.alert(isPresented: self.$showAlert){
-                        Alert(title: Text("Delete Account"), message: Text("Do you wish to delete your account?"), primaryButton: .cancel(), secondaryButton: .destructive(Text("Delete"), action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                            if(self.showAlert == false)
-                            {
-                                    self.showAfterDismiss.toggle()
 
+                    List{
+                        Section{
+                            NavigationLink(destination: EditProfileInfo())
+                            {
+                                Text("Edit Profile")
                             }
                         }
-                            ))
-                    }
-                    
-                    Spacer()
+                        
+                        
+                        Section{
+
+                        Button(action: {
+                            self.showAlert = true
+                        }){
+                            Text("Delete Account").foregroundColor(.red)
+                        }.alert(isPresented: self.$showAlert){
+                            Alert(title: Text("Delete Account"), message: Text("Do you wish to delete your account?"), primaryButton: .cancel(), secondaryButton: .destructive(Text("Delete"), action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                                if(self.showAlert == false)
+                                {
+                                        self.showAfterDismiss.toggle()
+                                    self.showDeleteView.toggle()
+                                }
+                            }))
+                        }
+                        }
+                        
+                    }.listStyle(GroupedListStyle())
                 }
-                Spacer()
-            }
         }.onDisappear(perform: {
             if(self.showAfterDismiss == true)
             {
-                //DispatchQueue.main.async {
-                    self.showDeleteVerify.toggle()
-                //}
+                self.closeProfileView.toggle()
+                
             }
         })
+            .navigationBarTitle(Text("Settings"))
+        }
     }
 }
 

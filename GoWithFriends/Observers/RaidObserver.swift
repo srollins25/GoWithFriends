@@ -40,7 +40,7 @@ class RaidObserver: ObservableObject {
                     //print("sighted time to delete: ", (sighted.doubleValue + 600))
                     //( Date().timeIntervalSince1970 as NSNumber).doubleValue >= timeToRemove.doubleValue &&  timeTillStart.doubleValue == 0 ||  (Date().timeIntervalSince1970 as NSNumber).doubleValue >= timeTillStart.doubleValue && timeToRemove.doubleValue == 0
                     print("current time: ", Date().timeIntervalSince1970 as NSNumber)
-                    if(timeToRemove.doubleValue < (Date().timeIntervalSince1970 as NSNumber).doubleValue && dexnum != "")
+                    if((timeToRemove.doubleValue < (Date().timeIntervalSince1970 as NSNumber).doubleValue /* && dexnum != "" */)  )
                     {
                         
                         let db = Firestore.firestore()
@@ -53,7 +53,7 @@ class RaidObserver: ObservableObject {
                             }
                         }
                     }
-                    else if (timeTillStart.doubleValue < (Date().timeIntervalSince1970 as NSNumber).doubleValue && dexnum == "")
+                    else if (timeTillStart.doubleValue < (Date().timeIntervalSince1970 as NSNumber).doubleValue /* && dexnum == "" */ )
                     {
                         let db = Firestore.firestore()
                         

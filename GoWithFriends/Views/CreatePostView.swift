@@ -21,18 +21,74 @@ struct CreatePostView: View {
     @State var picData: Data = .init(count: 0)
     @State var loading = false
     @Binding var parentPost: String
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
+         
+            NavigationView{
+                
+                VStack{
+                    multilineTextField(text: $postText).padding()
+                    Divider()
+                    Spacer().frame(height: UIScreen.main.bounds.height * 0.5)
+                }
+                    .navigationBarTitle(Text("New Post"), displayMode: .inline)
+                        .navigationBarItems(leading: Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }){
+                            Text("Cancel")
+                        }, trailing:
+                            Button(action: {
+                                if(self.postText != "")
+                                {
+                                    self.createPost(postText: self.postText)
+                                }
+                        }){
+                            Text("Post").foregroundColor(self.postText == "" ? Color.blue.opacity(0.7) : Color.blue )
+                            }.disabled(self.postText == "" ? true : false))
+                    }
         
-        
-        VStack{
-            PostNavBar(closeView: $closeView, postText: $postText, parentPost: $parentPost)
-            multilineTextField(text: $postText).padding()
-            Divider()
-            Spacer().frame(height: UIScreen.main.bounds.height * 0.5)
             
+    }
+    
+    func createPost(postText: String)
+    {
+        let uid = Auth.auth().currentUser?.uid
+        let db = Firestore.firestore()
+        let ref = Firestore.firestore().document("users/\(uid!)")
+        
+        ref.getDocument{ (snapshot, error) in
+            
+            guard let snapshot = snapshot, snapshot.exists else { return }
+            let data = snapshot.data()
+            let name = (data!["name"] as? String)!
+            let trainerId = UserDefaults.standard.string(forKey: "trainerId")!
+            let profileimage = UserDefaults.standard.string(forKey: "image")!
+            let parentPost = self.parentPost
+            let createdAt = Date().timeIntervalSince1970 as NSNumber
+            
+            let values = ["userId": uid!, "name": name, "trainerId": trainerId, "image": "", "profileimage": profileimage, "body": postText, "comments": [String]() as NSArray, "favorites": 0, "createdAt": createdAt, "parentPost": parentPost] as [String : Any]
+            
+            let collection = db.collection("posts")
+            let doc = collection.document()
+            let id = doc.documentID
+            doc.setData(values)
+            var userRef = db.collection("users/").document("\(uid!)")
+            userRef.updateData(["user_posts": FieldValue.arrayUnion([id])])
+            
+            if(parentPost != "")
+            {
+                userRef = db.collection("posts/").document("\(parentPost)")
+                userRef.updateData(["comments" : FieldValue.arrayUnion([id])])
+            }
+        }
+        
+        self.postText = ""
+        withAnimation(.easeOut(duration: 0.5)){
+            self.closeView.toggle()
         }
     }
+    
 }
 
 
@@ -73,7 +129,7 @@ struct multilineTextField: UIViewRepresentable{
             {
                 textView.text = ""
             }
-            textView.textColor = .black
+            //textView.textColor = .black
         }
         
         func textViewDidChange(_ textView: UITextView) {

@@ -16,14 +16,15 @@ struct ForgotPasswordView: View {
     @State var alertTitle = ""
     @State var showAlert = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var fromLogin: Bool
     
     var body: some View {
         
         NavigationView{
             VStack{
                        
-                Text("Enter your email address and an email will be sent to recover your account.").fontWeight(.bold).padding(.top, 10).padding(.bottom, 20).lineLimit(6)
-                       TextField("", text: self.$email)
+                Text("Enter your email address and an email will be sent to recover your password.").fontWeight(.bold).padding(.top, 10).padding(.bottom, 20).lineLimit(6)
+                       TextField("Email", text: self.$email)
                        Divider()
                        Button(action: {
                         
@@ -35,10 +36,14 @@ struct ForgotPasswordView: View {
                                 self.showAlert.toggle()
                                 return
                             }
-                            self.alertTitle = "Success"
-                            self.alertMessage = "An email has been sent."
-                            self.showAlert.toggle()
-                            //alert email send then close view
+                            else
+                            {
+                                self.alertTitle = "Success"
+                                self.alertMessage = "An email has been sent."
+                                self.showAlert.toggle()
+                                //alert email send then close view
+                            }
+
                         }
                         
                         self.email = ""
@@ -46,22 +51,31 @@ struct ForgotPasswordView: View {
                            Text("Send")
                        }.alert(isPresented: self.$showAlert){
                         Alert(title: Text(self.alertTitle), message: Text(self.alertMessage), dismissButton: .cancel(Text("Done"), action: {
+                            
+                            if(self.fromLogin == true){
+                            
                             self.presentationMode.wrappedValue.dismiss()
+                            }
                         }))
                 }
-            }.padding(.horizontal, 45)
+                Spacer()
+                }.background(Color(UIColor.systemBackground))
+            .padding(.horizontal, 45)
             .navigationBarItems(leading: Button(action: {
                  self.email = ""
                 self.presentationMode.wrappedValue.dismiss()
             }){
                 Text("Cancel")
             })
+            
+        }.onTapGesture {
+            UIApplication.shared.endEditing()
         }
     }
 }
 
-struct ForgotPasswordView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForgotPasswordView()
-    }
-}
+//struct ForgotPasswordView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ForgotPasswordView()
+//    }
+//}

@@ -48,7 +48,7 @@ class FavoritePostsObserver: ObservableObject {
                         let parentPost = i.document.get("parentPost") as! String
                         let createdAt = i.document.get("createdAt") as! NSNumber
                         
-                        self.favoritePosts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                        self.favoritePosts.append(Post(id: id, userID: userId, name: name, trainerId: "", image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                     }
                 }
                 

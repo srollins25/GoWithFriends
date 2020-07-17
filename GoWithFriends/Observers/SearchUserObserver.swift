@@ -28,6 +28,7 @@ class SearchUserObserver: ObservableObject {
                 
                 let id = i.documentID
                 let name = i.get("name") as! String
+                let trainerId = i.get("trainerId") as! String
                 let image = i.get("image") as! String
                 let user_posts = i.get("user_posts") as! [String]
                 
@@ -47,7 +48,7 @@ class SearchUserObserver: ObservableObject {
                         
                         if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
                         {
-                            self.users.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: user_posts, createdAt: 0))
+                            self.users.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: user_posts, createdAt: 0, trainerId: trainerId))
                         }
                        
                     }

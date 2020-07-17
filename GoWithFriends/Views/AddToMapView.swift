@@ -9,11 +9,13 @@
 import SwiftUI
 import Firebase
 import CoreLocation
+import GoogleMobileAds
 
 struct AddToMapView: View {
     
     @Binding var showAddToMapView: Bool
     @State var selectedView: Int = 0
+    //@Environment(\.colorScheme) var scheme 
     
     var body: some View {
         
@@ -30,6 +32,17 @@ struct AddToMapView: View {
                             Text("Cancel")
                         }
                         Spacer()
+//                        Button(action: {
+//                            if(self.selectedView == 0)
+//                            {
+//                            }
+//                            else
+//                            {
+//                                
+//                            }
+//                        }){
+//                            Text("Create")
+//                        }
                     }
                     .padding(.top, (UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.safeAreaInsets.top)!)
                     VStack(spacing: 25){
@@ -54,7 +67,60 @@ struct AddToMapView: View {
                 Spacer()
             }
         }
+        .background(Color(UIColor.systemBackground))
     }
+    
+    
+//    func AddPokemon()
+//    {
+//        print("adding pokemon")
+//        let location: CLLocationCoordinate2D = locationManager.location!.coordinate
+//
+//        let db = Firestore.firestore()
+//        let collection = db.collection("pokemon")
+//        let doc = collection.document()
+//        let id = doc.documentID
+//        let createdAt = Date().timeIntervalSince1970 as NSNumber
+//        let lat = location.latitude
+//        let lon = location.longitude
+//        let timeToRemove = createdAt.doubleValue + Double(900)
+//
+//        let values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": self.pokename, "cp": (self.cp as NSString).integerValue, "dexnum": self.dexnum, "sighted": createdAt, "timeToRemove": timeToRemove] as [String : Any]
+//        doc.setData(values)
+//        //show alert
+//        self.show.toggle()
+//    }
+    
+//    func AddRaid()
+//    {
+//        //if a raid is active the timetostart
+//
+//        print("adding raid")
+//        let location: CLLocationCoordinate2D = locationManager.location!.coordinate
+//
+//        let db = Firestore.firestore()
+//        let collection = db.collection("raids")
+//        let doc = collection.document()
+//        let id = doc.documentID
+//        let timeToStart = self.timeLeft
+//        let lat = location.latitude
+//        let lon = location.longitude
+//        let timeToRemove = self.timeLeft
+//        var values = [String: Any]()
+//        if(isActive == 0)
+//        {
+//            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": self.pokename, "cp": (self.cp as NSString).integerValue, "dexnum": self.dexnum, "difficulty": 0, "timeToStart": 0, "timeToRemove": timeToRemove.timeIntervalSince1970 as NSNumber] as [String : Any]
+//        }
+//        else
+//        {
+//            //not active raid
+//            values = ["id": id, "user": (Auth.auth().currentUser?.uid)!, "lat": lat as Any, "lon": lon as Any, "name": "", "cp": 0, "dexnum": "", "difficulty": self.difficulty, "timeToStart": timeToStart.timeIntervalSince1970 as NSNumber, "timeToRemove": 0] as [String : Any]
+//        }
+//
+//        doc.setData(values)
+//        //show alert
+//        self.show.toggle()
+//    }
 }
 
 struct AddPokemonView: View {
@@ -68,14 +134,14 @@ struct AddPokemonView: View {
     @State var selectedPokemon = 0
     @State var showAlert = false
     let locationManager = CLLocationManager()
-    
+    @State var pokeimg = Image(systemName: "questionmark.circle")
     @State var pokemon: [MapPkm] = []
     
     
     var body: some View{
         
         VStack(spacing: 10){
-            Image(systemName: "questionmark.circle").resizable().frame(width: 120, height: 120).foregroundColor(.gray).onTapGesture {
+            pokeimg.resizable().frame(width: 120, height: 120).foregroundColor(.gray).onTapGesture {
                 self.showPokePicker.toggle()
             }.sheet(isPresented: self.$showPokePicker){
                 
@@ -91,6 +157,16 @@ struct AddPokemonView: View {
                             }.onReceive([self.selectedPokemon].publisher.first()){ (i) in
                                 self.pokename = self.pokemon[i].name
                                 self.dexnum = self.pokemon[i].dexnum
+                                
+                                if(self.pokename != ""){
+                                    let index = self.pokemon.firstIndex{ $0.name == self.pokename }
+                                    self.pokeimg = Image(self.pokemon[index!].dexnum)
+                                }
+                                
+                                else
+                                {
+                                    self.pokeimg = Image(systemName: "questionmark.circle")
+                                }
                             }
                         }
                     }
@@ -122,6 +198,7 @@ struct AddPokemonView: View {
                     else
                     {
                         self.AddPokemon()
+//
                     }
                 }){
                     Text("Create")
@@ -130,10 +207,12 @@ struct AddPokemonView: View {
                 }
             }
         }
+
         .onAppear(perform: {
             
             self.getPokemon()
             print(self.pokemon.description)
+
         })
     }
     
@@ -825,6 +904,7 @@ struct AddRaidView: View {
     @State var selectedPokemon = 0
     @State var raids: [MapPkm] = []
     let locationManager = CLLocationManager()
+     @State var pokeimg = Image(systemName: "questionmark.circle")
     
     var body: some View{
         VStack(spacing: 9){
@@ -848,6 +928,15 @@ struct AddRaidView: View {
                             }.onReceive([self.selectedPokemon].publisher.first()){ (i) in
                                 self.pokename = self.raids[i].name
                                 self.dexnum = self.raids[i].dexnum
+                                if(self.pokename != ""){
+                                    let index = self.raids.firstIndex{ $0.name == self.pokename }
+                                    self.pokeimg = Image(self.raids[index!].dexnum)
+                                }
+                                
+                                else
+                                {
+                                    self.pokeimg = Image(systemName: "questionmark.circle")
+                                }
                             }
                         }
                     }
@@ -876,7 +965,7 @@ struct AddRaidView: View {
                         TextField("CP...", text: self.$cp).keyboardType(.numberPad)
                         Divider()
                         Form{
-                            DatePicker("Set remaing time...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute).background(Color.white)
+                            DatePicker("Set remaing time...", selection: self.$timeLeft, in: Date()..., displayedComponents: .hourAndMinute)
                         }
                         
                         //TextField("Remaining time...", text: self.$timeLeft)//needs to be date picker
@@ -911,7 +1000,9 @@ struct AddRaidView: View {
                     else
                     {
                         self.AddRaid()
+
                     }
+                    
                     
                 }){
                     Text("Create")
@@ -921,9 +1012,10 @@ struct AddRaidView: View {
             }
         }
         .onAppear(perform: {
-            
+
             self.getPokemon()
             print(self.raids.description)
+           
         })
     }
     

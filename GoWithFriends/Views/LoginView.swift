@@ -17,6 +17,7 @@ struct SignUpView: View {
     
     @State var email: String = ""
     @State var name: String = ""
+    @State var trainerId: String = ""
     @State var username: String = ""
     @State var password: String = ""
     @State var validatePassword: String = ""
@@ -26,7 +27,9 @@ struct SignUpView: View {
     @State var imagePicker = false
     @State var imageData: Data = .init(count: 0)
     @State var showAlert = false
-
+    @Binding var showLoading: Bool
+    @Environment(\.colorScheme) var scheme
+    
     
     var body: some View{
         VStack{
@@ -36,15 +39,15 @@ struct SignUpView: View {
                     HStack{
                         Spacer(minLength: 0)
                         VStack(spacing: 10){
-                            Text("Sign up").foregroundColor(self.index == 1 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold)
+                            Text("Sign up").foregroundColor(self.index == 1 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold).padding(.top, 3)
                             Capsule().fill(self.index == 1 ? Color.blue : Color.clear).frame(width: 100, height: 5)
                         }
                     }
-                    .padding(.top, 30)
+                    .padding(.top, 20)
                     
                     
                     if(self.imageData.count == 0){
-                        Image(systemName: "person.crop.circle.badge.plus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 40, height: 40).foregroundColor(.gray).onTapGesture {
+                        Image(systemName: "person.crop.circle.badge.plus").resizable().aspectRatio(contentMode: .fill).frame(width: 40, height: 40).foregroundColor(.gray).onTapGesture {
                             self.imagePicker.toggle()
                         }.sheet(isPresented: self.$imagePicker){
                             ImagePicker(picker: self.$imagePicker, imageData: self.$imageData)
@@ -59,7 +62,6 @@ struct SignUpView: View {
                         }
                     }
                     
-
                     
                     VStack{
                         HStack(spacing: 15){
@@ -70,7 +72,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 15)
+                    .padding(.top, 8)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -81,7 +83,18 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 15)
+                    .padding(.top, 8)
+                    
+                    VStack{
+                        HStack(spacing: 15){
+                            Image(systemName: "number.square.fill")
+                            
+                            TextField("Trainer Code", text: self.$trainerId).keyboardType(.numberPad)
+                        }
+                        Divider().background(Color.white.opacity(0.5))
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -92,7 +105,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 15)
+                    .padding(.top, 8)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -103,16 +116,17 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 15)
+                    .padding(.top, 8)
                     
                 }
                 .padding()
-                .padding(.bottom, 65)
-                .background(Color.white)
+                .padding(.bottom, 60)
+                .background(Color(UIColor.systemBackground))
                 .clipShape(CShape2())
                 .contentShape(CShape2())
                 .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: -5)
                 .onTapGesture {
+                    UIApplication.shared.endEditing()
                     self.index = 1
                 }
                 .cornerRadius(35)
@@ -121,9 +135,10 @@ struct SignUpView: View {
                 //button
                 
                 Button(action: {
+                    UIApplication.shared.endEditing()
                     print("singup tapp")
                     
-                    if(self.email == "" || self.password == "" || self.validatePassword == "")
+                    if(self.email == "" || self.password == "" || self.validatePassword == "" || self.trainerId == "")
                     {
                         self.showAlert.toggle()
                         self.error = "All fields must be filled."
@@ -140,21 +155,8 @@ struct SignUpView: View {
                     }
                     else
                     {
-                    
-                    Auth.auth().createUser(withEmail: self.email, password: self.password){ authResult, error in
-                        
-                        if error != nil{
-                            print((error?.localizedDescription)!)
-                            self.showAlert.toggle()
-                            self.error = (error?.localizedDescription)!
-                            return
-                        }
-                        
-                        let uid = Auth.auth().currentUser?.uid
-                        
-                        let storage = Storage.storage().reference()
-                        
-                        storage.child("profilepics").child(uid!).putData(self.imageData, metadata: nil){ (_, error) in
+                        self.showLoading = true
+                        Auth.auth().createUser(withEmail: self.email, password: self.password){ authResult, error in
                             
                             if error != nil{
                                 print((error?.localizedDescription)!)
@@ -163,7 +165,11 @@ struct SignUpView: View {
                                 return
                             }
                             
-                            storage.child("profilepics").child(uid!).downloadURL{ (url, error) in
+                            let uid = Auth.auth().currentUser?.uid
+                            
+                            let storage = Storage.storage().reference()
+                            
+                            storage.child("profilepics").child(uid!).putData(self.imageData, metadata: nil){ (_, error) in
                                 
                                 if error != nil{
                                     print((error?.localizedDescription)!)
@@ -172,22 +178,35 @@ struct SignUpView: View {
                                     return
                                 }
                                 
-                            UserDefaults.standard.set(url?.absoluteString, forKey: "image")
-                               self.createUser(image: UserDefaults.standard.string(forKey: "image")!, uid: uid!)
-
-                               self.email = ""
-                               self.password = ""
-                               self.name = ""
-                               self.validatePassword = ""
-                               self.isloggedin.toggle()
-                               UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
-                               self.index = 0
-                                self.imageData.count = 0
+                                storage.child("profilepics").child(uid!).downloadURL{ (url, error) in
+                                    
+                                    if error != nil{
+                                        print((error?.localizedDescription)!)
+                                        self.showAlert.toggle()
+                                        self.error = (error?.localizedDescription)!
+                                        return
+                                    }
+                                    
+                                    UserDefaults.standard.set(url?.absoluteString, forKey: "image")
+                                    self.createUser(image: UserDefaults.standard.string(forKey: "image")!, uid: uid!)
+                                    
+                                    self.email = ""
+                                    self.password = ""
+                                    self.name = ""
+                                    self.trainerId = ""
+                                    self.validatePassword = ""
+                                    self.showLoading.toggle()
+                                    self.isloggedin.toggle()
+                                    UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
+                                    self.index = 0
+                                    self.imageData.count = 0
+                                }
+                                
+                                
                             }
                         }
                     }
-                    }
-
+                    
                 }){
                     Text("Sign up").foregroundColor(.white)
                         .fontWeight(.bold)
@@ -198,7 +217,9 @@ struct SignUpView: View {
                         .shadow(color: Color.white.opacity(0.1), radius: 5, x: 0, y: 5)
                 }
                 .alert(isPresented: self.$showAlert){
-                    Alert(title: Text("Invalid Form"), message: Text(error), dismissButton: .cancel())
+                    Alert(title: Text("Invalid Form"), message: Text(error), dismissButton: .cancel(Text("Cancel"),action: {
+                        self.showLoading = false
+                    }))
                 }
                 .offset(y: 25)
                 .opacity(self.index == 1 ? 1 : 0)
@@ -212,22 +233,24 @@ struct SignUpView: View {
         
         let name = self.name
         let image = image
+        let trainerId = self.trainerId
         let favorites = [String]()
-        let friends = [String]()
+        let friends = [PokeUser]()
         let blocked = [String]()
         let comments = [String]()
         let user_posts = [String]()
         let createdAt = Date().timeIntervalSince1970
         let email = self.email
         
-        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "user_posts": user_posts] as [String: Any]
+        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "trainerId": trainerId, "user_posts": user_posts] as [String: Any]
         db.collection("users").document(uid).setData(values)
-
+        
         UserDefaults.standard.set(uid, forKey: "userid")
         UserDefaults.standard.set(name, forKey: "username")
+        UserDefaults.standard.set(email, forKey: "email")
         UserDefaults.standard.set(image, forKey: "image")
+        UserDefaults.standard.set(trainerId, forKey: "trainerId")
         UserDefaults.standard.set(favorites, forKey: "favorites")
-        UserDefaults.standard.set(friends, forKey: "friends")
         UserDefaults.standard.set("", forKey: "friendId")
     }
 }
@@ -240,7 +263,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     func makeCoordinator() -> ImagePicker.Coordinator {
         return ImagePicker.Coordinator(parent1: self)
     }
-
+    
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -283,17 +306,33 @@ struct LoginView: View {
     
     @State var index = 0
     @Binding var isloggedin: Bool
+    @State var showLoading = false
+    
     var body: some View{
         
         GeometryReader{_ in
             VStack{
                 
                 //for logo Image("").resizable().frame(width: 60, height: 60)
+                //LoaderView()
                 
                 ZStack{
                     
-                    SignUpView(isloggedin: self.$isloggedin, index: self.$index).zIndex(Double(self.index))
-                    LoginView2(isloggedin: self.$isloggedin, index: self.$index)
+                    ZStack{
+                        SignUpView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading).zIndex(Double(self.index))
+                        LoginView2(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading)
+                    }
+                    
+                    if(self.showLoading == true)
+                    {
+                        GeometryReader{_ in
+                            
+                            LoaderView()
+                            
+                        }.background(Color.clear)
+                        
+                    }
+                    
                 }
                 
                 HStack(spacing: 15){
@@ -333,6 +372,9 @@ struct LoginView2: View {
     @Binding var index: Int
     @State var showAlert = false
     @State var showForgotPass = false
+    @Binding var showLoading: Bool
+    @Environment(\.colorScheme) var scheme
+    @State var fromLogin = true
     
     var body: some View{
         
@@ -374,7 +416,7 @@ struct LoginView2: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 30)
-                
+
                 HStack{
                     Spacer(minLength: 0)
                     
@@ -383,7 +425,7 @@ struct LoginView2: View {
                     }){
                         Text("Forgot Password?").foregroundColor(Color.gray.opacity(0.6))
                     }.sheet(isPresented: self.$showForgotPass){
-                        ForgotPasswordView()
+                        ForgotPasswordView(fromLogin: self.$fromLogin)
                     }
                 }
                 .padding(.horizontal)
@@ -391,11 +433,11 @@ struct LoginView2: View {
             }
             .padding()
             .padding(.bottom, 65)
-            .background(Color.white)
+            .background(Color(UIColor.systemBackground))
             .clipShape(CShape())
             .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: -5)
             .onTapGesture {
-                
+                UIApplication.shared.endEditing()
                 self.index = 0
             }
             .contentShape(CShape())
@@ -406,7 +448,7 @@ struct LoginView2: View {
             
             Button(action: {
                 print("login tapp")
-                
+                UIApplication.shared.endEditing()
                 if(self.email == "" || self.password == "")
                 {
                     self.showAlert.toggle()
@@ -414,6 +456,9 @@ struct LoginView2: View {
                 }
                 else
                 {
+                    
+                    
+                    self.showLoading.toggle()
                     Auth.auth().signIn(withEmail: self.email, password: self.password, completion: { (user, error) in
                         
                         if error != nil{
@@ -442,21 +487,28 @@ struct LoginView2: View {
                                 else{
                                     let data = snapshot?.data()
                                     let name = data!["name"] as? String
+                                    let trainerId = data!["trainerId"] as? String
                                     let image = data!["image"] as? String
+                                    let email = data!["email"] as? String
                                     let favorites = data!["favorites"] as? [String]
-                                    let friends = data!["friends"] as? [String]
+                                    var friends = FriendsObserver()
+                                    let friends_ = friends.friends.map{ $0.id }
                                     
                                     UserDefaults.standard.set(uid, forKey: "userid")
                                     UserDefaults.standard.set(name, forKey: "username")
                                     UserDefaults.standard.set(image, forKey: "image")
                                     UserDefaults.standard.set(favorites, forKey: "favorites")
-                                    UserDefaults.standard.set(friends, forKey: "friends")
+                                    UserDefaults.standard.set(friends_, forKey: "friends")
+                                    UserDefaults.standard.set(trainerId, forKey: "trainerId")
                                     UserDefaults.standard.set("", forKey: "friendId")
+                                    UserDefaults.standard.set(email, forKey: "email")
                                     self.email = ""
                                     self.password = ""
+                                    self.showLoading.toggle()
                                     self.isloggedin.toggle()
                                     UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
                                     UserDefaults.standard.synchronize()
+                                    
                                 }
                             }
                         }
@@ -474,7 +526,9 @@ struct LoginView2: View {
                     .shadow(color: Color.white.opacity(0.1), radius: 5, x: 0, y: 5)
             }
             .alert(isPresented: self.$showAlert){
-                Alert(title: Text("Error"), message: Text(self.error), dismissButton: .cancel())
+                Alert(title: Text("Error"), message: Text(self.error), dismissButton: .cancel(Text("Cancel"), action: {
+                    self.showLoading = false//.toggle()
+                }))
             }
             .offset(y: 25)
             .opacity(self.index == 0 ? 1 : 0)

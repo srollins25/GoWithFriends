@@ -11,15 +11,17 @@ import Firebase
 
 class FriendsObserver: ObservableObject {
     
-    @Published var friends = [Message]()
+    @Published var friends = [PokeUser]()
     
-    init()
-    {
+    init(){
         let db = Firestore.firestore()
         let uid = Auth.auth().currentUser?.uid
-        db.collection("users").document(uid!).collection("messages").addSnapshotListener{ (snap, error) in
+        var _friends = [String]()
+
+        db.collection("users").document(uid!).collection("friends").getDocuments{ (snap, error) in //user friends
             
-            if error != nil{
+            if(error != nil)
+            {
                 print((error?.localizedDescription)!)
                 return
             }
@@ -30,36 +32,13 @@ class FriendsObserver: ObservableObject {
                     let id = i.document.documentID
                     let name = i.document.get("name") as! String
                     let image = i.document.get("image") as! String
-                    let text = i.document.get("message") as! String
-                    let createdAt = i.document.get("createdAt") as! NSNumber
+                    let trainerId = i.document.get("trainerId") as! String
                     
-                    self.friends.append(Message(id: id, image: image, name: name, text: text, createdAt: createdAt))
-                    self.friends.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedDescending})
+                    self.friends.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: [String](), createdAt: 0, trainerId: trainerId))
+                    self.friends.sort(by: { $0.name.compare($1.name) == .orderedDescending})
+                    _friends = self.friends.map{ $0.id }
+                    UserDefaults.standard.set(_friends, forKey: "friends")
                 }
-                
-                if(i.type == .modified){
-                    let id = i.document.documentID
-                    let text = i.document.get("message") as! String
-                    //let name = i.document.get("name") as! String
-                    //let image = i.document.get("image") as! String
-                    let createdAt = i.document.get("createdAt") as! NSNumber
-                    
-                    
-                    for j in 0..<self.friends.count{
-                        if (self.friends[j].id == id){
-                            
-                            self.friends[j].text = text
-                            //self.friends[j].name = name
-                            //self.friends[j].image = image
-                            self.friends[j].createdAt = createdAt
-                        }
-                    }
-                    
-                    self.friends.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedDescending})
-                    
-                }
-                
-                
                 
                 if(i.type == .removed){
                     
@@ -71,6 +50,8 @@ class FriendsObserver: ObservableObject {
                             return
                         }
                     }
+                    _friends = self.friends.map{ $0.id }
+                    UserDefaults.standard.set(_friends, forKey: "friends")
                 }
             }
         }

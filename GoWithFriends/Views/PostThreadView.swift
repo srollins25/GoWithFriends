@@ -12,118 +12,83 @@ import SDWebImageSwiftUI
 
 struct PostThreadView: View {
     
-    @Binding var closeView: Bool
+    //@Binding var closeView: Bool
     @Binding var mainPost: Post
     @State var showSubThread = false
     @Binding var subParentPost: Post
-    @State var subPost2 = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var subPost2 = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     let transition = AnyTransition.move(edge: .trailing)
-    
-    @ObservedObject var commentsObserver = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
+    @Binding var showDeleteView: Bool
+    @EnvironmentObject var commentsObserver: CommentsObserver //= CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!) 
+    @State var isFavorite: Bool = false
+    @State var isSubFavorite: Bool = false
+    @State var favPic = Image(systemName: "star")
+    //@Binding var needRefresh: Bool
+    @State var needSubRefresh: Bool = false
     
     var body: some View {
         
         ZStack{
             
-            //Color.white
-            
             VStack{
-                CustomNavBar(closeView: $closeView)
-//                VStack{
-//
-//                    HStack(alignment: .top){
-//                        AnimatedImage(url: URL(string: mainPost.profileimage)).resizable().renderingMode(.original).frame(width: 60, height: 60).clipShape(Circle())
-//
-//                        Text(mainPost.name).font(.title)
-//                        Spacer()
-//                        Image(systemName: "ellipsis")
-//                    }
-//
-//                    Text(mainPost.postBody)
-//
-//                    if(mainPost.image != ""){
-//                        AnimatedImage(url: URL(string: mainPost.image)).resizable().renderingMode(.original).frame(height: 140).cornerRadius(8)
-//                    }
-//
-//                    HStack{
-//                        Button(action: {
-//
-//                        }){
-//
-//                            HStack{
-//                                Image(systemName: "bubble.right")
-//                                Text(mainPost.comments.count == 0 ? "" : "\(mainPost.comments.count)")
-//                            }
-//                        }.buttonStyle(BorderlessButtonStyle())
-//
-//                        Button(action: {
-//
-//                        }){
-//
-//                            HStack{
-//                                Image(systemName: "star")
-//                                Text(mainPost.favorites == 0 ? "" : "\(mainPost.favorites)")
-//                            }
-//                        }.buttonStyle(BorderlessButtonStyle())
-//
-//                        Button(action: {
-//
-//                        }){
-//
-//                                Image(systemName: "paperplane")
-//                        }.buttonStyle(BorderlessButtonStyle())
-//
-//                        Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: mainPost.createdAt)), formatter: RelativeDateTimeFormatter())").font(.footnote)
-//                    }
-//                }.padding()
                 
-
-                PostCell(id: self.mainPost.id, user: self.mainPost.userID, name: self.mainPost.name, image: self.mainPost.image, profileimage: self.mainPost.profileimage, postBody: self.mainPost.postBody, comments: self.mainPost.comments, favorites: self.mainPost.favorites, createdAt:  self.mainPost.createdAt, parentPost: self.mainPost.parentPost).padding()
+                PostCell(id: self.mainPost.id, user: self.mainPost.userID, name: self.mainPost.name, trainerId: self.mainPost.trainerId, image: self.mainPost.image, profileimage: self.mainPost.profileimage, postBody: self.mainPost.postBody, comments: self.mainPost.comments, favorites: self.mainPost.favorites, createdAt:  self.mainPost.createdAt, parentPost: self.mainPost.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).padding()
                 Divider()
-                List{
-                    ForEach(commentsObserver.comments) { post in
+                List(commentsObserver.comments) { post in
+                    //ForEach(commentsObserver.comments) { post in
                         
-
-                        Button(action: {
-                            
-                            self.subParentPost = post
-                            UserDefaults.standard.set(self.subParentPost.id, forKey: "parentPost")
-                            withAnimation(.easeInOut(duration: 0.5)){
-                            
-                            self.showSubThread.toggle()
+                        
+                        if(post.id != self.mainPost.id)
+                        {
+                            ZStack{
+                                
+                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                
+                                NavigationLink(destination: PostThreadView(mainPost: self.$subParentPost, subParentPost: self.$subPost2, showDeleteView: self.$showDeleteView)){
+                                    
+                                    EmptyView()
+                                }
+                                
+                                Button(action: {
+                                    self.subParentPost = post
+                                    
+                                    UserDefaults.standard.set(self.subParentPost.id, forKey: "parentPost")
+                                    self.showSubThread.toggle()
+                                    self.isSubFavorite = (UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(self.subParentPost.id)
+//                                    if((UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(self.subParentPost.id))
+//                                    {
+//                                        
+//                                        self.favPic = Image(systemName: "star.fill")
+//                                    }
+                                    UIApplication.shared.endEditing()
+                                    
+                                }){
+                                    Text("")
+                                }
+                                
                             }
-                            
-                        }){
-                            PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost)
                         }
-                    }
                 }
             }
             
-            if(self.showSubThread == true)
-            {
-                PostThreadView(closeView: self.$showSubThread, mainPost: self.$subParentPost, subParentPost: self.$subPost2).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition)//.edgesIgnoringSafeArea(.all)
+        }.navigationBarTitle(Text("Thread"), displayMode: .inline).background(Color(UIColor.systemBackground))
+            .onAppear(perform: {
+                self.isFavorite = (UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(self.mainPost.id)
+            })
+            .onDisappear(perform: {
                 
-            }
-            }.edgesIgnoringSafeArea(.all).background(Color(UIColor.systemBackground))
-        .onAppear(perform: {
-            
-        })
-        .onDisappear(perform: {
-            
-            if(self.showSubThread == false)
-            {
-                UserDefaults.standard.set("", forKey: "parentPost")
-            }
-            
-            else
-            {
-                UserDefaults.standard.set(self.mainPost.id, forKey: "parentPost")
-            }
-            
-            
-            print("parent post close: ", UserDefaults.standard.string(forKey: "parentPost")!)
-        })
+                if(self.showSubThread == false)
+                {
+                    UserDefaults.standard.set("", forKey: "parentPost")
+                }
+                    
+                else
+                {
+                    UserDefaults.standard.set(self.mainPost.id, forKey: "parentPost")
+                }
+                
+                print("parent post close: ", UserDefaults.standard.string(forKey: "parentPost")!)
+            })
     }
 }
 

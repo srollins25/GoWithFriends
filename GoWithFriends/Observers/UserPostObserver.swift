@@ -1,5 +1,5 @@
 //
-//  UserPostObserver.swift
+//  PostObserver.swift
 //  GoWithFriends
 //
 //  Created by stephan rollins on 4/24/20.
@@ -40,6 +40,7 @@ class UserPostObserver: ObservableObject {
                         let name = i.document.get("name") as! String
                         let userId = i.document.get("userId") as! String
                         let image = i.document.get("image") as! String
+                        let trainerId = i.document.get("trainerId") as! String
                         let profileimage = i.document.get("profileimage") as! String
                         let comments = i.document.get("comments") as! NSArray
                         let body = i.document.get("body") as! String
@@ -48,7 +49,7 @@ class UserPostObserver: ObservableObject {
                         let createdAt = i.document.get("createdAt") as! NSNumber
                         
                         
-                        self.currentuserposts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                        self.currentuserposts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                         self.currentuserposts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                         
                     }

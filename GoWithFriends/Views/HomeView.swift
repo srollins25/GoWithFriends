@@ -4,116 +4,97 @@
 //
 //  Created by stephan rollins on 4/8/20.
 //  Copyright © 2020 OmniStack. All rights reserved.
-//
+//  .padding(.top, (UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.safeAreaInsets.top)!)
 
 import SwiftUI
 import Firebase
 import FirebaseFirestore
 import SDWebImageSwiftUI
+import GoogleMobileAds
 
 
 struct HomeView: View {
     
-
     @EnvironmentObject var postsObserver: PostObserver
-    @State var show = false
+    @Binding var show: Bool
     @State var showPostThread = false
     @State var shouldFetch = false
-    @State var showSearchBar = false
+    @Binding var showSearchBar: Bool
     @State var searchtxt = ""
-    @State var post: Post = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
-    @State var subParentPost = Post(id: "", userID: "", name: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var subParentPost = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
     @Binding var isLoggedIn: Bool
-    let transition = AnyTransition.move(edge: .trailing)
-    
+    @State var favpic = Image(systemName: "star")
+    @State var isFavorite = false
+    @State var isSubFavorite = false
+    @State var needRefresh: Bool = false
+    @State var showLoading = false
+    @Binding var showDeleteView: Bool
+    @State var comments = CommentsObserver(parentPost_: "")
     
     var body: some View {
         
-        
         ZStack{
-            
-            
-            NavigationView{
+            ZStack(alignment: .bottomTrailing){
                 
-                ZStack(alignment: .bottomTrailing){
-                    
-                    VStack{
-                        List{
-                            if(postsObserver.posts.isEmpty)
-                            {
-                                Text("No posts").fontWeight(.heavy)
-                            }
+                VStack{
+                    List{
+                        if(postsObserver.posts.isEmpty)
+                        {
+                            Text("No posts").fontWeight(.heavy)
+                        }
+                            
+                        else
+                        {
+                            ForEach(postsObserver.posts.reversed()){ post in
                                 
-                            else
-                            {
-                                ForEach(postsObserver.posts.reversed()){ post in
-                                     
-                                    Button(action: {
+                                ZStack{
+                                    
+                                    PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).environmentObject(self.postsObserver)
+                                    
+                                    NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).environmentObject(self.comments)){
                                         
+                                        EmptyView()
+                                    }
+                                    
+                                    Button(action: {
                                         self.post = post
-                                        print("Post: ",  self.post.id, "Postbody: ",  self.post.postBody, "Comments: ",  self.post.comments.description)
-                                        UserDefaults.standard.set(self.post.id, forKey: "parentPost")
-                                        withAnimation(.easeIn(duration: 0.5)){
-                                            self.showPostThread.toggle()
-                                        }
+                                        
+                                        UserDefaults.standard.set(post.id, forKey: "parentPost")
+                                        self.comments = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
                                     }){
-                                        PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost)
+                                        Text("")
                                     }
                                 }
                             }
                         }
-                    }
-                    
-                    GeometryReader{_ in
-                        
-                        HStack{
-                            SideMenu(isLoggedIn: self.$isLoggedIn).offset(x: self.show ? 0 : -UIScreen.main.bounds.width)
-                                .animation(.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.6))
-                            Spacer()
-                        }
-                    }.background(Color.black.opacity(self.show ? 0.5 : 0)).edgesIgnoringSafeArea(.bottom)
+                    }.padding(.bottom, 120)
                 }
-                .navigationBarTitle(Text("Home"))
-                .navigationBarItems(leading: Button(action: {
-                    self.show.toggle()
-                    
-                }){
-                    AnimatedImage(url: URL(string: UserDefaults.standard.string(forKey: "image")!)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 35, height: 35).shadow(color: .gray, radius: 5, x: 1, y: 1).clipShape(Circle())
-                }.accentColor(.white)
-                    
-                    , trailing:
-
-                        Button(action: {
-                            
-                            withAnimation(.easeInOut(duration: 0.5)){
-                                self.showSearchBar.toggle()
-                            }
-                            
-                        }){
-                            Image(systemName: "magnifyingglass").resizable().frame(width: 30, height: 30).shadow(color: .gray, radius: 5, x: 1, y: 1)
-                            
-                        }.accentColor(.white)
-                )
-            }
-            
-            if(self.showPostThread == true)
-            {
-                PostThreadView(closeView: self.$showPostThread, mainPost: self.$post, subParentPost: self.$subParentPost).padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)!).transition(transition).edgesIgnoringSafeArea(.all)
                 
+                GeometryReader{_ in
+                    
+                    HStack{
+                        SideMenu(isLoggedIn: self.$isLoggedIn, showLoading: self.$showLoading, showDeleteView: self.$showDeleteView).environmentObject(self.postsObserver).offset(x: self.show ? 0 : -UIScreen.main.bounds.width)
+                            .animation(.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.6))
+                        Spacer()
+                    }
+                }.background(Color.black.opacity(self.show ? 0.5 : 0)).edgesIgnoringSafeArea(.bottom)
+                    .onTapGesture {
+                        self.show.toggle()
+                }
             }
             
-            ZStack{
-                SearchView(closeView: self.$showSearchBar)
-
+            if(self.showLoading == true)
+            {
+                GeometryReader{_ in
+                    
+                    LoaderView()
+                    
+                }.background(Color.clear)
             }
-            .edgesIgnoringSafeArea(.all)
-            .offset(x: self.showSearchBar ? 0 : UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.frame.width ?? 0, y: 0)
-
         }
             
         .onAppear(perform: {
-            
-            
             
             if(self.shouldFetch == false){
                 
@@ -126,14 +107,43 @@ struct HomeView: View {
 
 struct SideMenu: View {
     
-
     @Binding var isLoggedIn: Bool
     @State var showSupport = false
+    @State var showProfile = false
+    @Binding var showLoading: Bool
+    @Binding var showDeleteView: Bool//final delete screen
+    @State var user: PokeUser = PokeUser(id: UserDefaults.standard.string(forKey: "userid")!, name: UserDefaults.standard.string(forKey: "username")!, profileimage: UserDefaults.standard.string(forKey: "image")!, email: "", user_posts: [String](), createdAt: 0, trainerId:  UserDefaults.standard.string(forKey: "trainerId")!)
+    @EnvironmentObject var passedPosts: PostObserver
+    
     
     var body: some View {
         
         VStack(spacing: 25){
-            
+
+                Button(action: {
+                    self.showProfile.toggle()
+                }){
+                    VStack(spacing: 8){
+//                        Image(systemName: "person").renderingMode(.original).resizable().frame(width: 25, height: 25)
+                        
+                        AnimatedImage(url: URL(string: UserDefaults.standard.string(forKey: "image")!)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 35, height: 35).shadow(color: .gray, radius: 5, x: 1, y: 1).clipShape(Circle())
+                        Text("Profile")
+                         
+                    }
+                }.sheet(isPresented: self.$showProfile)
+                {
+                    NavigationView{
+                        ProfileView(user: self.$user, show: self.$showProfile, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(self.passedPosts)
+                            .navigationBarTitle(Text(self.user.name), displayMode: .inline)
+                            .navigationBarItems(leading: Button(action: {
+                                
+                                self.showProfile.toggle()
+                            }){
+                                Text("Done")
+                            })
+                    }
+            }
+
             Button(action: {
                 self.showSupport.toggle()
             }){
@@ -145,33 +155,35 @@ struct SideMenu: View {
                 SupportView(closeView: self.$showSupport)
             }
             
-            Button(action: {
-                
-            }){
-                VStack(spacing: 8){
-                    Image(systemName: "gear").renderingMode(.original).resizable().frame(width: 25, height: 25)
-                    Text("Settings")
-                }
-            }
-            
-            Button(action: {
-                
-                do{
 
-                    try Auth.auth().signOut()
-                }
-                catch{
-                    print("Problem signing out.")
-                }
+            Button(action: {
+                self.showLoading.toggle()
                 
-                UserDefaults.standard.set("", forKey: "username")
-                UserDefaults.standard.set("", forKey: "image")
-                UserDefaults.standard.set("", forKey: "userid")
-                let emptyArr = [String]()
-                UserDefaults.standard.set(emptyArr, forKey: "favorites")
-                UserDefaults.standard.set(emptyArr, forKey: "friends")
-                self.isLoggedIn.toggle()
-                UserDefaults.standard.set(self.isLoggedIn, forKey: "isloggedin")
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5){
+                    
+                    do{
+                        
+                        try Auth.auth().signOut()
+                    }
+                    catch{
+                        print("Problem signing out.")
+                    }
+                    
+                    UserDefaults.standard.set("", forKey: "username")
+                    UserDefaults.standard.set("", forKey: "image")
+                    UserDefaults.standard.set("", forKey: "userid")
+                    UserDefaults.standard.set("", forKey: "email")
+                    UserDefaults.standard.set("", forKey: "trainerId")
+                    let emptyArr = [String]()
+                    UserDefaults.standard.set(emptyArr, forKey: "favorites")
+
+                    UserDefaults.standard.set([String](), forKey: "friends")
+                    self.showLoading.toggle()
+                    self.isLoggedIn.toggle()
+                    UserDefaults.standard.set(self.isLoggedIn, forKey: "isloggedin")
+                    
+                }
                 
             }){
                 VStack(spacing: 8){
@@ -191,8 +203,22 @@ struct SideMenu: View {
     }
 }
 
+struct AdView: UIViewRepresentable {
+    func makeUIView(context: UIViewRepresentableContext<AdView>) ->  GADBannerView {
+        let banner = GADBannerView(adSize: kGADAdSizeBanner)
+        banner.adUnitID = "ca-app-pub-9788435879014471/4288086107"
+        // ca-app-pub-3659675992750002~2083157801 ca-app-pub-3659675992750002/5447687740
+        banner.rootViewController = UIApplication.shared.windows.first?.rootViewController
+        banner.load(GADRequest())
+        return banner
+    }
+    
+    func updateUIView(_ uiView: GADBannerView, context: UIViewRepresentableContext<AdView>) {
+        
+    }
+}
 
-
+//
 //struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        HomeView()

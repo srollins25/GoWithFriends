@@ -12,17 +12,18 @@ import Firebase
 struct ContentView: View {
     
     @State var isLoggedIn: Bool = false
-    var showTabBar = ShowTabBar()
+    //var posts = PostObserver()
     
     var body: some View {
         
-        LoginView(isloggedin: self.$isLoggedIn).overlay(self.isLoggedIn ? IsLoggedInView(isLoggedIn: self.$isLoggedIn).background(Color.white).environmentObject(showTabBar).edgesIgnoringSafeArea(.bottom) : nil)
+        LoginView(isloggedin: self.$isLoggedIn).overlay(self.isLoggedIn ? IsLoggedInView(isLoggedIn: self.$isLoggedIn).background(Color.white) /* .environmentObject(posts) */ : nil)
             
             .onAppear(perform: {
                 
                 if(UserDefaults.standard.object(forKey: "isloggedin") != nil)
                 {
                     self.isLoggedIn = UserDefaults.standard.bool(forKey: "isloggedin")
+                    
                 }
             })
     }

@@ -24,28 +24,29 @@ struct ChatView: View{
     @EnvironmentObject var showTabBar: ShowTabBar
     let obj = observed()
     @State var value: CGFloat = 0
+    @Environment(\.colorScheme) var scheme
+    
     
     var body: some View{
         
+
         ZStack{
-            Color("background").edgesIgnoringSafeArea(.all)
             
-            
-     
+            self.scheme == .dark ? Color.black.edgesIgnoringSafeArea(.all) : Color("background").edgesIgnoringSafeArea(.all)
                 VStack(spacing: 0){
 
                     chatTopView(pic: pic, name: name, showChatView: self.$chat).padding(.bottom, 5)
-
                     GeometryReader{_ in
 
                         ChatList(messages: self.$messages, offset: self.$value)
                     }
                     
-                    chatBottomView(messageTextFeild: self.$messageTextFeild, name: self.$name, pic: self.$pic, uid: self.$uid).environmentObject(obj).offset(y: -self.value).animation(.spring())
+                    chatBottomView(name: self.$name, pic: self.$pic, uid: self.$uid).environmentObject(obj).offset(y: -self.value).animation(.spring())
                 }
-        }
-        .navigationBarTitle("")
+        }.edgesIgnoringSafeArea(.bottom)
+            .navigationBarTitle(Text(self.name), displayMode: .inline)
         .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
         .onAppear(perform: {
             UITableView.appearance().separatorColor = .clear
             self.getMessages()
@@ -58,19 +59,21 @@ struct ChatView: View{
             
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main){ (notification) in
 
-                
                 self.value = 0
             }
         })
         .onAppear(perform: {
-            self.showTabBar.showTabBar = false
+            //self.showTabBar.showTabBar = false
         })
-            .onDisappear(perform: {
+        .onDisappear(perform: {
                 withAnimation(.easeInOut(duration: 0.5)){
 
-                    self.showTabBar.showTabBar = true
+                    //self.showTabBar.showTabBar = true
                 }
             })
+            .onTapGesture {
+                UIApplication.shared.windows.first?.rootViewController?.view.endEditing(true)
+        }
     }
     
     
@@ -109,6 +112,8 @@ struct chatTopView: View {
     var pic: String
     var name: String
     @Binding var showChatView: Bool
+    @Environment(\.colorScheme) var scheme
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View{
         HStack{
@@ -117,17 +122,18 @@ struct chatTopView: View {
                 UIApplication.shared.endEditing()
                 withAnimation(.easeIn(duration: 0.5)){
                     self.showChatView.toggle()
+                    self.presentationMode.wrappedValue.dismiss()
                 }
                 
             }){
-                Image(systemName: "control").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 15, height: 15).font(.title).rotationEffect(.init(degrees: -90)).foregroundColor(.gray)
+                Image(systemName: "control").resizable().aspectRatio(contentMode: .fill).frame(width: 15, height: 15).font(.title).rotationEffect(.init(degrees: -90)).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
                 
             }
             
             Spacer()
             VStack(spacing: 5){
-                AnimatedImage(url: URL(string: pic)).resizable().frame(width:45, height: 45).clipShape(Circle())
-                Text(name).font(.system(size: 20)).bold().fontWeight(.heavy)
+                AnimatedImage(url: URL(string: pic)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width:45, height: 45).clipShape(Circle()).padding(.trailing, 10).padding(.top, 5).padding(.bottom, 5)
+                //Text(name).font(.system(size: 20)).bold().fontWeight(.heavy)
             }
             
             Spacer()
@@ -139,6 +145,7 @@ struct ChatList: View {
     
     @Binding var messages: [ChatMessage]
     @Binding var offset: CGFloat
+    @Environment(\.colorScheme) var scheme
     
     var body: some View{
         
@@ -147,6 +154,8 @@ struct ChatList: View {
                 Text("No messages")
             }
             else{
+                
+                
                 ForEach(messages) { i in
                     
                     HStack{
@@ -163,14 +172,14 @@ struct ChatList: View {
                 }
             }
         }.padding(.horizontal, 15).padding(.bottom, self.offset == 0 ? 0 : self.offset + 10)
-            .background(Color.white)
+            .background(self.scheme == .dark ? Color.black : Color.white)
             .clipShape(Rounded())
     }
 }
 
 struct chatBottomView: View{
 
-    @Binding var messageTextFeild: String
+    @State var messageTextFeild = ""
     @Binding var name: String
     @Binding var pic: String
     @Binding var uid: String
@@ -180,13 +189,13 @@ struct chatBottomView: View{
     var body: some View{
 
         HStack{
-            Button(action: {
-
-            }){
-                Image(systemName: "camera.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 25, height: 25).padding(10).foregroundColor(Color.gray)
-            }
+//            Button(action: {
+//
+//            }){
+//                Image(systemName: "camera.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 25, height: 25).padding(10).foregroundColor(Color.gray)
+//            }
             
-            MultiTextField(messageTextFeild: self.$messageTextFeild).frame(height: self.obj.size < 150 ? self.obj.size + 30 : 150).padding(10)
+            MultiTextField(messageTextFeild: self.$messageTextFeild).frame(height: self.obj.size < 150 ? self.obj.size : 150).padding(8)
                 .background(Color.gray)
                 .cornerRadius(10)
             
@@ -196,7 +205,9 @@ struct chatBottomView: View{
                 let createdAt = Date().timeIntervalSince1970 as NSNumber
 
                 //create message and send to database
-
+                
+                UIApplication.shared.windows.first?.rootViewController?.view.endEditing(true)
+                
                 sendMessage(user: self.name, uid: self.uid, pic: self.pic, createdAt: createdAt, message: self.messageTextFeild)
 
                 self.messageTextFeild = ""
@@ -273,13 +284,27 @@ struct MultiTextField: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            textView.text = ""
-            textView.textColor = .black
+            
+            if(self.parent.messageTextFeild == "")
+            {
+                textView.text = ""
+                textView.textColor = .black 
+            }
+            
+
         }
         
         func textViewDidChange(_ textView: UITextView) {
             self.parent.obj.size = textView.contentSize.height
             self.parent.messageTextFeild = textView.text
+        }
+        
+        func textViewDidEndEditing(_ textView: UITextView) {
+            if(self.parent.messageTextFeild == "")
+            {
+                textView.text = "Type message..."
+                textView.textColor = UIColor.black.withAlphaComponent(0.35)
+            }
         }
     }
     
@@ -347,7 +372,7 @@ func setRecents(user: String, uid: String, pic: String, createdAt: NSNumber, mes
     let myname = UserDefaults.standard.string(forKey: "username")
     let mypic = UserDefaults.standard.string(forKey: "image")
     
-    db.collection("users").document(uid).collection("messages").document(myuid!).setData(["name": /* user */ myname!, "image": /* pic */ mypic!, "message": message, "createdAt": createdAt]) { (error) in
+    db.collection("users").document(uid).collection("messages").document(myuid!).setData(["name": myname!, "image": mypic!, "message": message, "createdAt": createdAt]) { (error) in
         
         if error != nil{
             print((error?.localizedDescription)!)

@@ -13,15 +13,17 @@ struct PokeUser: Identifiable{
     
     var id: String
     var name: String
+    var trainerId: String
     var profileimage: String
     var email: String
     //var comments: [Post] = []
     var user_posts: [String] = []
     var createdAt: NSNumber
     
-    init(id: String, name: String, profileimage: String, email: String,  user_posts: [String], createdAt: NSNumber){
+    init(id: String, name: String, profileimage: String, email: String,  user_posts: [String], createdAt: NSNumber, trainerId: String){
         self.id = id
         self.name = name
+        self.trainerId = trainerId
         self.profileimage = profileimage
         self.email = email
         self.user_posts = user_posts

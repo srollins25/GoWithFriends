@@ -14,27 +14,59 @@ import SDWebImageSwiftUI
 struct PostCell: View {
     
     @State var id: String
-    let user: String
+    @State var user: String
     let name: String
+    let trainerId: String
     let image: String
-    let profileimage: String
+    var profileimage: String
     let postBody: String
     let comments: NSArray
-    let favorites: NSNumber
+    @State var favorites: NSNumber
     let createdAt: NSNumber
     @State var parentPost: String
     @State var showDeleteButton = false
     @State var showAlert = false
     @State var show = false
+    @State var showProfile = false
     @State var showCreatePost = false
+    @Binding var isFavorite: Bool// = false
+    @State var favoriteImage = Image(systemName: "star")
+    @State var showFavoriteAlert = false
+    @State var isLoggedIn = (UserDefaults.standard.bool(forKey: "isloggedin"))
+    @Binding var showDeleteView: Bool
+    @EnvironmentObject var pastPosts: PostObserver
+    @State var pokeuser: PokeUser = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0, trainerId: "")
     
     var body: some View {
         
         HStack(alignment: .top){
             //image
-            AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle()).onTapGesture {
+            
+            ZStack{
                 
+                AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle()).onTapGesture {
+                    
+                    self.showProfile.toggle()
+                    print("from post cell: ", self.user)
+                    self.pokeuser.id = self.user
+                    self.pokeuser.name = self.name
+                    self.pokeuser.trainerId = self.trainerId
+                    self.pokeuser.profileimage = self.profileimage
+                    
+                }.sheet(isPresented: self.$showProfile){
+                    
+                    NavigationView{
+                        ProfileView(user: self.$pokeuser, show: self.$showProfile, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(self.pastPosts)
+                            .navigationBarTitle(Text(self.pokeuser.name), displayMode: .inline)
+                            .navigationBarItems(leading: Button(action: {
+                                self.showProfile.toggle()
+                            }){
+                                Text("Done")
+                            })
+                    }
+                }
             }
+            
             //(vastack: name, text, image)
             VStack(alignment: .leading){
                 //name, text
@@ -70,13 +102,13 @@ struct PostCell: View {
                         Text(self.postBody).fixedSize(horizontal: false, vertical: true).font(.body)
                         if(self.image != "")
                         {
-                            AnimatedImage(url: URL(string: self.image)).resizable().renderingMode(.original).frame(height: 140).cornerRadius(8).onTapGesture {
-                            }
+                            AnimatedImage(url: URL(string: self.image)).resizable().renderingMode(.original).frame(height: 140).cornerRadius(8)//.onTapGesture {
+                            //}
                         }
                     }
                 }
                 //thread, fav, send, date
-                HStack(spacing: 20){
+                HStack(spacing: 30){
                     HStack{
                         Button(action: {
                             self.showCreatePost.toggle()
@@ -92,56 +124,80 @@ struct PostCell: View {
                     HStack{
                         
                         Button(action: {
-                            let db = Firestore.firestore()
-                            let favorites = self.favorites
-                            var newArr = UserDefaults.standard.array(forKey: "favorites") as! [String]
-                            if(!newArr.contains(self.id))
+                            self.showFavoriteAlert.toggle()
+                            if(self.isFavorite == true)
                             {
-                                db.collection("posts").document(self.id).updateData(["favorites": favorites.doubleValue + 1]) { (error) in
-                                    if error != nil {
-                                        print(error!)
-                                        return
-                                    }
-                                    
-                                    let uid = Auth.auth().currentUser?.uid
-                                    let ref = db.collection("users/").document("\(uid!)")
-                                    ref.updateData(["favorites": FieldValue.arrayUnion([self.id])])
-                                    
-                                    newArr.append(self.id)
-                                    UserDefaults.standard.set(newArr, forKey: "favorites")
-                                }
+                                self.favoriteImage = Image(systemName: "star.fill")
                             }
-                                
                             else
                             {
-                                
-                                db.collection("posts").document(self.id).updateData(["favorites": favorites.doubleValue - 1]) { (error) in
-                                    if error != nil {
-                                        print(error!)
-                                        return
-                                    }
-                                    
-                                    let uid = Auth.auth().currentUser?.uid
-                                    let ref = db.collection("users/").document("\(uid!)")
-                                    ref.updateData(["favorites": FieldValue.arrayRemove([self.id])])
-                                    
-                                    if let index = newArr.firstIndex(of: self.id){
-                                        newArr.remove(at: index)
-                                    }
-                                    UserDefaults.standard.set(newArr, forKey: "favorites")
-                                }
+                                self.favoriteImage = Image(systemName: "star")
                             }
                         }){
-                            Image(systemName: "star")
-                        }.buttonStyle(BorderlessButtonStyle())
+                            self.favoriteImage
+                            
+                            
+                        }.alert(isPresented: self.$showFavoriteAlert){
+                            Alert(title: Text("Confirm"), primaryButton: .cancel(), secondaryButton: .default(Text("Continue"), action: {
+                                
+                                
+                                let db = Firestore.firestore()
+                                //let favorites = self.favorites
+                                var newArr = UserDefaults.standard.array(forKey: "favorites") as! [String]
+                                if(!newArr.contains(self.id))
+                                {
+                                    db.collection("posts").document(self.id).updateData(["favorites": self.favorites.doubleValue + 1]) { (error) in
+                                        if error != nil {
+                                            print(error!)
+                                            return
+                                        }
+                                        
+                                        let uid = Auth.auth().currentUser?.uid
+                                        let ref = db.collection("users/").document("\(uid!)")
+                                        ref.updateData(["favorites": FieldValue.arrayUnion([self.id])])
+                                        
+                                        newArr.append(self.id)
+                                        UserDefaults.standard.set(newArr, forKey: "favorites")
+                                        self.favorites = NSNumber(value: self.favorites.doubleValue + 1)
+                                        self.favoriteImage = Image(systemName: "star.fill")
+                                        
+                                    }
+                                    
+                                }
+                                    
+                                else
+                                {
+                                    
+                                    db.collection("posts").document(self.id).updateData(["favorites": self.favorites.doubleValue - 1]) { (error) in
+                                        if error != nil {
+                                            print(error!)
+                                            return
+                                        }
+                                        
+                                        let uid = Auth.auth().currentUser?.uid
+                                        let ref = db.collection("users/").document("\(uid!)")
+                                        ref.updateData(["favorites": FieldValue.arrayRemove([self.id])])
+                                        
+                                        if let index = newArr.firstIndex(of: self.id){
+                                            newArr.remove(at: index)
+                                        }
+                                        UserDefaults.standard.set(newArr, forKey: "favorites")
+                                        self.favorites = NSNumber(value: self.favorites.doubleValue - 1)
+                                        self.favoriteImage = Image(systemName: "star")
+                                    }
+                                }
+                                
+                            }))
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
                         Text(self.favorites == 0 ? "" : "\(self.favorites)")
                         
                     }
-                    Button(action: {
-                        print("share")
-                    }){
-                        Image(systemName: "paperplane")
-                    }.buttonStyle(BorderlessButtonStyle())
+                    //                    Button(action: {
+                    //                        print("share")
+                    //                    }){
+                    //                        Image(systemName: "paperplane")
+                    //                    }.buttonStyle(BorderlessButtonStyle())
                     
                     Spacer()
                     
@@ -151,6 +207,34 @@ struct PostCell: View {
             }
             
         }.padding(.top)
+            .onAppear(perform: {
+                
+                
+                
+                let favoritesArr = (UserDefaults.standard.object(forKey: "favorites")! as? [String])!
+                
+                if(favoritesArr.contains(self.id))
+                {
+                    self.isFavorite = true
+                    self.favoriteImage = Image(systemName: "star.fill")
+                }
+                
+                let db = Firestore.firestore()
+                let ref = db.collection("posts").document(self.id)
+                
+                ref.getDocument{ (snapshot, error) in
+                    
+                    if(error != nil){
+                        print((error?.localizedDescription)!)
+                        return
+                    }
+                        
+                    else{
+                        let data = snapshot?.data()
+                        self.favorites = (data!["favorites"] as? NSNumber)!
+                    }
+                }
+            })
     }
 }
 
@@ -195,8 +279,8 @@ struct PopOver: View {
                         return
                     }
                     
-                    for document in snap!.documents {
-
+                    for document in snap!.documents { 
+                        
                         let ref = db.collection("users").document("\(document.documentID)")
                         ref.updateData(["favorites": FieldValue.arrayRemove([self.postId])])
                     }
@@ -217,19 +301,19 @@ struct PopOver: View {
                 
                 // delete from comments
                 db.collection("posts").whereField("comments", arrayContains: self.postId).getDocuments { (snap, error) in
-                        
-                        if(error != nil)
-                        {
-                            print((error?.localizedDescription)!)
-                            return
-                        }
-                        
-                        for document in snap!.documents {
-                            
-                            let ref = db.collection("posts").document("\(document.documentID)")
-                            ref.updateData(["comments": FieldValue.arrayRemove([self.postId])])
-                        }
+                    
+                    if(error != nil)
+                    {
+                        print((error?.localizedDescription)!)
+                        return
                     }
+                    
+                    for document in snap!.documents {
+                        
+                        let ref = db.collection("posts").document("\(document.documentID)")
+                        ref.updateData(["comments": FieldValue.arrayRemove([self.postId])])
+                    }
+                }
                 
                 // change all posts that have as parent to empty string
                 db.collection("posts").whereField("parentPost", isEqualTo: self.postId).getDocuments { (snap, error) in
@@ -256,7 +340,7 @@ struct PopOver: View {
                     }
                     ref.updateData(["user_posts": FieldValue.arrayRemove([self.postId])])
                 }
-
+                
                 // delete from posts
                 db.collection("posts").document(self.postId).delete() { err in
                     if let err = err {

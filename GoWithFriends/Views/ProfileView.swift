@@ -19,27 +19,39 @@ struct ProfileView: View {
     @ObservedObject var favoritePostsObserver = FavoritePostsObserver()
     @State var userPosts: [Post] = []
     @State var userFavorites: [Post] = []
-    @State var currentUserFriends = (UserDefaults.standard.object(forKey: "friends")! as? [String])!
+    var currentUserFriends = FriendsObserver()
     @State var fetchPosts: Bool = true
     @State private var name: String = ""
     @State private var image: String = ""
     @State var profileArrIndex = 0
     @Binding var user: PokeUser
     @Binding var show: Bool
-    @Binding var fromSearch: Bool
+    @State var chat = false
     @Binding var isLoggedIn: Bool
     @State var showMoreMenu = false
+    @State var showInbox = false
     @State var showProfileSettings = false
     @State var buttonImage: Image = Image(systemName: "person.circle")
     @State var buttonText = ""
-    @State var isFriend: Bool = (UserDefaults.standard.object(forKey: "friends")! as? [String])!.contains(UserDefaults.standard.string(forKey: "friendId")!)
+    @State var isFriend = false
     @State var showDeleteVerify = false
     @State var showFriends: Bool = false
-    
+    @Environment(\.colorScheme) var scheme 
+    @State var subParentPost = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var favpic = Image(systemName: "star")
+    @State var favSubPic = Image(systemName: "star")
+    @State var isFavorite = false
+    @State var isSubFavorite = false
+    @State var showNewMessage = false
+    @State var uid = (Auth.auth().currentUser?.uid)!
+    @State var comments = CommentsObserver(parentPost_: "")
+    @Binding var showDeleteView: Bool//final delete screen
+    let friends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
     
     var body: some View {
-        
-        ZStack(alignment: .top){
+
+        ZStack{
             //Color.white.edgesIgnoringSafeArea(.all)
             VStack{
                 HStack{
@@ -57,77 +69,72 @@ struct ProfileView: View {
                                 .padding(.top, 40)
                         }
                         
-                        Text("\(user.name)")
-                        //check if from search or not
+                        if(self.user.id == UserDefaults.standard.string(forKey: "username")!)
+                        {
+                            Text("Trainer Code: " + UserDefaults.standard.string(forKey: "trainerId")!)
+                        }
+                        else
+                        {
+                            Text("Trainer Code: " + "\(user.trainerId)")
+                        }
                         
-                        if(self.fromSearch && user.id != Auth.auth().currentUser?.uid)
+                        if(user.id != Auth.auth().currentUser?.uid)
                         {
                             HStack{
                                 
                                 VStack{
                                     
-                                    if(isFriend == true)
-                                    {
                                         Button(action: {
-                                              self.deleteFriend()
-                                          }){
-                                              
-                                            Image(systemName: "person.crop.circle.badge.minus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                              
-                                              //check to see if in friends list
-                                          }
-                                          
-                                            Text("Unfollow").font(.footnote)
-                                    }
-                                    else
-                                    {
-                                        Button(action: {
-                                            self.addFriend()
-                                          }){
-                                              
-                                              Image(systemName: "person.crop.circle.badge.plus").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                              
-                                              //check to see if in friends list
-                                          }
-                                            Text("Follow").font(.footnote)
-                                    }
+                                            
+                                            if(self.isFriend == true)
+                                            {
+                                                self.deleteFriend()
+
+                                            }
+                                            else
+                                            {
+                                                self.addFriend()
+
+                                            }
+                                        }){
+                                            
+                                            self.buttonImage.resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
+                                            
+                                            //check to see if in friends list
+                                        }
+                                        
+                                    Text(self.buttonText).font(.footnote)
                                     
                                 }
                                 
                                 VStack{
-                                    Button(action: {
-                                        
-                                    }){
-                                        
-                                        Image(systemName: "envelope").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                        
+                                    
+                                    NavigationLink(destination: ChatView(pic: self.user.profileimage, name: self.user.name, uid: self.user.id, chat: self.$chat)){
+                                        Image(systemName: "envelope").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
                                     }
+                                    
                                     Text("Message").font(.footnote)
                                 }
                                 
-                                //ZStack{
-                                    
-                                    VStack(spacing: 10){
-                                        Button(action: {
-                                            
-                                            withAnimation(.easeIn(duration: 0.3)){
-                                                 self.showMoreMenu.toggle()
-                                            }
-                                        }){
-                                            
-                                            Image(systemName: "line.horizontal.3.decrease.circle").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                            
-                                        }
-                                        Text("More").font(.footnote)
+                                VStack(spacing: 10){
+                                    Button(action: {
                                         
-                                        if(self.showMoreMenu)
-                                        {
-                                            MoreMenu(show: self.$showMoreMenu, user: self.$user)
+                                        withAnimation(.easeIn(duration: 0.3)){
+                                            self.showMoreMenu.toggle()
                                         }
+                                    }){
+                                        
+                                        Image(systemName: "line.horizontal.3.decrease.circle").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
+                                        
                                     }
+                                    Text("More").font(.footnote)
                                     
-                                    
-                                //}
+                                    if(self.showMoreMenu)
+                                    {
+                                        MoreMenu(show: self.$showMoreMenu, user: self.$user)
+                                    }
+                                }
+                                
                             }.padding()
                         }
                         else
@@ -135,28 +142,37 @@ struct ProfileView: View {
                             HStack{
                                 
                                 VStack{
-                                        Button(action: {
-                                            //present list of friends
-                                            self.showFriends.toggle()
-                                          }){
-                                              
-                                            Image(systemName: "person.2.fill").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                        }.sheet(isPresented: self.$showFriends){
-                                            FriendsView(closeView: self.$showFriends)
+                                    Button(action: {
+                                        //present list of friends
+                                        self.showFriends.toggle()
+                                    }){
+                                        
+                                        Image(systemName: "person.2.fill").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
+                                    }.sheet(isPresented: self.$showFriends){
+                                        FriendsView(closeView: self.$showFriends)
                                     }
-                                          
-                                            Text("Friends").font(.footnote)
+                                    
+                                    Text("Friends").font(.footnote)
                                 }
                                 
                                 VStack{
-                                    Button(action: {
-                                        //present notification view
-                                    }){
-                                        
-                                        Image(systemName: "bell.fill").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
-                                        
+
+                                    NavigationLink(destination: MessageView()
+                                        .navigationBarTitle("Messages")
+                                        .navigationBarItems(trailing: Button(action: {
+                                            self.showNewMessage.toggle()
+                                        }){
+                                            Image(systemName: "square.and.pencil").resizable().frame(width: 25, height: 25).shadow(color: .gray, radius: 5, x: 1, y: 1)
+                                        }.accentColor(.white)
+                                            .sheet(isPresented: self.$showNewMessage){
+                                                NewMessageView(name: self.$name, uid: self.$uid, pic: self.$image, show: self.$show, chat: self.$showNewMessage).environmentObject(self.currentUserFriends)
+                                    }))
+                                        {
+                                            
+                                    Image(systemName: "envelope").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
+//
                                     }
-                                    Text("Notification").font(.footnote)
+                                    Text("Inbox").font(.footnote)
                                 }
                                 
                                 ZStack{
@@ -167,10 +183,10 @@ struct ProfileView: View {
                                             self.showProfileSettings.toggle()
                                         }){
                                             
-                                            Image(systemName: "line.horizontal.3.decrease.circle").resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 30, height: 30)
+                                            Image(systemName: "line.horizontal.3.decrease.circle").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
                                             
                                         }.sheet(isPresented: self.$showProfileSettings){
-                                            ProfileSettingsView(closeView: self.$showProfileSettings, showDeleteVerify: self.$showDeleteVerify)
+                                            ProfileSettingsView(closeView: self.$showProfileSettings, closeProfileView: self.$show, showDeleteVerify: self.$showDeleteVerify, showDeleteView: self.$showDeleteView)
                                         }
                                         Text("Settings").font(.footnote)
                                     }
@@ -188,7 +204,10 @@ struct ProfileView: View {
                 Spacer()
                 
                 VStack{
-                    
+                    Picker(selection: $profileArrIndex, label: Text("")) {
+                        Text("Posts").tag(0)
+                        Text("Favorites").tag(1)
+                    }.pickerStyle(SegmentedPickerStyle()).padding(.horizontal, 5)
                     if(currentUserPostsObserver.currentuserposts.isEmpty)
                     {
                         Text("No posts").fontWeight(.heavy)
@@ -199,24 +218,59 @@ struct ProfileView: View {
                     {
                         
                         List{
-                            
-                            Picker(selection: $profileArrIndex, label: Text("")) {
-                                Text("Posts").tag(0)
-                                Text("Favorites").tag(1)
-                            }.pickerStyle(SegmentedPickerStyle())
-                            
                             if(profileArrIndex == 0)
                             {
                                 if(self.user.id == UserDefaults.standard.string(forKey: "userid"))
                                 {
                                     ForEach(self.currentUserPostsObserver.currentuserposts.reversed()) { post in
-                                        PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost)
+                                        
+                                        ZStack{
+                                            
+                                            PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            
+                                            NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
+                                                
+                                                EmptyView()
+                                            }
+                                            
+                                            Button(action: {
+                                                self.post = post
+
+                                                UIApplication.shared.endEditing()
+                                                UserDefaults.standard.set(self.post.id, forKey: "parentPost")
+                                                self.comments = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
+                                            }){
+                                                Text("")
+                                            }
+                                            
+                                        }
                                     }
                                 }
                                 else
                                 {
                                     ForEach(self.userPosts.reversed()) { post in
-                                        PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost)
+                                        
+                                        ZStack{
+                                            
+                                            PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            
+                                            NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
+                                                
+                                                EmptyView()
+                                            }
+                                            
+                                            Button(action: {
+                                                self.post = post
+
+                                                UIApplication.shared.endEditing()
+                                                UserDefaults.standard.set(self.post.id, forKey: "parentPost")
+                                                self.comments = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
+                                            }){
+                                                Text("")
+                                            }
+                                            
+                                        }
+                                        
                                     }
                                 }
                             }
@@ -234,120 +288,126 @@ struct ProfileView: View {
                                     {
                                         ForEach(self.favoritePostsObserver.favoritePosts){ post in
                                             
-                                            PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost)
-                                            
+                                            ZStack{
+                                                
+                                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                
+                                                NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
+                                                    
+                                                    EmptyView()
+                                                }
+                                                
+                                                Button(action: {
+                                                    self.post = post
+
+                                                    UIApplication.shared.endEditing()
+                                                    UserDefaults.standard.set(self.post.id, forKey: "parentPost")
+                                                    self.comments = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
+                                                }){
+                                                    Text("")
+                                                }
+                                            }
                                         }
                                     }
                                     else
                                     {
                                         ForEach(self.userFavorites){ post in
                                             
-                                            PostCell(id: post.id, user: post.userID, name: post.name, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost)
-                                            
+                                            ZStack{
+                                                
+                                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                
+                                                NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
+                                                    
+                                                    EmptyView()
+                                                }
+                                                
+                                                Button(action: {
+                                                    self.post = post
+                                                    
+                                                    UIApplication.shared.endEditing()
+                                                    UserDefaults.standard.set(self.post.id, forKey: "parentPost")
+                                                    self.comments = CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!)
+                                                }){
+                                                    Text("")
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
+                        }.padding(.bottom, 120)
                     }
                 }
             }
-            
-            if(fromSearch == true)
-            {
-                CustomNavBar(closeView: self.$show).edgesIgnoringSafeArea(.top)
-            }
-            
-            if(self.showDeleteVerify == true)
-            {
-                DeleteAccountVerifyView(closeView: self.$showDeleteVerify, isLoggedIn: self.$isLoggedIn)
-            }
-            
-            if(self.isLoggedIn == false)
-            {
-                LoginView(isloggedin: self.$isLoggedIn)
-            }
         }
             
-        .background(Color(UIColor.systemBackground))
-        .onAppear(perform: {
-            
-            if(self.user.id != UserDefaults.standard.string(forKey: "userid"))
+            .background(Color(UIColor.systemBackground))
+            .onAppear(perform: {
+                if(self.user.id != UserDefaults.standard.string(forKey: "userid") && self.fetchPosts == true)
+                {
+                    
+                    self.isFriend = self.friends.contains(self.user.id) ? true : false
+                    
+                    if(self.isFriend == true)
+                    {
+                        self.buttonText = "Unfollow"
+                        self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
+                    }
+                    else
+                    {
+                        self.buttonText = "Follow"
+                        self.buttonImage = Image(systemName: "person.crop.circle.badge.plus")
+                    }
+                    
+                    
+                    self.getUserPosts()
+                    self.fetchPosts.toggle()
+                }
+            })
+
+    }
+    
+    func checkIfFriend(){
+        
+        var i = 0
+        
+        while(i < self.currentUserFriends.friends.count){
+           
+            if(self.user.id == self.currentUserFriends.friends[i].id)
             {
-
-                self.getUserPosts()
+                self.isFriend = true
+                break
             }
-
-//            if(self.isFriend == false)
-//            {
-//                self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
-//                self.buttonText = "Follow"
-//                self.isFriend = false
-//            }
-//            else
-//            {
-//                self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
-//                self.buttonText = "Unfollow"
-//                self.isFriend = true
-//            }
-        })
+            else
+            {
+                i = i + 1
+            }
+        }
     }
     
     func addFriend()
     {
-        
-        let uid = Auth.auth().currentUser?.uid
+
+        self.buttonText = "Unfollow"
+        self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(uid!)
-        ref.getDocument { (snap, error) in
-            
-            if(error != nil)
-            {
-                print((error?.localizedDescription)!)
-                return
-            }
-            ref.updateData(["friends": FieldValue.arrayUnion([self.user.id])])
-            self.passedPosts.posts.append(contentsOf: self.userPosts)
-            self.passedPosts.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
-            print("friend added")
-            let data = snap?.data()
-            let friends = data!["friends"] as? [String]
-            UserDefaults.standard.set(friends, forKey: "friends")
-            //print("friends after butten press: ", UserDefaults.standard.string(forKey: "friends")?.description)
-            //UserDefaults.standard.synchronize()
-            self.currentUserFriends = friends!
-            self.buttonImage =  Image(systemName: "person.crop.circle.badge.minus")
-            self.buttonText = "Unfollow"
-            self.isFriend = true
-        }
+        db.collection("users").document(self.uid).collection("friends").document(self.user.id).setData(["name": self.user.name, "image": self.user.profileimage, "id": self.user.id, "trainerId": self.user.trainerId])
+        self.passedPosts.posts.append(contentsOf: self.userPosts)
+        self.passedPosts.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+        self.isFriend = true
     }
     
     func deleteFriend()
     {
-        print("entering delete friend method")
-        let uid = Auth.auth().currentUser?.uid
+
+        self.buttonText = "Follow"
+        self.buttonImage = Image(systemName: "person.crop.circle.badge.plus")
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(uid!)
-        ref.getDocument { (snap, error) in
-            
-            if(error != nil)
-            {
-                print((error?.localizedDescription)!)
-                return
-            }
-            ref.updateData(["friends": FieldValue.arrayRemove([self.user.id])])
-            self.passedPosts.posts.removeAll(where: { $0.userID == self.user.id })
-            print("friend deleted")
-            let data = snap?.data()
-            let friends = data!["friends"] as? [String]
-            UserDefaults.standard.set(friends, forKey: "friends")
-            //print("friends after butten press: ", UserDefaults.standard.string(forKey: "friends")?.description)
-            //UserDefaults.standard.synchronize()
-            self.currentUserFriends = friends!
-            self.buttonImage =  Image(systemName: "person.crop.circle.badge.plus")
-            self.buttonText = "Follow"
-            self.isFriend = false
-        }
+        db.collection("users").document(self.uid).collection("friends").document(self.user.id).delete()
+        self.passedPosts.posts.removeAll(where: { $0.userID == self.user.id })
+        self.isFriend = false
+        
     }
     
     func getUserPosts()
@@ -379,19 +439,6 @@ struct ProfileView: View {
                 
             }
             
-            
-            //            ref.getDocument{ (snap, error) in
-            //
-            //                if(error != nil){
-            //                    print((error?.localizedDescription)!)
-            //                    return
-            //                }
-            //
-            //                let data = snap?.data()
-            //                favorites = (data!["favorites"] as? [String])!
-            //
-            //            }
-            
             db.collection("posts").addSnapshotListener { (snap, error) in
                 
                 if error != nil{
@@ -405,6 +452,7 @@ struct ProfileView: View {
                         if((i.document.get("userId") as! String) == uid){
                             let id = i.document.documentID
                             let name = i.document.get("name") as! String
+                            let trainerId = i.document.get("trainerId") as! String
                             let userId = i.document.get("userId") as! String
                             let image = i.document.get("image") as! String
                             let profileimage = i.document.get("profileimage") as! String
@@ -414,7 +462,7 @@ struct ProfileView: View {
                             let parentPost = i.document.get("parentPost") as! String
                             let createdAt = i.document.get("createdAt") as! NSNumber
                             
-                            self.userPosts.append(Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                            self.userPosts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
                             self.userPosts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                         }
                         
@@ -423,6 +471,7 @@ struct ProfileView: View {
                             let id = i.document.documentID
                             let name = i.document.get("name") as! String
                             let userId = i.document.get("userId") as! String
+                            let trainerId = i.document.get("trainerId") as! String
                             let image = i.document.get("image") as! String
                             let profileimage = i.document.get("profileimage") as! String
                             let comments = i.document.get("comments") as! NSArray
@@ -431,7 +480,7 @@ struct ProfileView: View {
                             let parentPost = i.document.get("parentPost") as! String
                             let createdAt = i.document.get("createdAt") as! NSNumber
                             
-                            self.userFavorites.append( Post(id: id, userID: userId, name: name, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost) )
+                            self.userFavorites.append( Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost) )
                         }
                     }
                     
@@ -455,8 +504,6 @@ struct ProfileView: View {
                                 }
                             }
                         }
-                        
-                        
                     }
                     
                     if(i.type == .modified){
@@ -529,7 +576,6 @@ struct MoreMenu: View {
                                 return
                             }
                             
-                            
                             //check if from search and if user is equal to current user
                             ref.updateData(["blocked": FieldValue.arrayUnion([self.user.id])])
                             
@@ -552,11 +598,5 @@ struct MoreMenu: View {
                       }))
             }
         }.background(Color(UIColor.systemBackground))
-    }
-}
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }

@@ -12,18 +12,22 @@ import Firebase
 struct DeleteAccountVerifyView: View {
     
     @Binding var closeView: Bool
+    //@Binding var closePreviousView: Bool
     @State var email = ""
     @State var pass = ""
     @State var showAlert = false
+    @State var showLoading = false
     @State var error = ""
     @Binding var isLoggedIn: Bool
+    @Environment(\.colorScheme) var scheme 
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         
         
         ZStack{
             
-            Color.white.edgesIgnoringSafeArea(.all)
+            Color(UIColor.systemBackground).edgesIgnoringSafeArea(.all)
             
             VStack{
                 
@@ -57,6 +61,12 @@ struct DeleteAccountVerifyView: View {
                             }
                             else
                             {
+                                self.presentationMode.wrappedValue.dismiss()
+                                self.showLoading.toggle()
+                                
+                                //self.closePreviousView = false
+                                
+                                
                                 
                                 let user = Auth.auth().currentUser
                                 let credential = EmailAuthProvider.credential(withEmail: self.email, password: self.pass)
@@ -197,19 +207,26 @@ struct DeleteAccountVerifyView: View {
                                                 return
                                             }
                                         }
-                                        self.closeView.toggle()
                                         
                                         //erase all userdefault data then signout
                                         UserDefaults.standard.set("", forKey: "userid")
                                         UserDefaults.standard.set("", forKey: "username")
                                         UserDefaults.standard.set("", forKey: "image")
                                         UserDefaults.standard.set("", forKey: "favorites")
-                                        UserDefaults.standard.set("", forKey: "friends")
+//                                        let encoder = JSONEncoder()
+//                                        if let encoded = try? encoder.encode([PokeUser]())
+//                                        {
+//                                            UserDefaults.standard.set(encoded, forKey: "friends")
+//                                        }
                                         UserDefaults.standard.set("", forKey: "friendId")
+                                        UserDefaults.standard.set("", forKey: "email")
                                         UserDefaults.standard.set(false, forKey: "isloggedin")
+                                        self.showLoading.toggle()
                                         self.isLoggedIn.toggle()
                                     }
                                 }
+                                
+                                
                             }
                         }){
                             Text("Delete").foregroundColor(.red)
@@ -217,10 +234,26 @@ struct DeleteAccountVerifyView: View {
                             
                             Alert(title: Text("Error"), message: Text(self.error), dismissButton: .cancel())
                         }
-                    
                     }
                 }.padding(.horizontal, 45)
+                Spacer()
             }
+            
+//            if(self.showLoading == true)
+//            {
+//                GeometryReader{_ in
+//
+//                    LoaderView()
+//
+//                }.background(Color.clear)
+//
+//            }
+            
+        }
+        .onDisappear{
+            //self.showProfileView.toggle()
+            //self.closePreviousView.toggle()
+            self.presentationMode.wrappedValue.dismiss()
         }
     }
 }
