@@ -135,13 +135,13 @@ struct SideMenu: View {
                     NavigationView{
                         ProfileView(user: self.$user, show: self.$showProfile, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(self.passedPosts)
                             .navigationBarTitle(Text(self.user.name), displayMode: .inline)
-                            .navigationBarItems(leading: Button(action: {
+                            /*.navigationBarItems(leading: Button(action: {
                                 
                                 self.showProfile.toggle()
                             }){
                                 Text("Done")
-                            })
-                    }
+                            })*/
+                    }.navigationViewStyle(StackNavigationViewStyle())
             }
 
             Button(action: {

@@ -73,7 +73,7 @@ struct AddToMapView: View {
     
 //    func AddPokemon()
 //    {
-//        print("adding pokemon")
+
 //        let location: CLLocationCoordinate2D = locationManager.location!.coordinate
 //
 //        let db = Firestore.firestore()
@@ -95,7 +95,7 @@ struct AddToMapView: View {
 //    {
 //        //if a raid is active the timetostart
 //
-//        print("adding raid")
+
 //        let location: CLLocationCoordinate2D = locationManager.location!.coordinate
 //
 //        let db = Firestore.firestore()
@@ -177,7 +177,7 @@ struct AddPokemonView: View {
                         }){
                             Text("Done")
                     })
-                }
+                }.navigationViewStyle(StackNavigationViewStyle())
             }
             
             VStack(spacing: 15){
@@ -211,7 +211,6 @@ struct AddPokemonView: View {
         .onAppear(perform: {
             
             self.getPokemon()
-            print(self.pokemon.description)
 
         })
     }
@@ -866,7 +865,7 @@ struct AddPokemonView: View {
     
     func AddPokemon()
     {
-        print("adding pokemon")
+
         let location: CLLocationCoordinate2D = locationManager.location!.coordinate
         
         let db = Firestore.firestore()
@@ -1014,7 +1013,7 @@ struct AddRaidView: View {
         .onAppear(perform: {
 
             self.getPokemon()
-            print(self.raids.description)
+
            
         })
     }
@@ -1189,7 +1188,7 @@ struct AddRaidView: View {
     {
         //if a raid is active the timetostart
         
-        print("adding raid")
+
         let location: CLLocationCoordinate2D = locationManager.location!.coordinate
         
         let db = Firestore.firestore()

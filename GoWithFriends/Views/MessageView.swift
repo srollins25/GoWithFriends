@@ -102,8 +102,6 @@ struct MessageView: View {
                     db.collection("messages").document(uid!).collection(userId).document(document.documentID).delete(){ err in
                         if let err = err {
                             print("Error removing document: \(err)")
-                        } else {
-                            print("Document successfully removed!")
                         }
                     }
                     

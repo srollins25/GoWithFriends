@@ -56,7 +56,7 @@ struct FriendsView: View {
             }){
                 Text("Cancel")
             })
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

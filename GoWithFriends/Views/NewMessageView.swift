@@ -69,7 +69,7 @@ struct NewMessageView: View{
             .onDisappear(perform: {
                     
             })
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

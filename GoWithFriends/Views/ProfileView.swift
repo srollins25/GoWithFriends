@@ -48,6 +48,7 @@ struct ProfileView: View {
     @State var comments = CommentsObserver(parentPost_: "")
     @Binding var showDeleteView: Bool//final delete screen
     let friends = (UserDefaults.standard.array(forKey: "friends")! as? [String])!
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
 
@@ -341,7 +342,6 @@ struct ProfileView: View {
                 }
             }
         }
-            
             .background(Color(UIColor.systemBackground))
             .onAppear(perform: {
                 if(self.user.id != UserDefaults.standard.string(forKey: "userid") && self.fetchPosts == true)
@@ -393,8 +393,22 @@ struct ProfileView: View {
         self.buttonImage = Image(systemName: "person.crop.circle.badge.minus")
         let db = Firestore.firestore()
         db.collection("users").document(self.uid).collection("friends").document(self.user.id).setData(["name": self.user.name, "image": self.user.profileimage, "id": self.user.id, "trainerId": self.user.trainerId])
+        let ref = db.collection("users").document(UserDefaults.standard.string(forKey: "userid")!)
+        ref.updateData(["friends": FieldValue.arrayUnion([self.user.id])])
         self.passedPosts.posts.append(contentsOf: self.userPosts)
         self.passedPosts.posts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
+        ref.getDocument{
+            (snapshot, error) in
+            
+            if(error != nil){
+                print((error?.localizedDescription)!)
+                return
+            }
+            let data = snapshot?.data()
+            let friends_ = data!["friends"] as? [String]
+            UserDefaults.standard.set(friends_, forKey: "friends")
+            
+        }
         self.isFriend = true
     }
     
@@ -405,6 +419,20 @@ struct ProfileView: View {
         self.buttonImage = Image(systemName: "person.crop.circle.badge.plus")
         let db = Firestore.firestore()
         db.collection("users").document(self.uid).collection("friends").document(self.user.id).delete()
+        let ref = db.collection("users").document(UserDefaults.standard.string(forKey: "userid")!)
+        ref.updateData(["friends": FieldValue.arrayRemove([self.user.id])])
+        ref.getDocument{
+            (snapshot, error) in
+            
+            if(error != nil){
+                print((error?.localizedDescription)!)
+                return
+            }
+            let data = snapshot?.data()
+            let friends_ = data!["friends"] as? [String]
+            UserDefaults.standard.set(friends_, forKey: "friends")
+            
+        }
         self.passedPosts.posts.removeAll(where: { $0.userID == self.user.id })
         self.isFriend = false
         

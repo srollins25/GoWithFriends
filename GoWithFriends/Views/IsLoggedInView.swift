@@ -30,7 +30,7 @@ struct IsLoggedInView: View {
             NavigationView{
                 
                 TabBar(showCreatePost: self.$showCreatePost, showDeleteView: self.$showDeleteView, isLoggedIn: self.$isLoggedIn, index: self.$index, show: self.$show, fromSearch: self.$fromSearch, parentPost: self.$parentPost, user: self.$user ).environmentObject(posts).environmentObject(raids).environmentObject(pokemon)
-            }
+            }.navigationViewStyle(StackNavigationViewStyle())
             
             if(self.showDeleteView == true)
             {

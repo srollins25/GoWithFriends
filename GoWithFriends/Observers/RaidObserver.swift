@@ -36,8 +36,7 @@ class RaidObserver: ObservableObject {
                     let dexnum = i.document.get("dexnum") as! String
                     let timeToRemove = i.document.get("timeToRemove") as! NSNumber
                     let difficulty = i.document.get("difficulty") as! NSNumber
-                    //print("sighted: ", sighted)
-                    //print("sighted time to delete: ", (sighted.doubleValue + 600))
+
                     //( Date().timeIntervalSince1970 as NSNumber).doubleValue >= timeToRemove.doubleValue &&  timeTillStart.doubleValue == 0 ||  (Date().timeIntervalSince1970 as NSNumber).doubleValue >= timeTillStart.doubleValue && timeToRemove.doubleValue == 0
                     print("current time: ", Date().timeIntervalSince1970 as NSNumber)
                     if((timeToRemove.doubleValue < (Date().timeIntervalSince1970 as NSNumber).doubleValue /* && dexnum != "" */)  )

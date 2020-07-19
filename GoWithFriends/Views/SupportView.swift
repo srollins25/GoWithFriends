@@ -29,7 +29,7 @@ struct SupportView: View {
                  Spacer()
             }
            
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

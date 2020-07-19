@@ -46,7 +46,7 @@ struct CreatePostView: View {
                         }){
                             Text("Post").foregroundColor(self.postText == "" ? Color.blue.opacity(0.7) : Color.blue )
                             }.disabled(self.postText == "" ? true : false))
-                    }
+                    }.navigationViewStyle(StackNavigationViewStyle())
         
             
     }
@@ -124,7 +124,6 @@ struct multilineTextField: UIViewRepresentable{
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            print("did begin editing")
             if(textView.textColor == .gray)
             {
                 textView.text = ""
@@ -171,7 +170,6 @@ struct PostNavBar: View {
                         
                         if(self.postText != "")
                         {
-                            print("post text: ", self.postText)
                             self.createPost(postText: self.postText)
                         }
                     }){

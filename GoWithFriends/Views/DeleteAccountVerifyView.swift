@@ -85,7 +85,7 @@ struct DeleteAccountVerifyView: View {
                                         //remove posts from user favorites
                                         db.collection("posts").whereField("userId", isEqualTo: (Auth.auth().currentUser?.uid)!).getDocuments { snap, error  in
                                             if let error = error {
-                                                print("Error removing document: \(error)")
+
                                                 self.showAlert.toggle()
                                                 self.error = (error.localizedDescription)
                                                 return
@@ -96,7 +96,7 @@ struct DeleteAccountVerifyView: View {
                                                 db.collection("users").whereField("favorites", arrayContains: document.documentID).getDocuments { (snap, error) in
                                                     if(error != nil)
                                                     {
-                                                        print((error?.localizedDescription)!)
+
                                                         self.showAlert.toggle()
                                                         self.error = (error?.localizedDescription)!
                                                         return
@@ -119,7 +119,7 @@ struct DeleteAccountVerifyView: View {
                                         
                                         db.collection("posts").whereField("userId", isEqualTo: (Auth.auth().currentUser?.uid)!).getDocuments { snap, error  in
                                             if let error = error {
-                                                print("Error removing document: \(error)")
+
                                                 self.showAlert.toggle()
                                                 self.error = (error.localizedDescription)
                                                 return
@@ -130,7 +130,7 @@ struct DeleteAccountVerifyView: View {
                                                 db.collection("posts").whereField("parentPost", isEqualTo: document.documentID).getDocuments { (snap, error) in
                                                     if(error != nil)
                                                     {
-                                                        print((error?.localizedDescription)!)
+
                                                         self.showAlert.toggle()
                                                         self.error = (error?.localizedDescription)!
                                                         return
@@ -178,7 +178,6 @@ struct DeleteAccountVerifyView: View {
                                         desertRef.delete { error in
                                             if let error = error {
                                                 // Uh-oh, an error occurred!
-                                                print((error.localizedDescription))
                                                 self.showAlert.toggle()
                                                 self.error = (error.localizedDescription)
                                                 return

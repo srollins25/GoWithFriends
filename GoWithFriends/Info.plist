@@ -17,19 +17,19 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9788435879014471~3166576128</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow GoWithFriends Access to location</string>
+	<string>Allow GoWithFriends Access to location to find nearby pokemon and raids</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow GoWithFriends Access to location</string>
+	<string>Allow GoWithFriends Access to location to find nearby pokemon and raids</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Allow GoWithFriends Access to location</string>
+	<string>Allow GoWithFriends Access to location to find nearby pokemon and raids</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow GoWithFriends Access to location</string>
+	<string>Allow GoWithFriends Access to location to find nearby pokemon and raids</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

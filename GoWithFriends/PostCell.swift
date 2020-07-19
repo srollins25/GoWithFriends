@@ -47,7 +47,7 @@ struct PostCell: View {
                 AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle()).onTapGesture {
                     
                     self.showProfile.toggle()
-                    print("from post cell: ", self.user)
+
                     self.pokeuser.id = self.user
                     self.pokeuser.name = self.name
                     self.pokeuser.trainerId = self.trainerId
@@ -58,12 +58,12 @@ struct PostCell: View {
                     NavigationView{
                         ProfileView(user: self.$pokeuser, show: self.$showProfile, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(self.pastPosts)
                             .navigationBarTitle(Text(self.pokeuser.name), displayMode: .inline)
-                            .navigationBarItems(leading: Button(action: {
+                            /*.navigationBarItems(leading: Button(action: {
                                 self.showProfile.toggle()
                             }){
                                 Text("Done")
-                            })
-                    }
+                            })*/
+                    }.navigationViewStyle(StackNavigationViewStyle())
                 }
             }
             
@@ -345,8 +345,6 @@ struct PopOver: View {
                 db.collection("posts").document(self.postId).delete() { err in
                     if let err = err {
                         print("Error removing document: \(err)")
-                    } else {
-                        print("Document successfully removed!")
                     }
                 }
             }))

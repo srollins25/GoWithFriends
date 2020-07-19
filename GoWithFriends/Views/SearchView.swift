@@ -39,14 +39,16 @@ struct SearchView: View {
             
             Group{
                 VStack{
-                    //Spacer().frame(height: 140)
                     VStack{
-                        TextField("Search", text: self.$txt).padding(.vertical, 12).padding(.horizontal).background(Color.black.opacity(0.06)).clipShape(Capsule())
                         
                         Picker(selection: $searchIndex, label: Text("")) {
                             Text("Posts").tag(0)
                             Text("Accounts").tag(1)
                         }.pickerStyle(SegmentedPickerStyle()).padding(.horizontal, 4).padding(.bottom, 2)
+                        
+                        
+                        TextField("Search", text: self.$txt).padding(.vertical, 12).padding(.horizontal).background(Color.black.opacity(0.06)).clipShape(Capsule())
+                        
                     }.padding([.top, .leading, .trailing], 8)
                     .background(Color(UIColor.systemBackground))
                     

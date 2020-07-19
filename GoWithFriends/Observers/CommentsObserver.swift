@@ -82,6 +82,8 @@ class CommentsObserver: ObservableObject {
                 if(i.type == .modified)
                 {
                     let id = i.document.documentID
+                    let name = i.document.get("name") as! String
+                    let profileimage = i.document.get("profileimage") as! String
                     let favorites = i.document.get("favorites") as! NSNumber
                     let comments = i.document.get("comments") as! NSArray
                     
@@ -91,6 +93,8 @@ class CommentsObserver: ObservableObject {
                         {
                             self.comments[j].favorites = favorites
                             self.comments[j].comments = comments
+                            self.comments[j].name = name
+                            self.comments[j].profileimage = profileimage
                             return
                         }
                     }

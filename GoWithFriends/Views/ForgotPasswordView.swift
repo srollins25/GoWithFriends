@@ -68,7 +68,7 @@ struct ForgotPasswordView: View {
                 Text("Cancel")
             })
             
-        }.onTapGesture {
+        }.navigationViewStyle(StackNavigationViewStyle()).onTapGesture {
             UIApplication.shared.endEditing()
         }
     }

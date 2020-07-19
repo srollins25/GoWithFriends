@@ -64,7 +64,7 @@ struct ProfileSettingsView: View {
             }
         })
             .navigationBarTitle(Text("Settings"))
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

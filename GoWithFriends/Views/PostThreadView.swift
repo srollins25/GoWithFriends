@@ -87,7 +87,7 @@ struct PostThreadView: View {
                     UserDefaults.standard.set(self.mainPost.id, forKey: "parentPost")
                 }
                 
-                print("parent post close: ", UserDefaults.standard.string(forKey: "parentPost")!)
+               
             })
     }
 }

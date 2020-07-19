@@ -79,13 +79,19 @@ class SearchPostsObserver: ObservableObject {
                 if(i.type == .modified)
                 {
                     let id = i.document.documentID
+                    let name = i.document.get("name") as! String
+                    let profileimage = i.document.get("profileimage") as! String
                     let favorites = i.document.get("favorites") as! NSNumber
                     let comments = i.document.get("comments") as! NSArray
                     
-                    for j in 0..<self.posts.count{
-                        if (self.posts[j].id == id){
+                    for j in 0..<self.posts.count
+                    {
+                        if(self.posts[j].id == id)
+                        {
                             self.posts[j].favorites = favorites
                             self.posts[j].comments = comments
+                            self.posts[j].name = name
+                            self.posts[j].profileimage = profileimage
                             return
                         }
                     }

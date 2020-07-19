@@ -33,7 +33,6 @@ class PostObserver: ObservableObject {
                     let userId = i.document.get("userId") as! String
                     if(friends.contains(userId) || userId == UserDefaults.standard.string(forKey: "userid"))
                     {
-                        //print("array contains friend")
                         let id = i.document.documentID
                         let name = i.document.get("name") as! String
                         let trainerId = i.document.get("trainerId") as! String
@@ -85,11 +84,17 @@ class PostObserver: ObservableObject {
                 if(i.type == .modified)
                 {
                     let id = i.document.documentID
+                    let name = i.document.get("name") as! String
+                    let trainerid = i.document.get("trainerId") as! String
+                    let profileimage = i.document.get("profileimage") as! String
                     let favorites = i.document.get("favorites") as! NSNumber
                     let comments = i.document.get("comments") as! NSArray
                     
                     for j in 0..<self.posts.count{
                         if (self.posts[j].id == id){
+                            self.posts[j].name = name
+                            self.posts[j].trainerId = trainerid
+                            self.posts[j].profileimage = profileimage
                             self.posts[j].favorites = favorites
                             self.posts[j].comments = comments
                             return

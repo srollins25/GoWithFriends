@@ -39,6 +39,27 @@ class FriendsObserver: ObservableObject {
                     _friends = self.friends.map{ $0.id }
                     UserDefaults.standard.set(_friends, forKey: "friends")
                 }
+
+                if(i.type == .modified){
+                    
+                    let id = i.document.documentID
+                    let name = i.document.get("name") as! String
+                    let image = i.document.get("image") as! String
+                    let trainerId = i.document.get("trainerId") as! String
+
+
+                    for j in 0..<self.friends.count{
+                        if (self.friends[j].id == id){
+                            self.friends[j].name = name
+                            self.friends[j].trainerId = trainerId
+                            self.friends[j].profileimage = image
+                            return
+                        }
+
+                    }
+                    _friends = self.friends.map{ $0.id }
+                    UserDefaults.standard.set(_friends, forKey: "friends")
+                }
                 
                 if(i.type == .removed){
                     

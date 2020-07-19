@@ -39,7 +39,7 @@ struct SignUpView: View {
                     HStack{
                         Spacer(minLength: 0)
                         VStack(spacing: 10){
-                            Text("Sign up").foregroundColor(self.index == 1 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold).padding(.top, 3)
+                            Text("Sign up").foregroundColor(self.index == 1 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold).padding(.top, 15)
                             Capsule().fill(self.index == 1 ? Color.blue : Color.clear).frame(width: 100, height: 5)
                         }
                     }
@@ -136,7 +136,7 @@ struct SignUpView: View {
                 
                 Button(action: {
                     UIApplication.shared.endEditing()
-                    print("singup tapp")
+
                     
                     if(self.email == "" || self.password == "" || self.validatePassword == "" || self.trainerId == "")
                     {
@@ -159,7 +159,7 @@ struct SignUpView: View {
                         Auth.auth().createUser(withEmail: self.email, password: self.password){ authResult, error in
                             
                             if error != nil{
-                                print((error?.localizedDescription)!)
+
                                 self.showAlert.toggle()
                                 self.error = (error?.localizedDescription)!
                                 return
@@ -172,7 +172,7 @@ struct SignUpView: View {
                             storage.child("profilepics").child(uid!).putData(self.imageData, metadata: nil){ (_, error) in
                                 
                                 if error != nil{
-                                    print((error?.localizedDescription)!)
+ 
                                     self.showAlert.toggle()
                                     self.error = (error?.localizedDescription)!
                                     return
@@ -181,7 +181,7 @@ struct SignUpView: View {
                                 storage.child("profilepics").child(uid!).downloadURL{ (url, error) in
                                     
                                     if error != nil{
-                                        print((error?.localizedDescription)!)
+
                                         self.showAlert.toggle()
                                         self.error = (error?.localizedDescription)!
                                         return
@@ -235,7 +235,7 @@ struct SignUpView: View {
         let image = image
         let trainerId = self.trainerId
         let favorites = [String]()
-        let friends = [PokeUser]()
+        let friends = [String]()
         let blocked = [String]()
         let comments = [String]()
         let user_posts = [String]()
@@ -249,6 +249,7 @@ struct SignUpView: View {
         UserDefaults.standard.set(name, forKey: "username")
         UserDefaults.standard.set(email, forKey: "email")
         UserDefaults.standard.set(image, forKey: "image")
+        UserDefaults.standard.set(friends, forKey: "friends")
         UserDefaults.standard.set(trainerId, forKey: "trainerId")
         UserDefaults.standard.set(favorites, forKey: "favorites")
         UserDefaults.standard.set("", forKey: "friendId")
@@ -335,16 +336,16 @@ struct LoginView: View {
                     
                 }
                 
-                HStack(spacing: 15){
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(height: 1)
-                    Text("Or")
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(height: 1)
-                }.padding(.horizontal, 20)
-                    .padding(.top, 50)
+//                HStack(spacing: 15){
+//                    Rectangle()
+//                        .fill(Color.gray)
+//                        .frame(height: 1)
+//                    Text("Or")
+//                    Rectangle()
+//                        .fill(Color.gray)
+//                        .frame(height: 1)
+//                }.padding(.horizontal, 20)
+//                    .padding(.top, 50)
                     
                     
                     //other login buttons
@@ -447,7 +448,7 @@ struct LoginView2: View {
             //button
             
             Button(action: {
-                print("login tapp")
+
                 UIApplication.shared.endEditing()
                 if(self.email == "" || self.password == "")
                 {
@@ -462,7 +463,7 @@ struct LoginView2: View {
                     Auth.auth().signIn(withEmail: self.email, password: self.password, completion: { (user, error) in
                         
                         if error != nil{
-                            print((error?.localizedDescription)!)
+
                             self.showAlert.toggle()
                             self.error = (error?.localizedDescription)!
                             return
@@ -478,11 +479,10 @@ struct LoginView2: View {
                             ref.getDocument{ (snapshot, error) in
                                 
                                 if(error != nil){
-                                    print((error?.localizedDescription)!)
                                     self.showAlert.toggle()
                                     self.error = (error?.localizedDescription)!
                                     return
-                                }
+                                } 
                                     
                                 else{
                                     let data = snapshot?.data()
@@ -491,14 +491,15 @@ struct LoginView2: View {
                                     let image = data!["image"] as? String
                                     let email = data!["email"] as? String
                                     let favorites = data!["favorites"] as? [String]
-                                    var friends = FriendsObserver()
-                                    let friends_ = friends.friends.map{ $0.id }
+                                    //var friends = FriendsObserver()
+                                    let friends_ = data!["friends"] as? [String]
                                     
                                     UserDefaults.standard.set(uid, forKey: "userid")
                                     UserDefaults.standard.set(name, forKey: "username")
                                     UserDefaults.standard.set(image, forKey: "image")
                                     UserDefaults.standard.set(favorites, forKey: "favorites")
                                     UserDefaults.standard.set(friends_, forKey: "friends")
+                                    
                                     UserDefaults.standard.set(trainerId, forKey: "trainerId")
                                     UserDefaults.standard.set("", forKey: "friendId")
                                     UserDefaults.standard.set(email, forKey: "email")
