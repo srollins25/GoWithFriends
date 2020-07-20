@@ -28,6 +28,7 @@ struct SignUpView: View {
     @State var imageData: Data = .init(count: 0)
     @State var showAlert = false
     @Binding var showLoading: Bool
+    @Binding var isChecked: Bool
     @Environment(\.colorScheme) var scheme
     
     
@@ -61,7 +62,6 @@ struct SignUpView: View {
                             ImagePicker(picker: self.$imagePicker, imageData: self.$imageData)
                         }
                     }
-                    
                     
                     VStack{
                         HStack(spacing: 15){
@@ -133,10 +133,9 @@ struct SignUpView: View {
                 .padding(.horizontal, 20)
                 
                 //button
-                
                 Button(action: {
                     UIApplication.shared.endEditing()
-
+                    
                     
                     if(self.email == "" || self.password == "" || self.validatePassword == "" || self.trainerId == "")
                     {
@@ -153,13 +152,18 @@ struct SignUpView: View {
                         self.showAlert.toggle()
                         self.error = "Image must be selected."
                     }
+                    else if(self.isChecked == false)
+                    {
+                        self.showAlert.toggle()
+                        self.error = "You must agree to the Terms of Service to continue."
+                    }
                     else
                     {
                         self.showLoading = true
                         Auth.auth().createUser(withEmail: self.email, password: self.password){ authResult, error in
                             
                             if error != nil{
-
+                                
                                 self.showAlert.toggle()
                                 self.error = (error?.localizedDescription)!
                                 return
@@ -172,7 +176,7 @@ struct SignUpView: View {
                             storage.child("profilepics").child(uid!).putData(self.imageData, metadata: nil){ (_, error) in
                                 
                                 if error != nil{
- 
+                                    
                                     self.showAlert.toggle()
                                     self.error = (error?.localizedDescription)!
                                     return
@@ -181,7 +185,7 @@ struct SignUpView: View {
                                 storage.child("profilepics").child(uid!).downloadURL{ (url, error) in
                                     
                                     if error != nil{
-
+                                        
                                         self.showAlert.toggle()
                                         self.error = (error?.localizedDescription)!
                                         return
@@ -224,6 +228,7 @@ struct SignUpView: View {
                 .offset(y: 25)
                 .opacity(self.index == 1 ? 1 : 0)
             }
+            
         }
     }
     
@@ -308,6 +313,8 @@ struct LoginView: View {
     @State var index = 0
     @Binding var isloggedin: Bool
     @State var showLoading = false
+    @State var isChecked = false
+    @State var showTerms = false
     
     var body: some View{
         
@@ -320,7 +327,7 @@ struct LoginView: View {
                 ZStack{
                     
                     ZStack{
-                        SignUpView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading).zIndex(Double(self.index))
+                        SignUpView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading, isChecked: self.$isChecked).zIndex(Double(self.index))
                         LoginView2(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading)
                     }
                     
@@ -336,16 +343,39 @@ struct LoginView: View {
                     
                 }
                 
-//                HStack(spacing: 15){
-//                    Rectangle()
-//                        .fill(Color.gray)
-//                        .frame(height: 1)
-//                    Text("Or")
-//                    Rectangle()
-//                        .fill(Color.gray)
-//                        .frame(height: 1)
-//                }.padding(.horizontal, 20)
-//                    .padding(.top, 50)
+                if(self.index == 1)
+                {
+                    HStack(spacing: 10){
+                        Button(action: {
+                            self.isChecked.toggle()
+                        }){
+                            Image(systemName: self.isChecked ? "checkmark.square.fill" : "square").frame(width: 15, height: 15)
+                        }
+                        
+                        Button(action: {
+                            self.showTerms.toggle()
+                        }){
+                            Text("Terms of Service")
+                        }.sheet(isPresented: self.$showTerms){
+                            NavigationView{
+                                TermsofServiceView()
+                            }
+                        }
+                    }.padding(.vertical).padding(.top, 15)
+                }
+                
+
+                    
+                    //                HStack(spacing: 15){
+                    //                    Rectangle()
+                    //                        .fill(Color.gray)
+                    //                        .frame(height: 1)
+                    //                    Text("Or")
+                    //                    Rectangle()
+                    //                        .fill(Color.gray)
+                    //                        .frame(height: 1)
+                    //                }.padding(.horizontal, 20)
+                    //                    .padding(.top, 50)
                     
                     
                     //other login buttons
@@ -356,7 +386,7 @@ struct LoginView: View {
                     //
                     //                    }
                     //                }.padding(.top, 30)
-                    .padding(.vertical)
+                    
             }
             
         }
@@ -417,7 +447,7 @@ struct LoginView2: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 30)
-
+                
                 HStack{
                     Spacer(minLength: 0)
                     
@@ -448,7 +478,7 @@ struct LoginView2: View {
             //button
             
             Button(action: {
-
+                
                 UIApplication.shared.endEditing()
                 if(self.email == "" || self.password == "")
                 {
@@ -463,7 +493,7 @@ struct LoginView2: View {
                     Auth.auth().signIn(withEmail: self.email, password: self.password, completion: { (user, error) in
                         
                         if error != nil{
-
+                            
                             self.showAlert.toggle()
                             self.error = (error?.localizedDescription)!
                             return
@@ -549,7 +579,7 @@ struct CShape: Shape {
             path.addLine(to: CGPoint(x: 0, y: 0))
             
         }
-        
+
     }
 }
 
@@ -565,7 +595,6 @@ struct CShape2: Shape {
             path.addLine(to: CGPoint(x: rect.width, y: 0))
             
         }
-        
     }
 }
 

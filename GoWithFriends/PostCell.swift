@@ -25,8 +25,10 @@ struct PostCell: View {
     let createdAt: NSNumber
     @State var parentPost: String
     @State var showDeleteButton = false
+    @State var showReportButton = false
     @State var showAlert = false
     @State var show = false
+    @State var showReport = false
     @State var showProfile = false
     @State var showCreatePost = false
     @Binding var isFavorite: Bool// = false
@@ -92,6 +94,22 @@ struct PostCell: View {
                                     if(self.show == true)
                                     {
                                         PopOver( showAlert: self.$showAlert, show: self.$show, postId: self.$id, parentPost: self.$parentPost).cornerRadius(5).shadow(radius: 6)
+                                    }
+                                }
+                                else
+                                {
+                                    Image(systemName: "ellipsis").onTapGesture {
+                                        
+                                        withAnimation(.spring()){
+                                            self.showReportButton.toggle()
+                                            self.showReport.toggle()
+                                        }
+                                    }
+                                    
+                                    
+                                    if(self.showReport == true)
+                                    {
+                                        ReportPopOver(showReportButton: self.$showReport, postId: self.$id, parentPost: self.$parentPost).cornerRadius(5).shadow(radius: 6)
                                     }
                                 }
                             }
@@ -348,6 +366,26 @@ struct PopOver: View {
                     }
                 }
             }))
+        }
+    }
+}
+struct ReportPopOver: View {
+    
+    @Binding var showReportButton: Bool
+    @State var showReport = false
+    @Binding var postId: String
+    @Binding var parentPost: String
+    
+    var body: some View{
+        
+        Text("Report").foregroundColor(.red)
+            .frame(width: 70, height: 30)
+            .background(Color.white)
+            .onTapGesture {
+                
+                self.showReport.toggle()
+        }.sheet(isPresented: self.$showReport){
+            ReportPostView(postId: self.$postId, parentPost: self.$parentPost, showReportButton: self.$showReportButton)
         }
     }
 }
