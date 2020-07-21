@@ -39,7 +39,7 @@ struct MapView: View {
                         }
                     }){
                         Image(systemName: "plus.circle").resizable().frame(width: 25, height: 25).padding(.top, 55).padding(.trailing, 20)
-                    }
+                    }.disabled(CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse ? false : true)
 //                    .sheet(isPresented: self.$showAddToMapView){
 //                        AddToMapView(showAddToMapView: self.$showAddToMapView).edgesIgnoringSafeArea(.top)
 //                    }

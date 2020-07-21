@@ -15,7 +15,7 @@ struct ForgotPasswordView: View {
     @State var alertMessage = ""
     @State var alertTitle = ""
     @State var showAlert = false
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> 
     @Binding var fromLogin: Bool
     
     var body: some View {

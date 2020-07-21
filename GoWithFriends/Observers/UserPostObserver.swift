@@ -47,9 +47,10 @@ class UserPostObserver: ObservableObject {
                         let favorites = i.document.get("favorites") as! NSNumber
                         let parentPost = i.document.get("parentPost") as! String
                         let createdAt = i.document.get("createdAt") as! NSNumber
+                        let reported = i.document.get("isReported") as! Bool
                         
                         
-                        self.currentuserposts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                        self.currentuserposts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost, isReported: reported))
                         self.currentuserposts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                         
                     }
@@ -72,6 +73,8 @@ class UserPostObserver: ObservableObject {
                     let id = i.document.documentID
                     let favorites = i.document.get("favorites") as! NSNumber
                     let comments = i.document.get("comments") as! NSArray
+                    let body = i.document.get("body") as! String
+                    let reported = i.document.get("isReported") as! Bool
                     
                     for j in 0..<self.currentuserposts.count
                     {
@@ -79,6 +82,8 @@ class UserPostObserver: ObservableObject {
                         {
                             self.currentuserposts[j].favorites = favorites
                             self.currentuserposts[j].comments = comments
+                            self.currentuserposts[j].postBody = body
+                            self.currentuserposts[j].isReported = reported
                             return
                         }
                     }

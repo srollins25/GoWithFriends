@@ -47,8 +47,9 @@ class FavoritePostsObserver: ObservableObject {
                         let favorites = i.document.get("favorites") as! NSNumber
                         let parentPost = i.document.get("parentPost") as! String
                         let createdAt = i.document.get("createdAt") as! NSNumber
+                        let reported = i.document.get("isReported") as! Bool
                         
-                        self.favoritePosts.append(Post(id: id, userID: userId, name: name, trainerId: "", image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                        self.favoritePosts.append(Post(id: id, userID: userId, name: name, trainerId: "", image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost, isReported: reported))
                     }
                 }
                 
@@ -71,6 +72,8 @@ class FavoritePostsObserver: ObservableObject {
                     let profileimage = i.document.get("profileimage") as! String
                     let favorites = i.document.get("favorites") as! NSNumber
                     let comments = i.document.get("comments") as! NSArray
+                    let reported = i.document.get("isReported") as! Bool
+                    let body = i.document.get("body") as! String
                     
                     for j in 0..<self.favoritePosts.count
                     {
@@ -79,7 +82,9 @@ class FavoritePostsObserver: ObservableObject {
                             self.favoritePosts[j].favorites = favorites
                             self.favoritePosts[j].comments = comments
                             self.favoritePosts[j].name = name
+                            self.favoritePosts[j].postBody = body
                             self.favoritePosts[j].profileimage = profileimage
+                            self.favoritePosts[j].isReported = reported
                             return
                         }
                     }

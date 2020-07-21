@@ -37,8 +37,8 @@ struct ProfileView: View {
     @State var showDeleteVerify = false
     @State var showFriends: Bool = false
     @Environment(\.colorScheme) var scheme 
-    @State var subParentPost = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
-    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var subParentPost = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "", isReported: false)
+    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "", isReported: false)
     @State var favpic = Image(systemName: "star")
     @State var favSubPic = Image(systemName: "star")
     @State var isFavorite = false
@@ -227,7 +227,14 @@ struct ProfileView: View {
                                         
                                         ZStack{
                                             
-                                            PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            if(post.isReported == false)
+                                            {
+                                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            }
+                                            else
+                                            {
+                                                ReportedPostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            }
                                             
                                             NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
                                                 
@@ -253,7 +260,14 @@ struct ProfileView: View {
                                         
                                         ZStack{
                                             
-                                            PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            if(post.isReported == false)
+                                            {
+                                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            }
+                                            else
+                                            {
+                                                ReportedPostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                            }
                                             
                                             NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
                                                 
@@ -291,7 +305,14 @@ struct ProfileView: View {
                                             
                                             ZStack{
                                                 
-                                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                if(post.isReported == false)
+                                                {
+                                                    PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                }
+                                                else
+                                                {
+                                                    ReportedPostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                }
                                                 
                                                 NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
                                                     
@@ -316,7 +337,14 @@ struct ProfileView: View {
                                             
                                             ZStack{
                                                 
-                                                PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                if(post.isReported == false)
+                                                {
+                                                    PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                }
+                                                else
+                                                {
+                                                    ReportedPostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView)
+                                                }
                                                 
                                                 NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).navigationBarTitle("Thread").environmentObject(self.comments)){
                                                     
@@ -489,8 +517,9 @@ struct ProfileView: View {
                             let favorites = i.document.get("favorites") as! NSNumber
                             let parentPost = i.document.get("parentPost") as! String
                             let createdAt = i.document.get("createdAt") as! NSNumber
+                            let reported = i.document.get("isReported") as! Bool
                             
-                            self.userPosts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost))
+                            self.userPosts.append(Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost, isReported: reported))
                             self.userPosts.sort(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending})
                         }
                         
@@ -507,8 +536,9 @@ struct ProfileView: View {
                             let favorites = i.document.get("favorites") as! NSNumber
                             let parentPost = i.document.get("parentPost") as! String
                             let createdAt = i.document.get("createdAt") as! NSNumber
+                            let reported = i.document.get("isReported") as! Bool
                             
-                            self.userFavorites.append( Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost) )
+                            self.userFavorites.append( Post(id: id, userID: userId, name: name, trainerId: trainerId, image: image, profileimage: profileimage, postBody: body, comments: comments, favorites: favorites, createdAt: createdAt, parentPost: parentPost, isReported: reported) )
                         }
                     }
                     
@@ -538,11 +568,13 @@ struct ProfileView: View {
                         let id = i.document.documentID
                         let favorites_ = i.document.get("favorites") as! NSNumber
                         let comments = i.document.get("comments") as! NSArray
+                        let reported = i.document.get("isReported") as! Bool
                         
                         for j in 0..<self.userPosts.count{
                             if(self.userPosts[j].id == id){
                                 self.userPosts[j].favorites = favorites_
                                 self.userPosts[j].comments = comments
+                                self.userPosts[j].isReported = reported
                                 return
                             }
                         }
@@ -553,6 +585,7 @@ struct ProfileView: View {
                                 if(self.userFavorites[j].id == id){
                                     self.userFavorites[j].favorites = favorites_
                                     self.userFavorites[j].comments = comments
+                                    self.userPosts[j].isReported = reported
                                     return
                                 }
                             }
@@ -571,60 +604,75 @@ struct MoreMenu: View {
     
     @Binding var show: Bool
     @State var showAlert = false
+    @State var showReport = false
     @Binding var user: PokeUser
     
     
     var body: some View {
         
-        HStack{
-            
-            
-            Button(action: {
-                self.showAlert.toggle()
-            }){
-                Text("Block user").foregroundColor(.red)
-            }
-            .alert(isPresented: $showAlert){
-                
-                Alert(title: Text("Block user"), message: Text("Continue blocking user?"), primaryButton: .cancel(Text("Cancel"), action: {
-                    withAnimation(.spring()){
-                        self.showAlert.toggle()
-                    }}),
-                      secondaryButton: .destructive(Text("Block"), action: {
-                        
-                        let uid = Auth.auth().currentUser?.uid
-                        let db = Firestore.firestore()
-                        
-                        let ref = db.collection("users").document(uid!)
-                        ref.getDocument{ (snap, error) in
-                            
-                            if(error != nil)
-                            {
-                                print((error?.localizedDescription)!)
-                                return
-                            }
-                            
-                            //check if from search and if user is equal to current user
-                            ref.updateData(["blocked": FieldValue.arrayUnion([self.user.id])])
-                            
-                            
-                            let ref2 = db.collection("users").document(self.user.id)
-                            ref2.getDocument{ (snap, error) in
-                                
-                                ref2.updateData(["friends": FieldValue.arrayRemove([uid!])])
-                                
-                            }
-                            //remove posts from blocked user posts array
-                            //remove user from blocked user messages
-                            //remove favorite posts from blocked user favorites
-                            //
-                        }
-                        
+        VStack{
+            HStack{
+                Button(action: {
+                    self.showAlert.toggle()
+                }){
+                    Text("Block user").foregroundColor(.red)
+                }
+                .alert(isPresented: $showAlert){
+                    
+                    Alert(title: Text("Block user"), message: Text("Continue blocking user?"), primaryButton: .cancel(Text("Cancel"), action: {
                         withAnimation(.spring()){
                             self.showAlert.toggle()
-                        }
-                      }))
-            }
-        }.background(Color(UIColor.systemBackground))
+                        }}),
+                          secondaryButton: .destructive(Text("Block"), action: {
+                            
+                            let uid = Auth.auth().currentUser?.uid
+                            let db = Firestore.firestore()
+                            
+                            let ref = db.collection("users").document(uid!)
+                            ref.getDocument{ (snap, error) in
+                                
+                                if(error != nil)
+                                {
+                                    print((error?.localizedDescription)!)
+                                    return
+                                }
+                                
+                                //check if from search and if user is equal to current user
+                                ref.updateData(["blocked": FieldValue.arrayUnion([self.user.id])])
+                                
+                                
+                                let ref2 = db.collection("users").document(self.user.id)
+                                ref2.getDocument{ (snap, error) in
+                                    
+                                    ref2.updateData(["friends": FieldValue.arrayRemove([uid!])])
+                                    
+                                }
+                                //remove posts from blocked user posts array
+                                //remove user from blocked user messages
+                                //remove favorite posts from blocked user favorites
+                                //
+                            }
+                            
+                            withAnimation(.spring()){
+                                self.showAlert.toggle()
+                            }
+                          }))
+                }
+            }.background(Color(UIColor.systemBackground))
+            
+            
+            HStack{
+                Button(action: {
+                    self.showReport.toggle()
+                }){
+                    Text("Report user").foregroundColor(.red)
+                }.sheet(isPresented: self.$showReport){
+                    ReportUserView(userId: self.$user.id, showReportButton: self.$show)
+                }
+            }.background(Color(UIColor.systemBackground))
+        }
+        
+        
+        
     }
 }

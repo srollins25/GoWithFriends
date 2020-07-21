@@ -1,8 +1,8 @@
 //
-//  PostCell.swift
+//  ReportedPostCell.swift
 //  GoWithFriends
 //
-//  Created by stephan rollins on 4/12/20.
+//  Created by stephan rollins on 7/19/20.
 //  Copyright © 2020 OmniStack. All rights reserved.
 //
 
@@ -11,15 +11,14 @@ import Firebase
 import FirebaseFirestore
 import SDWebImageSwiftUI
 
-struct PostCell: View {
-    
+struct ReportedPostCell: View {
     @State var id: String
     @State var user: String
     let name: String
     let trainerId: String
     let image: String
     var profileimage: String
-    let postBody: String
+    let postBody = "This post has been reported."
     let comments: NSArray
     @State var favorites: NSNumber
     let createdAt: NSNumber
@@ -255,143 +254,8 @@ struct PostCell: View {
     }
 }
 
-
-
-struct PopOver: View {
-    
-    @Binding var showAlert: Bool
-    @Binding var show: Bool
-    @Binding var postId: String
-    @Binding var parentPost: String
-    
-    var body: some View{
-        
-        Text("Delete").foregroundColor(.red)
-            .frame(width: 70, height: 30)
-            .background(Color.white)
-            .onTapGesture {
-                
-                self.showAlert.toggle()
-        }.alert(isPresented: $showAlert){
-            Alert(title: Text("Delete Post"), message: Text("Continue deleting this post?"), primaryButton: .cancel(Text("Cancel"), action: {
-                withAnimation(.spring()){
-                    self.show.toggle()
-                }
-                
-            }), secondaryButton: .destructive(Text("Delete"), action: {
-                withAnimation(.spring()){
-                    self.show.toggle() 
-                } 
-                
-                // when deleting a post remove from all users who have it as a favorite, remove it from the current users posts array, and change all posts that havee it as a parent post to empty string
-                
-                let db = Firestore.firestore()
-                
-                // delete from favorites
-                db.collection("users").whereField("favorites", arrayContains: self.postId).getDocuments { (snap, error) in
-                    
-                    if(error != nil)
-                    {
-                        print((error?.localizedDescription)!)
-                        return
-                    }
-                    
-                    for document in snap!.documents { 
-                        
-                        let ref = db.collection("users").document("\(document.documentID)")
-                        ref.updateData(["favorites": FieldValue.arrayRemove([self.postId])])
-                    }
-                }
-                
-                // delete from user_posts
-                let uid = Auth.auth().currentUser?.uid
-                var ref = db.collection("users").document(uid!) 
-                ref.getDocument { (snap, error) in
-                    
-                    if(error != nil)
-                    {
-                        print((error?.localizedDescription)!)
-                        return
-                    }
-                    ref.updateData(["user_posts": FieldValue.arrayRemove([self.postId])])
-                }
-                
-                // delete from comments
-                db.collection("posts").whereField("comments", arrayContains: self.postId).getDocuments { (snap, error) in
-                    
-                    if(error != nil)
-                    {
-                        print((error?.localizedDescription)!)
-                        return
-                    }
-                    
-                    for document in snap!.documents {
-                        
-                        let ref = db.collection("posts").document("\(document.documentID)")
-                        ref.updateData(["comments": FieldValue.arrayRemove([self.postId])])
-                    }
-                }
-                
-                // change all posts that have as parent to empty string
-                db.collection("posts").whereField("parentPost", isEqualTo: self.postId).getDocuments { (snap, error) in
-                    if(error != nil)
-                    {
-                        print((error?.localizedDescription)!)
-                        return
-                    }
-                    
-                    for document in snap!.documents {
-                        
-                        let ref = db.collection("posts").document("\(document.documentID)")
-                        ref.updateData(["parentPost": ""])
-                    }
-                }
-                
-                ref = db.collection("users").document(uid!)
-                ref.getDocument { (snap, error) in
-                    
-                    if(error != nil)
-                    {
-                        print((error?.localizedDescription)!)
-                        return
-                    }
-                    ref.updateData(["user_posts": FieldValue.arrayRemove([self.postId])])
-                }
-                
-                // delete from posts
-                db.collection("posts").document(self.postId).delete() { err in
-                    if let err = err {
-                        print("Error removing document: \(err)")
-                    }
-                }
-            }))
-        }
-    }
-}
-struct ReportPopOver: View {
-    
-    @Binding var showReportButton: Bool
-    @State var showReport = false
-    @Binding var postId: String
-    @Binding var parentPost: String
-    
-    var body: some View{
-        
-        Text("Report").foregroundColor(.red)
-            .frame(width: 70, height: 30)
-            .background(Color.white)
-            .onTapGesture {
-                
-                self.showReport.toggle()
-        }.sheet(isPresented: self.$showReport){
-            ReportPostView(postId: self.$postId, parentPost: self.$parentPost, showReportButton: self.$showReportButton)
-        }
-    }
-}
-
-
-
-
-
-
-
+//struct ReportedPostCell_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ReportedPostCell()
+//    }
+//}

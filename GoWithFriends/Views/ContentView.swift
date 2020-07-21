@@ -12,11 +12,10 @@ import Firebase
 struct ContentView: View {
     
     @State var isLoggedIn: Bool = false
-    //var posts = PostObserver()
     
     var body: some View {
         
-        LoginView(isloggedin: self.$isLoggedIn).overlay(self.isLoggedIn ? IsLoggedInView(isLoggedIn: self.$isLoggedIn).background(Color.white) /* .environmentObject(posts) */ : nil)
+        LoginView(isloggedin: self.$isLoggedIn).overlay(self.isLoggedIn ? IsLoggedInView(isLoggedIn: self.$isLoggedIn).background(Color.white) : nil)
             
             .onAppear(perform: {
                 

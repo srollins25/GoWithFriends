@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 
 struct IsLoggedInView: View {
     @State var user = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0, trainerId: "")
-    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var post: Post = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "", isReported: false)
     @State var index = 0
     @State var show = true
     @State var fromSearch = false
@@ -34,7 +34,7 @@ struct IsLoggedInView: View {
             
             if(self.showDeleteView == true)
             {
-                DeleteAccountVerifyView(closeView: self.$showDeleteView, isLoggedIn: self.$isLoggedIn).offset(x: 0, y: self.showDeleteView ? 0 : UIApplication.shared.keyWindow?.frame.height ?? 0)//.edgesIgnoringSafeArea(.all)
+                DeleteAccountVerifyView(closeView: self.$showDeleteView, isLoggedIn: self.$isLoggedIn).offset(x: 0, y: self.showDeleteView ? 0 : UIApplication.shared.keyWindow?.frame.height ?? 0)
             }
         }
 

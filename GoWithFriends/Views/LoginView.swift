@@ -244,10 +244,11 @@ struct SignUpView: View {
         let blocked = [String]()
         let comments = [String]()
         let user_posts = [String]()
+        let mutedWords = [String]()
         let createdAt = Date().timeIntervalSince1970
         let email = self.email
         
-        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "trainerId": trainerId, "user_posts": user_posts] as [String: Any]
+        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "trainerId": trainerId, "user_posts": user_posts, "mutedWords": mutedWords] as [String: Any]
         db.collection("users").document(uid).setData(values)
         
         UserDefaults.standard.set(uid, forKey: "userid")
@@ -257,6 +258,7 @@ struct SignUpView: View {
         UserDefaults.standard.set(friends, forKey: "friends")
         UserDefaults.standard.set(trainerId, forKey: "trainerId")
         UserDefaults.standard.set(favorites, forKey: "favorites")
+        UserDefaults.standard.set(mutedWords, forKey: "mutedWords")
         UserDefaults.standard.set("", forKey: "friendId")
     }
 }
@@ -521,7 +523,7 @@ struct LoginView2: View {
                                     let image = data!["image"] as? String
                                     let email = data!["email"] as? String
                                     let favorites = data!["favorites"] as? [String]
-                                    //var friends = FriendsObserver()
+                                    let mutedWords = data!["mutedWords"] as? [String]
                                     let friends_ = data!["friends"] as? [String]
                                     
                                     UserDefaults.standard.set(uid, forKey: "userid")
@@ -529,7 +531,7 @@ struct LoginView2: View {
                                     UserDefaults.standard.set(image, forKey: "image")
                                     UserDefaults.standard.set(favorites, forKey: "favorites")
                                     UserDefaults.standard.set(friends_, forKey: "friends")
-                                    
+                                    UserDefaults.standard.set(mutedWords, forKey: "mutedWords")
                                     UserDefaults.standard.set(trainerId, forKey: "trainerId")
                                     UserDefaults.standard.set("", forKey: "friendId")
                                     UserDefaults.standard.set(email, forKey: "email")

@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>5</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9788435879014471~3166576128</string>
 	<key>LSRequiresIPhoneOS</key>

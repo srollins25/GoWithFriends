@@ -81,6 +81,9 @@ struct EditProfileInfo: View {
                             NavigationLink(destination: ForgotPasswordView(fromLogin: self.$fromLogin).navigationBarTitle("").navigationBarHidden(true)){
                                 Text("Update password")
                             }
+                            NavigationLink(destination: MutedWordsView().navigationBarTitle("").navigationBarHidden(true)){
+                                Text("Muted words")
+                            }
                         }
                     }.padding()
             

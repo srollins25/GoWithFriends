@@ -48,7 +48,9 @@ struct CreatePostView: View {
                             }.disabled(self.postText == "" ? true : false))
                     }.navigationViewStyle(StackNavigationViewStyle())
         
-            
+        .onAppear(perform: {
+            print("inside create post")
+        })
     }
     
     func createPost(postText: String)
@@ -66,9 +68,10 @@ struct CreatePostView: View {
             let profileimage = UserDefaults.standard.string(forKey: "image")!
             let parentPost = self.parentPost
             let createdAt = Date().timeIntervalSince1970 as NSNumber
+            let reported = false
             
-            let values = ["userId": uid!, "name": name, "trainerId": trainerId, "image": "", "profileimage": profileimage, "body": postText, "comments": [String]() as NSArray, "favorites": 0, "createdAt": createdAt, "parentPost": parentPost] as [String : Any]
-            
+            let values = ["userId": uid!, "name": name, "trainerId": trainerId, "image": "", "profileimage": profileimage, "body": postText, "comments": [String]() as NSArray, "favorites": 0, "createdAt": createdAt, "parentPost": parentPost, "isReported": reported] as [String : Any]
+
             let collection = db.collection("posts")
             let doc = collection.document()
             let id = doc.documentID
@@ -139,114 +142,118 @@ struct multilineTextField: UIViewRepresentable{
 }
 
 
-struct PostNavBar: View {
-    
-    @Binding var closeView: Bool
-    @Binding var postText: String
-    @Binding var parentPost: String
-    
-    var body: some View{
-        
-        ZStack{
-            
-            CustomNavBarBack()
-            
-            VStack(spacing: 0){
-                HStack(spacing: 8){
-                    Button(action: {
-                        
-                        withAnimation(.easeOut(duration: 0.5)){
-                            self.closeView.toggle()
-                        }
-                    }){
-                        Text("Cancel").foregroundColor(Color.black.opacity(0.5)).padding(9)
-                    }
-                    .background(Color.white)
-                    .shadow(color: .gray, radius: 7, x: 1, y: 1)
-                    .clipShape(Capsule())
-                    Spacer()
-                    
-                    Button(action: {
-                        
-                        if(self.postText != "")
-                        {
-                            self.createPost(postText: self.postText)
-                        }
-                    }){
-                        Text("Post").foregroundColor(self.postText == "" ? Color.white.opacity(0.9) : Color.black.opacity(0.5) ).padding(9)
-                    }
-                    .disabled(self.postText == "" ? true : false)
-                    .background(Color.white)
-                    .shadow(color: .gray, radius: 7, x: 1, y: 1)
-                    .clipShape(Capsule())
-                }
-                .padding(.top , (UIApplication.shared.windows.first?.safeAreaInsets.top)! )
-                .padding(.horizontal)
-                .padding(.bottom, 5)
-                    
-                .background(Color.black.opacity(0.3))
-                
-            }
-        }
-    }
-    
-    func createPost(postText: String)
-    {
-        let uid = Auth.auth().currentUser?.uid
-        let db = Firestore.firestore()
-        let ref = Firestore.firestore().document("users/\(uid!)")
-        
-        ref.getDocument{ (snapshot, error) in
-            
-            guard let snapshot = snapshot, snapshot.exists else { return }
-            let data = snapshot.data()
-            let name = (data!["name"] as? String)!
-            let profileimage = UserDefaults.standard.string(forKey: "image")!
-            let parentPost = self.parentPost
-            let createdAt = Date().timeIntervalSince1970 as NSNumber
-            
-            let values = ["userId": uid!, "name": name, "image": "", "profileimage": profileimage, "body": postText, "comments": [String]() as NSArray, "favorites": 0, "createdAt": createdAt, "parentPost": parentPost] as [String : Any]
-            
-            let collection = db.collection("posts")
-            let doc = collection.document()
-            let id = doc.documentID
-            doc.setData(values)
-            var userRef = db.collection("users/").document("\(uid!)")
-            userRef.updateData(["user_posts": FieldValue.arrayUnion([id])])
-            
-            if(parentPost != "")
-            {
-                userRef = db.collection("posts/").document("\(parentPost)")
-                userRef.updateData(["comments" : FieldValue.arrayUnion([id])])
-            }
-        }
-        
-        self.postText = ""
-        withAnimation(.easeOut(duration: 0.5)){
-            self.closeView.toggle()
-        }
-    }
-    
-    struct CustomNavBarBack: View {
-        
-        
-        var body: some View{
-            
-            VStack(spacing: 0){
-                HStack(spacing: 8){
-                    
-                    Text("")
-                    Spacer()
-                }
-                .padding(.top , (UIApplication.shared.windows.first?.safeAreaInsets.top)! )
-                .padding(.horizontal)
-                .padding(.bottom, 5)
-                    
-                .background(Color.white)
-            }
-        }
-    }
-}
+//struct PostNavBar: View {
+//
+//    @Binding var closeView: Bool
+//    @Binding var postText: String
+//    @Binding var parentPost: String
+//
+//    var body: some View{
+//
+//        ZStack{
+//
+//            CustomNavBarBack()
+//
+//            VStack(spacing: 0){
+//                HStack(spacing: 8){
+//                    Button(action: {
+//
+//                        withAnimation(.easeOut(duration: 0.5)){
+//                            self.closeView.toggle()
+//                        }
+//                    }){
+//                        Text("Cancel").foregroundColor(Color.black.opacity(0.5)).padding(9)
+//                    }
+//                    .background(Color.white)
+//                    .shadow(color: .gray, radius: 7, x: 1, y: 1)
+//                    .clipShape(Capsule())
+//                    Spacer()
+//
+//                    Button(action: {
+//
+//                        if(self.postText != "")
+//                        {
+//                            self.createPost(postText: self.postText)
+//                        }
+//                    }){
+//                        Text("Post").foregroundColor(self.postText == "" ? Color.white.opacity(0.9) : Color.black.opacity(0.5) ).padding(9)
+//                    }
+//                    .disabled(self.postText == "" ? true : false)
+//                    .background(Color.white)
+//                    .shadow(color: .gray, radius: 7, x: 1, y: 1)
+//                    .clipShape(Capsule())
+//                }
+//                .padding(.top , (UIApplication.shared.windows.first?.safeAreaInsets.top)! )
+//                .padding(.horizontal)
+//                .padding(.bottom, 5)
+//
+//                .background(Color.black.opacity(0.3))
+//
+//            }
+//        }
+//    }
+//
+//    func createPost(postText: String)
+//    {
+//        let uid = Auth.auth().currentUser?.uid
+//        let db = Firestore.firestore()
+//        let ref = Firestore.firestore().document("users/\(uid!)")
+//
+//        ref.getDocument{ (snapshot, error) in
+//
+//            guard let snapshot = snapshot, snapshot.exists else { return }
+//            let data = snapshot.data()
+//            let name = (data!["name"] as? String)!
+//            let profileimage = UserDefaults.standard.string(forKey: "image")!
+//            let parentPost = self.parentPost
+//            let reported = false
+//            let createdAt = Date().timeIntervalSince1970 as NSNumber
+//
+//            let values = ["userId": uid!, "name": name, "image": "", "profileimage": profileimage, "body": postText, "comments": [String]() as NSArray, "favorites": 0, "createdAt": createdAt, "parentPost": parentPost, "isReported": reported] as [String : Any]
+//
+//            print("values: ", values)
+//
+//            let collection = db.collection("posts")
+//            let doc = collection.document()
+//            let id = doc.documentID
+//            print("id: ", id)
+//            doc.setData(values)
+//            var userRef = db.collection("users/").document("\(uid!)")
+//            userRef.updateData(["user_posts": FieldValue.arrayUnion([id])])
+//
+//            if(parentPost != "")
+//            {
+//                userRef = db.collection("posts/").document("\(parentPost)")
+//                userRef.updateData(["comments" : FieldValue.arrayUnion([id])])
+//            }
+//        }
+//
+//        self.postText = ""
+//        withAnimation(.easeOut(duration: 0.5)){
+//            self.closeView.toggle()
+//        }
+//    }
+//
+//    struct CustomNavBarBack: View {
+//
+//
+//        var body: some View{
+//
+//            VStack(spacing: 0){
+//                HStack(spacing: 8){
+//
+//                    Text("")
+//                    Spacer()
+//                }
+//                .padding(.top , (UIApplication.shared.windows.first?.safeAreaInsets.top)! )
+//                .padding(.horizontal)
+//                .padding(.bottom, 5)
+//
+//                .background(Color.white)
+//            }
+//        }
+//    }
+//}
 
 struct imagePicker: UIViewControllerRepresentable {
     

@@ -16,7 +16,7 @@ struct PostThreadView: View {
     @Binding var mainPost: Post
     @State var showSubThread = false
     @Binding var subParentPost: Post
-    @State var subPost2 = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "")
+    @State var subPost2 = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "", isReported: false)
     let transition = AnyTransition.move(edge: .trailing)
     @Binding var showDeleteView: Bool
     @EnvironmentObject var commentsObserver: CommentsObserver //= CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!) 
@@ -25,6 +25,7 @@ struct PostThreadView: View {
     @State var favPic = Image(systemName: "star")
     //@Binding var needRefresh: Bool
     @State var needSubRefresh: Bool = false
+    //@State var isReported: Bool
     
     var body: some View {
         
@@ -32,7 +33,16 @@ struct PostThreadView: View {
             
             VStack{
                 
+                if(self.mainPost.isReported == false)
+                {
                 PostCell(id: self.mainPost.id, user: self.mainPost.userID, name: self.mainPost.name, trainerId: self.mainPost.trainerId, image: self.mainPost.image, profileimage: self.mainPost.profileimage, postBody: self.mainPost.postBody, comments: self.mainPost.comments, favorites: self.mainPost.favorites, createdAt:  self.mainPost.createdAt, parentPost: self.mainPost.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).padding()
+                }
+                else
+                {
+                    
+                    ReportedPostCell(id: self.mainPost.id, user: self.mainPost.userID, name: self.mainPost.name, trainerId: self.mainPost.trainerId, image: self.mainPost.image, profileimage: self.mainPost.profileimage, comments: self.mainPost.comments, favorites: self.mainPost.favorites, createdAt: self.mainPost.createdAt, parentPost: self.mainPost.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).padding()
+                }
+                
                 Divider()
                 List(commentsObserver.comments) { post in
                     //ForEach(commentsObserver.comments) { post in
