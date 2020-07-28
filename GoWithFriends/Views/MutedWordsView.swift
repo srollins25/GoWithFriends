@@ -27,7 +27,7 @@ struct MutedWordsView: View {
                     
                     TextField("Add new word", text: self.$newWord).padding(.vertical, 12).padding(.horizontal).background(Color.black.opacity(0.06)).clipShape(Capsule())
                     Button(action: {
-                        if(self.newWord == "")
+                        if(self.newWord.isBlank == true)
                         {
                             self.showAlert.toggle()
                         }

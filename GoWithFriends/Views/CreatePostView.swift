@@ -39,17 +39,17 @@ struct CreatePostView: View {
                             Text("Cancel")
                         }, trailing:
                             Button(action: {
-                                if(self.postText != "")
+                                if(self.postText.isBlank == false)
                                 {
                                     self.createPost(postText: self.postText)
                                 }
                         }){
-                            Text("Post").foregroundColor(self.postText == "" ? Color.blue.opacity(0.7) : Color.blue )
-                            }.disabled(self.postText == "" ? true : false))
+                            Text("Post").foregroundColor(self.postText.isBlank == true ? Color.blue.opacity(0.7) : Color.blue )
+                            }.disabled(self.postText.isBlank == true ? true : false))
                     }.navigationViewStyle(StackNavigationViewStyle())
         
         .onAppear(perform: {
-            print("inside create post")
+            //print("inside create post")
         })
     }
     

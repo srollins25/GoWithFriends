@@ -212,8 +212,8 @@ struct chatBottomView: View{
 
                 self.messageTextFeild = ""
             }){
-                Image(systemName: "arrow.up.circle").resizable().frame(width: 30, height: 30).padding(10).foregroundColor(self.messageTextFeild == "" ? Color.gray : Color.green)
-            }.disabled(self.messageTextFeild == "" ? true : false)
+                Image(systemName: "arrow.up.circle").resizable().frame(width: 30, height: 30).padding(10).foregroundColor(self.messageTextFeild.isBlank == true ? Color.gray : Color.green)
+            }.disabled(self.messageTextFeild.isBlank == true ? true : false)
         }.padding().background(Color(UIColor.systemBackground)).edgesIgnoringSafeArea(.top)
     }
 }

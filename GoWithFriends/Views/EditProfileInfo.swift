@@ -70,7 +70,7 @@ struct EditProfileInfo: View {
                                 Text("Trainer Code")
                                 Divider().background(Color.clear)
                                 VStack{
-                                TextField(self.trainerId, text: self.$trainerId)
+                                    TextField(self.trainerId, text: self.$trainerId).keyboardType(.numberPad)
                                     Divider()
                                 }
                             }
@@ -104,7 +104,7 @@ struct EditProfileInfo: View {
                 self.showLoading = true
             }){
                 Text("Done")
-            }.alert(isPresented: self.$showAlert){
+            }.disabled(self.username.isBlank == true || self.trainerId.isBlank || self.trainerId.count != 12 ? true : false).alert(isPresented: self.$showAlert){
                 Alert(title: Text("Submit?"), primaryButton: .cancel(Text("Cancel"), action: {
                     self.showLoading.toggle()
                 }), secondaryButton: .default(Text("Continue"), action: {
@@ -249,7 +249,7 @@ struct EditProfileInfo: View {
                         user?.updatePassword(to: self.email, completion: nil)
                     }
                     self.showLoading.toggle()
-                }))
+                    }))
             })
     }
 }

@@ -30,12 +30,9 @@ struct ReportPostView: View {
                 multilineTextField(text: $reportText).padding()
                 Divider()
                 Button(action: {
-                    
-                        
+                
                         self.sendReport(postId: self.postId, text: self.reportText)
                         self.showConfirmAlert.toggle()
-                    
-                    
                 }){
                     Text("Send report").foregroundColor(.white)
                     .fontWeight(.bold)
@@ -44,7 +41,7 @@ struct ReportPostView: View {
                     .background(Color.green.opacity(0.8))
                     .clipShape(Capsule())
                     .shadow(color: Color.white.opacity(0.1), radius: 5, x: 0, y: 5)
-                }.disabled(self.reportText == ""  || self.reportText == " " ? true : false)
+                }.disabled(self.reportText.isBlank == true ? true : false)
                 .alert(isPresented: self.$showConfirmAlert){
                     Alert(title: Text("Reprt Sent"), message: Text(self.message), dismissButton: .default(Text("Done")))
                 }

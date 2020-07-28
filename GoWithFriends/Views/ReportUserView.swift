@@ -49,7 +49,7 @@ struct ReportUserView: View {
                     .background(Color.green.opacity(0.8))
                     .clipShape(Capsule())
                     .shadow(color: Color.white.opacity(0.1), radius: 5, x: 0, y: 5)
-                }.disabled(self.reportText == "" || self.reportText == " " ? true : false).alert(isPresented: self.$showAlert){
+                }.disabled(self.reportText.isBlank == true ? true : false).alert(isPresented: self.$showAlert){
                     
 
                         Alert(title: Text("Report Sent"), message: Text(self.message), dismissButton: .default(Text("Done")))

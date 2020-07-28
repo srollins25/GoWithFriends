@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Firebase
+import Combine
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
@@ -27,6 +28,10 @@ struct SignUpView: View {
     @State var imagePicker = false
     @State var imageData: Data = .init(count: 0)
     @State var showAlert = false
+    @State var namefiltered = ""
+    @State var trainercodefiltered = ""
+    @State var pwfiltered = ""
+    @State var vpwfiltered = ""
     @Binding var showLoading: Bool
     @Binding var isChecked: Bool
     @Environment(\.colorScheme) var scheme
@@ -44,7 +49,7 @@ struct SignUpView: View {
                             Capsule().fill(self.index == 1 ? Color.blue : Color.clear).frame(width: 100, height: 5)
                         }
                     }
-                    .padding(.top, 20)
+                    .padding(.top, 15)
                     
                     
                     if(self.imageData.count == 0){
@@ -72,7 +77,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 8)
+                    .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -83,7 +88,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 8)
+                    .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -94,7 +99,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 8)
+                    .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -105,7 +110,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 8)
+                    .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
@@ -116,7 +121,7 @@ struct SignUpView: View {
                         Divider().background(Color.white.opacity(0.5))
                     }
                     .padding(.horizontal)
-                    .padding(.top, 8)
+                    .padding(.top, 6)
                     
                 }
                 .padding()
@@ -137,7 +142,7 @@ struct SignUpView: View {
                     UIApplication.shared.endEditing()
                     
                     
-                    if(self.email == "" || self.password == "" || self.validatePassword == "" || self.trainerId == "")
+                    if(self.email.isBlank == true || self.password.isBlank == true || self.validatePassword.isBlank == true || self.trainerId.isBlank == true)
                     {
                         self.showAlert.toggle()
                         self.error = "All fields must be filled."
@@ -156,6 +161,11 @@ struct SignUpView: View {
                     {
                         self.showAlert.toggle()
                         self.error = "You must agree to the Terms of Service to continue."
+                    }
+                    else if(self.trainerId.count != 12)
+                    {
+                        self.showAlert.toggle()
+                        self.error = "Trainer Code must be 12 digits."
                     }
                     else
                     {
@@ -361,7 +371,7 @@ struct LoginView: View {
                         }.sheet(isPresented: self.$showTerms){
                             NavigationView{
                                 TermsofServiceView()
-                            }
+                            }.navigationViewStyle(StackNavigationViewStyle())
                         }
                     }.padding(.vertical).padding(.top, 15)
                 }
@@ -601,3 +611,8 @@ struct CShape2: Shape {
 }
 
 
+extension String {
+  var isBlank: Bool {
+    return allSatisfy({ $0.isWhitespace })
+  }
+}
