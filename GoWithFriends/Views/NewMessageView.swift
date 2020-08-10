@@ -73,37 +73,6 @@ struct NewMessageView: View{
     }
 }
 
-//class getFriends: ObservableObject{
-//    
-//    @Published var users = [PokeUser]() 
-//    
-//    
-//    init(){
-//        let db = Firestore.firestore()
-//        
-//        let friends = UserDefaults.standard.array(forKey: "friends") as? [String]
-//        db.collection("users").getDocuments{ (snapshot, error) in //user friends
-//            
-//             
-//            if(error != nil)
-//            {
-//                print((error?.localizedDescription)!)
-//                return
-//            }
-//            
-//            for i in snapshot!.documents{
-//                let id = i.documentID
-//                let name = i.get("name") as! String
-//                //let email = i.get("email") as! String
-//                let image = i.get("image") as! String
-//                if(friends!.contains(id))
-//                {
-//                    self.users.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: [String](), createdAt: 0))
-//                } 
-//            }
-//        }
-//    }
-//}
 
 
 

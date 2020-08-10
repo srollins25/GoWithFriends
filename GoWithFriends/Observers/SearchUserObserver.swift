@@ -49,6 +49,7 @@ class SearchUserObserver: ObservableObject {
                         if(!(blocked?.contains((Auth.auth().currentUser!.uid)))!)
                         {
                             self.users.append(PokeUser(id: id, name: name, profileimage: image, email: "", user_posts: user_posts, createdAt: 0, trainerId: trainerId))
+                            print("user: ", id, name, image, trainerId)
                         }
                        
                     }

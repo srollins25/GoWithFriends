@@ -48,7 +48,7 @@ struct MapView: View {
                 
             if(self.showAddToMapView == true)
             {
-                AddToMapView(showAddToMapView: self.$showAddToMapView).offset(x: 0, y: self.showAddToMapView ? 0 : UIApplication.shared.keyWindow?.frame.height ?? 0)
+                AddToMapView(showAddToMapView: self.$showAddToMapView).offset(x: 0, y: self.showAddToMapView ? 0 : UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.frame.height ?? 0)
             }
             
         }

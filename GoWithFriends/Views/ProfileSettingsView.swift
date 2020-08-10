@@ -16,7 +16,6 @@ struct ProfileSettingsView: View {
     @State var showAlert = false
     @Binding var showDeleteVerify: Bool
     @State var showAfterDismiss = false
-    //@State var showDeleteView = false
     @Binding var showDeleteView: Bool//final delete screen
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     

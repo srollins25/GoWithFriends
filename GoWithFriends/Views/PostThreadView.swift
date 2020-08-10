@@ -12,20 +12,17 @@ import SDWebImageSwiftUI
 
 struct PostThreadView: View {
     
-    //@Binding var closeView: Bool
     @Binding var mainPost: Post
     @State var showSubThread = false
     @Binding var subParentPost: Post
     @State var subPost2 = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "", isReported: false)
     let transition = AnyTransition.move(edge: .trailing)
     @Binding var showDeleteView: Bool
-    @EnvironmentObject var commentsObserver: CommentsObserver //= CommentsObserver(parentPost_: UserDefaults.standard.string(forKey: "parentPost")!) 
+    @EnvironmentObject var commentsObserver: CommentsObserver
     @State var isFavorite: Bool = false
     @State var isSubFavorite: Bool = false
     @State var favPic = Image(systemName: "star")
-    //@Binding var needRefresh: Bool
     @State var needSubRefresh: Bool = false
-    //@State var isReported: Bool
     
     var body: some View {
         
@@ -45,8 +42,6 @@ struct PostThreadView: View {
                 
                 Divider()
                 List(commentsObserver.comments) { post in
-                    //ForEach(commentsObserver.comments) { post in
-                        
                         
                         if(post.id != self.mainPost.id)
                         {
@@ -65,11 +60,7 @@ struct PostThreadView: View {
                                     UserDefaults.standard.set(self.subParentPost.id, forKey: "parentPost")
                                     self.showSubThread.toggle()
                                     self.isSubFavorite = (UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(self.subParentPost.id)
-//                                    if((UserDefaults.standard.object(forKey: "favorites")! as? [String])!.contains(self.subParentPost.id))
-//                                    {
-//                                        
-//                                        self.favPic = Image(systemName: "star.fill")
-//                                    }
+
                                     UIApplication.shared.endEditing()
                                     
                                 }){

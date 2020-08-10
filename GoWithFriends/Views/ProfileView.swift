@@ -671,8 +671,5 @@ struct MoreMenu: View {
                 }
             }.background(Color(UIColor.systemBackground))
         }
-        
-        
-        
     }
 }
