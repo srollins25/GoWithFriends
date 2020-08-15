@@ -54,18 +54,12 @@ struct MessageView: View {
                             }){
                                 Text("")
                             }
-                            
-                        }
-                        
+                        }                        
                     }.onDelete(perform: delete)
-
                 }
                 
-                
             }.padding(.bottom, 140)
-            
         }
-            
         .onAppear(perform: {
             
             

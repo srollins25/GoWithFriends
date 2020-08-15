@@ -179,6 +179,7 @@ struct SideMenu: View {
                         print("Problem signing out.")
                     }
                     
+                    let ref = Firestore.firestore().collection("users").document(UserDefaults.standard.string(forKey: "userid")!)
                     UserDefaults.standard.set("", forKey: "username")
                     UserDefaults.standard.set("", forKey: "image")
                     UserDefaults.standard.set("", forKey: "userid")
@@ -186,12 +187,12 @@ struct SideMenu: View {
                     UserDefaults.standard.set("", forKey: "trainerId")
                     let emptyArr = [String]()
                     UserDefaults.standard.set(emptyArr, forKey: "favorites")
-
                     UserDefaults.standard.set([String](), forKey: "friends")
                     self.showLoading.toggle()
                     self.isLoggedIn.toggle()
                     UserDefaults.standard.set(self.isLoggedIn, forKey: "isloggedin")
                     
+                    ref.setData(["isOnline": false])
                 }
                 
             }){

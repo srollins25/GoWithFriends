@@ -48,7 +48,6 @@ struct NewMessageView: View{
                                 self.name = i.name
                                 self.pic = i.profileimage
                                 
-                                
                             }){
                                 Text("")
                             }

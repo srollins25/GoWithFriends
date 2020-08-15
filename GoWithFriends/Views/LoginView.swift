@@ -257,11 +257,13 @@ struct SignUpView: View {
         let mutedWords = [String]()
         let createdAt = Date().timeIntervalSince1970
         let email = self.email
+        let isOnline = true
         
-        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "trainerId": trainerId, "user_posts": user_posts, "mutedWords": mutedWords] as [String: Any]
+        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "trainerId": trainerId, "user_posts": user_posts, "mutedWords": mutedWords, "isOnline": isOnline] as [String: Any]
         db.collection("users").document(uid).setData(values)
         
         UserDefaults.standard.set(uid, forKey: "userid")
+        UserDefaults.standard.set(isOnline, forKey: "isOnline")
         UserDefaults.standard.set(name, forKey: "username")
         UserDefaults.standard.set(email, forKey: "email")
         UserDefaults.standard.set(image, forKey: "image")
@@ -274,10 +276,7 @@ struct SignUpView: View {
 }
 
 
-
-
 struct LoginView: View {
-    
     
     @State var index = 0
     @Binding var isloggedin: Bool
@@ -379,7 +378,6 @@ struct LoginView2: View {
     var body: some View{
         
         
-        
         ZStack(alignment: .bottom){
             VStack{
                 HStack{
@@ -388,7 +386,6 @@ struct LoginView2: View {
                         Text("Login").foregroundColor(self.index == 0 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold)
                         Capsule().fill(self.index == 0 ? Color.blue : Color.clear).frame(width: 100, height: 5)
                     }
-                    
                     
                     Spacer(minLength: 0)
                 }
@@ -493,6 +490,7 @@ struct LoginView2: View {
                                     let mutedWords = data!["mutedWords"] as? [String]
                                     let friends_ = data!["friends"] as? [String]
                                     
+                                    
                                     UserDefaults.standard.set(uid, forKey: "userid")
                                     UserDefaults.standard.set(name, forKey: "username")
                                     UserDefaults.standard.set(image, forKey: "image")
@@ -508,7 +506,7 @@ struct LoginView2: View {
                                     self.isloggedin.toggle()
                                     UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
                                     UserDefaults.standard.synchronize()
-                                    
+                                    ref.setData(["isOnline": UserDefaults.standard.bool(forKey: "isloggedin")])
                                 }
                             }
                         }
