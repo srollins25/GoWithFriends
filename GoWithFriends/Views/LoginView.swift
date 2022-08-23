@@ -287,18 +287,19 @@ struct LoginView: View {
     var body: some View{
         
         GeometryReader{_ in
-            VStack{
+
+            VStack(){
                 
                 //for logo Image("").resizable().frame(width: 60, height: 60)
                 //LoaderView()
-                
+                //Spacer().frame(height: 150)
                 ZStack{
                     
                     ZStack{
                         SignUpView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading, isChecked: self.$isChecked).zIndex(Double(self.index))
                         LoginView2(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading)
                     }
-                    
+
                     if(self.showLoading == true)
                     {
                         GeometryReader{_ in
@@ -310,7 +311,6 @@ struct LoginView: View {
                     }
                     
                 }
-                
                 if(self.index == 1)
                 {
                     HStack(spacing: 10){
@@ -329,36 +329,35 @@ struct LoginView: View {
                                 TermsofServiceView()
                             }.navigationViewStyle(StackNavigationViewStyle())
                         }
-                    }.padding(.vertical).padding(.top, 15)
+                    }.padding(.vertical)//.padding(.top, 15)
                 }
                 
-
+//                                    HStack(spacing: 15){
+//                                        Rectangle()
+//                                            .fill(Color.gray)
+//                                            .frame(height: 1)
+//                                        Text("Or")
+//                                        Rectangle()
+//                                            .fill(Color.gray)
+//                                            .frame(height: 1)
+//                                    }.padding(.horizontal, 20)
+//                                        .padding(.top, 50)
+//
+//
+//                    //other login buttons
+//                                    HStack(spacing: 25){
+//                                        Button(action: {
+//
+//                                        }){
+//
+//                                            Text("test")
+//                                        }
+//                                    }.padding(.top, 30)
                     
-                    //                HStack(spacing: 15){
-                    //                    Rectangle()
-                    //                        .fill(Color.gray)
-                    //                        .frame(height: 1)
-                    //                    Text("Or")
-                    //                    Rectangle()
-                    //                        .fill(Color.gray)
-                    //                        .frame(height: 1)
-                    //                }.padding(.horizontal, 20)
-                    //                    .padding(.top, 50)
-                    
-                    
-                    //other login buttons
-                    //                HStack(spacing: 25){
-                    //                    Button(action: {
-                    //
-                    //                    }){
-                    //
-                    //                    }
-                    //                }.padding(.top, 30)
-                    
-            }
+            }.padding([ .top], UIScreen.main.bounds.height / 4)
             
         }
-        .background(LinearGradient(gradient: Gradient(colors: [Color("gradient2"), Color("gradient1")]), startPoint: .top, endPoint: .bottom)).edgesIgnoringSafeArea(.all)
+        .background(LinearGradient(gradient: Gradient(colors: [.yellow, .blue, .red]), startPoint: .top, endPoint: .bottom)).edgesIgnoringSafeArea(.all)
     }
 }
 
@@ -376,7 +375,6 @@ struct LoginView2: View {
     @State var fromLogin = true
     
     var body: some View{
-        
         
         ZStack(alignment: .bottom){
             VStack{
@@ -506,7 +504,7 @@ struct LoginView2: View {
                                     self.isloggedin.toggle()
                                     UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
                                     UserDefaults.standard.synchronize()
-                                    ref.setData(["isOnline": UserDefaults.standard.bool(forKey: "isloggedin")])
+                                    ref.updateData(["isOnline": UserDefaults.standard.bool(forKey: "isloggedin")])
                                 }
                             }
                         }

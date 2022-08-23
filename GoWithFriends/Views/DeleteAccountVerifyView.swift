@@ -66,8 +66,6 @@ struct DeleteAccountVerifyView: View {
                                 
                                 //self.closePreviousView = false
                                 
-                                
-                                
                                 let user = Auth.auth().currentUser
                                 let credential = EmailAuthProvider.credential(withEmail: self.email, password: self.pass)
                                 

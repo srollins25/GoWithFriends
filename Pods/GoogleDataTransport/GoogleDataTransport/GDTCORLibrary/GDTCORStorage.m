@@ -243,7 +243,7 @@ static NSString *GDTCORStoragePath() {
     }
   } else {
 #if !TARGET_OS_MACCATALYST && !TARGET_OS_WATCH
-    [NSKeyedUnarchiver unarchiveObjectWithFile:[GDTCORStorage archivePath]];
+      [NSKeyedUnarchiver unarchiveObjectWithFile:[GDTCORStorage archivePath]];
 #endif
   }
 }

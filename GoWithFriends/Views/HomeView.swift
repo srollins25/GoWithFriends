@@ -192,7 +192,8 @@ struct SideMenu: View {
                     self.isLoggedIn.toggle()
                     UserDefaults.standard.set(self.isLoggedIn, forKey: "isloggedin")
                     
-                    ref.setData(["isOnline": false])
+                    ref.updateData(["isOnline": false])
+                    
                 }
                 
             }){
