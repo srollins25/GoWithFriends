@@ -60,7 +60,6 @@ struct HomeView: View {
                                     }
                                     
                                     
-                                    
                                     NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).environmentObject(self.comments)){
                                         
                                         EmptyView()
@@ -95,15 +94,9 @@ struct HomeView: View {
             
             if(self.showLoading == true)
             {
-                GeometryReader{_ in
-                    
                     LoaderView()
-                    
-                }.background(Color.clear)
             }
-        }
-            
-        .onAppear(perform: {
+        }.onAppear(perform: {
             
             if(self.shouldFetch == false){
                 
@@ -167,34 +160,7 @@ struct SideMenu: View {
 
             Button(action: {
                 self.showLoading.toggle()
-                
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5){
-                    
-                    do{
-                        
-                        try Auth.auth().signOut()
-                    }
-                    catch{
-                        print("Problem signing out.")
-                    }
-                    
-                    let ref = Firestore.firestore().collection("users").document(UserDefaults.standard.string(forKey: "userid")!)
-                    UserDefaults.standard.set("", forKey: "username")
-                    UserDefaults.standard.set("", forKey: "image")
-                    UserDefaults.standard.set("", forKey: "userid")
-                    UserDefaults.standard.set("", forKey: "email")
-                    UserDefaults.standard.set("", forKey: "trainerId")
-                    let emptyArr = [String]()
-                    UserDefaults.standard.set(emptyArr, forKey: "favorites")
-                    UserDefaults.standard.set([String](), forKey: "friends")
-                    self.showLoading.toggle()
-                    self.isLoggedIn.toggle()
-                    UserDefaults.standard.set(self.isLoggedIn, forKey: "isloggedin")
-                    
-                    ref.updateData(["isOnline": false])
-                    
-                }
+                SignOut()
                 
             }){
                 VStack(spacing: 8){
@@ -235,19 +201,4 @@ struct AdView: UIViewRepresentable {
 //        HomeView()
 //    }
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

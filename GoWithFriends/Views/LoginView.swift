@@ -36,24 +36,15 @@ struct SignUpView: View {
     @Binding var isChecked: Bool
     @Environment(\.colorScheme) var scheme
     
-    
     var body: some View{
         VStack{
             
             ZStack(alignment: .bottom){
                 VStack{
-                    HStack{
-                        Spacer(minLength: 0)
-                        VStack(spacing: 10){
-                            Text("Sign up").foregroundColor(self.index == 1 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold).padding(.top, 15)
-                            Capsule().fill(self.index == 1 ? Color.blue : Color.clear).frame(width: 100, height: 5)
-                        }
-                    }
-                    .padding(.top, 15)
-                    
-                    
+                
+                    // profile image selecter
                     if(self.imageData.count == 0){
-                        Image(systemName: "person.crop.circle.badge.plus").resizable().aspectRatio(contentMode: .fill).frame(width: 40, height: 40).foregroundColor(.gray).onTapGesture {
+                        Image(systemName: "person.crop.circle.badge.plus").resizable().aspectRatio(contentMode: .fill).frame(width: 40, height: 40).foregroundColor(.white).onTapGesture {
                             self.imagePicker.toggle()
                         }.sheet(isPresented: self.$imagePicker){
                             ImagePicker(picker: self.$imagePicker, imageData: self.$imageData)
@@ -70,55 +61,55 @@ struct SignUpView: View {
                     
                     VStack{
                         HStack(spacing: 15){
-                            Image(systemName: "person.crop.circle.fill")
+                            Image(systemName: "person.crop.circle.fill").foregroundColor(.white)
                             
-                            TextField("Username", text: self.$name)
+                            TextField("Username", text: self.$name).foregroundColor(.white)
                         }
-                        Divider().background(Color.white.opacity(0.5))
+                        Divider().background(Color.white)
                     }
                     .padding(.horizontal)
                     .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
-                            Image(systemName: "envelope.fill")
+                            Image(systemName: "envelope.fill").foregroundColor(.white)
                             
-                            TextField("Email", text: self.$email).keyboardType(.emailAddress)
+                            TextField("Email", text: self.$email).keyboardType(.emailAddress).foregroundColor(.white)
                         }
-                        Divider().background(Color.white.opacity(0.5))
+                        Divider().background(Color.white)
                     }
                     .padding(.horizontal)
                     .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
-                            Image(systemName: "number.square.fill")
+                            Image(systemName: "number.square.fill").foregroundColor(.white)
                             
-                            TextField("Trainer Code", text: self.$trainerId).keyboardType(.numberPad)
+                            TextField("Trainer Code", text: self.$trainerId).keyboardType(.numberPad).foregroundColor(.white)
                         }
-                        Divider().background(Color.white.opacity(0.5))
+                        Divider().background(Color.white)
                     }
                     .padding(.horizontal)
                     .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
-                            Image(systemName: "eye.slash.fill")
+                            Image(systemName: "eye.slash.fill").foregroundColor(.white)
                             
-                            SecureField("Password", text: self.$password)
+                            SecureField("Password", text: self.$password).foregroundColor(.white)
                         }
-                        Divider().background(Color.white.opacity(0.5))
+                        Divider().background(Color.white)
                     }
                     .padding(.horizontal)
                     .padding(.top, 6)
                     
                     VStack{
                         HStack(spacing: 15){
-                            Image(systemName: "eye.slash.fill")
+                            Image(systemName: "eye.slash.fill").foregroundColor(.white)
                             
-                            SecureField("Retype Password", text: self.$validatePassword)
+                            SecureField("Retype Password", text: self.$validatePassword).foregroundColor(.white)
                         }
-                        Divider().background(Color.white.opacity(0.5))
+                        Divider().background(Color.white)
                     }
                     .padding(.horizontal)
                     .padding(.top, 6)
@@ -126,18 +117,13 @@ struct SignUpView: View {
                 }
                 .padding()
                 .padding(.bottom, 60)
-                .background(Color(UIColor.systemBackground))
-                .clipShape(CShape2())
-                .contentShape(CShape2())
-                .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: -5)
                 .onTapGesture {
                     UIApplication.shared.endEditing()
                     self.index = 1
                 }
-                .cornerRadius(35)
                 .padding(.horizontal, 20)
                 
-                //button
+                // sign up button
                 Button(action: {
                     UIApplication.shared.endEditing()
                     
@@ -170,55 +156,7 @@ struct SignUpView: View {
                     else
                     {
                         self.showLoading = true
-                        Auth.auth().createUser(withEmail: self.email, password: self.password){ authResult, error in
-                            
-                            if error != nil{
-                                
-                                self.showAlert.toggle()
-                                self.error = (error?.localizedDescription)!
-                                return
-                            }
-                            
-                            let uid = Auth.auth().currentUser?.uid
-                            
-                            let storage = Storage.storage().reference()
-                            
-                            storage.child("profilepics").child(uid!).putData(self.imageData, metadata: nil){ (_, error) in
-                                
-                                if error != nil{
-                                    
-                                    self.showAlert.toggle()
-                                    self.error = (error?.localizedDescription)!
-                                    return
-                                }
-                                
-                                storage.child("profilepics").child(uid!).downloadURL{ (url, error) in
-                                    
-                                    if error != nil{
-                                        
-                                        self.showAlert.toggle()
-                                        self.error = (error?.localizedDescription)!
-                                        return
-                                    }
-                                    
-                                    UserDefaults.standard.set(url?.absoluteString, forKey: "image")
-                                    self.createUser(image: UserDefaults.standard.string(forKey: "image")!, uid: uid!)
-                                    
-                                    self.email = ""
-                                    self.password = ""
-                                    self.name = ""
-                                    self.trainerId = ""
-                                    self.validatePassword = ""
-                                    self.showLoading.toggle()
-                                    self.isloggedin.toggle()
-                                    UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
-                                    self.index = 0
-                                    self.imageData.count = 0
-                                }
-                                
-                                
-                            }
-                        }
+                        AuthCreatedUser()
                     }
                     
                 }){
@@ -238,40 +176,7 @@ struct SignUpView: View {
                 .offset(y: 25)
                 .opacity(self.index == 1 ? 1 : 0)
             }
-            
         }
-    }
-    
-    func createUser(image: String, uid: String)
-    {
-        let db = Firestore.firestore()
-        
-        let name = self.name
-        let image = image
-        let trainerId = self.trainerId
-        let favorites = [String]()
-        let friends = [String]()
-        let blocked = [String]()
-        let comments = [String]()
-        let user_posts = [String]()
-        let mutedWords = [String]()
-        let createdAt = Date().timeIntervalSince1970
-        let email = self.email
-        let isOnline = true
-        
-        let values = ["blocked": blocked, "comments": comments, "createdAt": createdAt, "email": email, "favorites": favorites, "friends": friends, "id": uid, "image": image, "name": name, "trainerId": trainerId, "user_posts": user_posts, "mutedWords": mutedWords, "isOnline": isOnline] as [String: Any]
-        db.collection("users").document(uid).setData(values)
-        
-        UserDefaults.standard.set(uid, forKey: "userid")
-        UserDefaults.standard.set(isOnline, forKey: "isOnline")
-        UserDefaults.standard.set(name, forKey: "username")
-        UserDefaults.standard.set(email, forKey: "email")
-        UserDefaults.standard.set(image, forKey: "image")
-        UserDefaults.standard.set(friends, forKey: "friends")
-        UserDefaults.standard.set(trainerId, forKey: "trainerId")
-        UserDefaults.standard.set(favorites, forKey: "favorites")
-        UserDefaults.standard.set(mutedWords, forKey: "mutedWords")
-        UserDefaults.standard.set("", forKey: "friendId")
     }
 }
 
@@ -287,32 +192,51 @@ struct LoginView: View {
     var body: some View{
         
         GeometryReader{_ in
+            ZStack(alignment: .center){
 
-            VStack(){
+            VStack{
                 
-                //for logo Image("").resizable().frame(width: 60, height: 60)
-                //LoaderView()
-                //Spacer().frame(height: 150)
-                ZStack{
-                    
-                    ZStack{
-                        SignUpView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading, isChecked: self.$isChecked).zIndex(Double(self.index))
-                        LoginView2(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading)
-                    }
+                Text(self.index == 0 ? "Login" : "Create Account").font(.largeTitle).foregroundColor(.white).padding(10)
+                Picker(selection: $index, label: Text("")) {
+                    Text("Sign in").tag(0)
+                    Text("Register").tag(1)
+                }.pickerStyle(SegmentedPickerStyle()).padding(.horizontal, 10)
+                
+                //ZStack{
 
-                    if(self.showLoading == true)
-                    {
-                        GeometryReader{_ in
-                            
-                            LoaderView()
-                            
-                        }.background(Color.clear)
-                        
-                    }
-                    
-                }
+                    index == 0 ? AnyView(LoginFormView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading)) : AnyView( SignUpView(isloggedin: self.$isloggedin, index: self.$index, showLoading: self.$showLoading, isChecked: self.$isChecked).zIndex(Double(self.index)))
+
+
+                //}
+                
+//                if(self.index == 0)
+//                {
+//                    HStack(spacing: 15){
+//                        Rectangle()
+//                            .fill(Color.gray)
+//                            .frame(height: 1)
+//                        Text("Or")
+//                        Rectangle()
+//                            .fill(Color.gray)
+//                            .frame(height: 1)
+//                    }.padding(.horizontal, 20)
+//                        .padding(.top, 50)
+//
+//
+//                    //other login buttons
+//                    HStack(spacing: 25){
+//                        Button(action: {
+//
+//                        }){
+//
+//                            Text("test")
+//                        }
+//                    }.padding(.top, 30)
+//                }
+                
                 if(self.index == 1)
                 {
+                    // show terms of service checkbox + button under sign up view
                     HStack(spacing: 10){
                         Button(action: {
                             self.isChecked.toggle()
@@ -329,39 +253,23 @@ struct LoginView: View {
                                 TermsofServiceView()
                             }.navigationViewStyle(StackNavigationViewStyle())
                         }
-                    }.padding(.vertical)//.padding(.top, 15)
+                    }.padding(.vertical).padding(.top, 15)
                 }
-                
-//                                    HStack(spacing: 15){
-//                                        Rectangle()
-//                                            .fill(Color.gray)
-//                                            .frame(height: 1)
-//                                        Text("Or")
-//                                        Rectangle()
-//                                            .fill(Color.gray)
-//                                            .frame(height: 1)
-//                                    }.padding(.horizontal, 20)
-//                                        .padding(.top, 50)
-//
-//
-//                    //other login buttons
-//                                    HStack(spacing: 25){
-//                                        Button(action: {
-//
-//                                        }){
-//
-//                                            Text("test")
-//                                        }
-//                                    }.padding(.top, 30)
+
                     
             }.padding([ .top], UIScreen.main.bounds.height / 4)
-            
+                
+                if(self.showLoading)
+                {
+                    LoaderView()
+                }
+            }
         }
         .background(LinearGradient(gradient: Gradient(colors: [.yellow, .blue, .red]), startPoint: .top, endPoint: .bottom)).edgesIgnoringSafeArea(.all)
     }
 }
 
-struct LoginView2: View {
+struct LoginFormView: View {
     
     @State var email: String = ""
     @State var password: String = ""
@@ -374,27 +282,17 @@ struct LoginView2: View {
     @Environment(\.colorScheme) var scheme
     @State var fromLogin = true
     
+    
     var body: some View{
         
         ZStack(alignment: .bottom){
             VStack{
-                HStack{
-                    
-                    VStack(spacing: 10){
-                        Text("Login").foregroundColor(self.index == 0 ? .gray : Color.gray.opacity(0.5)).font(.title).fontWeight(.bold)
-                        Capsule().fill(self.index == 0 ? Color.blue : Color.clear).frame(width: 100, height: 5)
-                    }
-                    
-                    Spacer(minLength: 0)
-                }
-                .padding(.top, 30)
-                
-                Spacer().frame(width: 45, height: 55)
+                Spacer().frame(width: 45, height: 35)
                 VStack{
                     HStack(spacing: 15){
-                        Image(systemName: "envelope.fill")
+                        Image(systemName: "envelope.fill").foregroundColor(.white)
                         
-                        TextField("Email", text: self.$email).keyboardType(.emailAddress)
+                        TextField("Email", text: self.$email).keyboardType(.emailAddress).foregroundColor(.white)
                     }
                     Divider().background(Color.white.opacity(0.5))
                 }
@@ -403,9 +301,9 @@ struct LoginView2: View {
                 
                 VStack{
                     HStack(spacing: 15){
-                        Image(systemName: "eye.slash.fill")
+                        Image(systemName: "eye.slash.fill").foregroundColor(.white)
                         
-                        SecureField("Password", text: self.$password)
+                        SecureField("Password", text: self.$password).foregroundColor(.white)
                     }
                     Divider().background(Color.white.opacity(0.5))
                 }
@@ -418,7 +316,7 @@ struct LoginView2: View {
                     Button(action: {
                         self.showForgotPass.toggle()
                     }){
-                        Text("Forgot Password?").foregroundColor(Color.gray.opacity(0.6))
+                        Text("Forgot Password?").foregroundColor(Color.white.opacity(0.6))
                     }.sheet(isPresented: self.$showForgotPass){
                         ForgotPasswordView(fromLogin: self.$fromLogin)
                     }
@@ -428,19 +326,15 @@ struct LoginView2: View {
             }
             .padding()
             .padding(.bottom, 65)
-            .background(Color(UIColor.systemBackground))
-            .clipShape(CShape())
             .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: -5)
             .onTapGesture {
                 UIApplication.shared.endEditing()
                 self.index = 0
             }
-            .contentShape(CShape())
             .cornerRadius(35)
             .padding(.horizontal, 20)
             
-            //button
-            
+            // login button
             Button(action: {
                 
                 UIApplication.shared.endEditing()
@@ -451,66 +345,9 @@ struct LoginView2: View {
                 }
                 else
                 {
-                    
-                    
                     self.showLoading.toggle()
-                    Auth.auth().signIn(withEmail: self.email, password: self.password, completion: { (user, error) in
-                        
-                        if error != nil{
-                            
-                            self.showAlert.toggle()
-                            self.error = (error?.localizedDescription)!
-                            return
-                        }
-                            
-                        else
-                        {
-                            UIApplication.shared.endEditing()
-                            let uid = Auth.auth().currentUser?.uid
-                            let db = Firestore.firestore()
-                            let ref = db.collection("users").document(uid!)
-                            
-                            ref.getDocument{ (snapshot, error) in
-                                
-                                if(error != nil){
-                                    self.showAlert.toggle()
-                                    self.error = (error?.localizedDescription)!
-                                    return
-                                } 
-                                    
-                                else{
-                                    let data = snapshot?.data()
-                                    let name = data!["name"] as? String
-                                    let trainerId = data!["trainerId"] as? String
-                                    let image = data!["image"] as? String
-                                    let email = data!["email"] as? String
-                                    let favorites = data!["favorites"] as? [String]
-                                    let mutedWords = data!["mutedWords"] as? [String]
-                                    let friends_ = data!["friends"] as? [String]
-                                    
-                                    
-                                    UserDefaults.standard.set(uid, forKey: "userid")
-                                    UserDefaults.standard.set(name, forKey: "username")
-                                    UserDefaults.standard.set(image, forKey: "image")
-                                    UserDefaults.standard.set(favorites, forKey: "favorites")
-                                    UserDefaults.standard.set(friends_, forKey: "friends")
-                                    UserDefaults.standard.set(mutedWords, forKey: "mutedWords")
-                                    UserDefaults.standard.set(trainerId, forKey: "trainerId")
-                                    UserDefaults.standard.set("", forKey: "friendId")
-                                    UserDefaults.standard.set(email, forKey: "email")
-                                    self.email = ""
-                                    self.password = ""
-                                    self.showLoading.toggle()
-                                    self.isloggedin.toggle()
-                                    UserDefaults.standard.set(self.isloggedin, forKey: "isloggedin")
-                                    UserDefaults.standard.synchronize()
-                                    ref.updateData(["isOnline": UserDefaults.standard.bool(forKey: "isloggedin")])
-                                }
-                            }
-                        }
-                    })
+                    LoginUser()
                 }
-                
                 
             }){
                 Text(" Login ").foregroundColor(.white)
@@ -530,38 +367,9 @@ struct LoginView2: View {
             .opacity(self.index == 0 ? 1 : 0)
         }
     }
+
 }
 
-struct CShape: Shape {
-    
-    func path(in rect: CGRect) -> Path{
-        
-        return Path{ path in
-            // right curve
-            path.move(to: CGPoint(x: rect.width, y: 100 + 20))
-            path.addLine(to: CGPoint(x: rect.width, y: rect.height))
-            path.addLine(to: CGPoint(x: 0, y: rect.height))
-            path.addLine(to: CGPoint(x: 0, y: 0))
-            
-        }
-
-    }
-}
-
-struct CShape2: Shape {
-    
-    func path(in rect: CGRect) -> Path{
-        
-        return Path{ path in
-            // left curve
-            path.move(to: CGPoint(x: 0, y: 100 + 20))
-            path.addLine(to: CGPoint(x: 0, y: rect.height))
-            path.addLine(to: CGPoint(x: rect.width, y: rect.height))
-            path.addLine(to: CGPoint(x: rect.width, y: 0))
-            
-        }
-    }
-}
 
 
 
