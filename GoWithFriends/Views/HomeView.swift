@@ -15,7 +15,7 @@ import GoogleMobileAds
 
 struct HomeView: View {
     
-    @EnvironmentObject var postsObserver: PostObserver
+    @EnvironmentObject var timelinePosts: PostObserver
     @Binding var show: Bool
     @State var showPostThread = false
     @State var shouldFetch = false
@@ -32,6 +32,7 @@ struct HomeView: View {
     @Binding var showDeleteView: Bool
     @State var comments = CommentsObserver(parentPost_: "")
     
+    
     var body: some View {
         
         ZStack{
@@ -39,29 +40,27 @@ struct HomeView: View {
                 
                 VStack{
                     List{
-                        if(postsObserver.posts.isEmpty)
+                        if(timelinePosts.posts.isEmpty)
                         {
                             Text("No posts").fontWeight(.heavy)
                         }
                             
                         else
                         {
-                            ForEach(postsObserver.posts.reversed()){ post in
+                            ForEach(timelinePosts.posts.reversed()){ post in
                                 
                                 ZStack{
                                     
                                     if(post.isReported == false)
                                     {
-                                        PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).environmentObject(self.postsObserver)
+                                        PostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, postBody: post.postBody, comments: post.comments, favorites: post.favorites, createdAt:  post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).environmentObject(self.timelinePosts)
                                     }
                                     else
                                     {
-                                        ReportedPostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).environmentObject(self.postsObserver)
+                                        ReportedPostCell(id: post.id, user: post.userID, name: post.name, trainerId: post.trainerId, image: post.image, profileimage: post.profileimage, comments: post.comments, favorites: post.favorites, createdAt: post.createdAt, parentPost: post.parentPost, isFavorite: self.$isFavorite, showDeleteView: self.$showDeleteView).environmentObject(self.timelinePosts)
                                     }
                                     
-                                    
                                     NavigationLink(destination: PostThreadView(mainPost: self.$post, subParentPost: self.$subParentPost, showDeleteView: self.$showDeleteView).environmentObject(self.comments)){
-                                        
                                         EmptyView()
                                     }
                                     
@@ -82,7 +81,7 @@ struct HomeView: View {
                 GeometryReader{_ in
                     
                     HStack{
-                        SideMenu(isLoggedIn: self.$isLoggedIn, showLoading: self.$showLoading, showDeleteView: self.$showDeleteView).environmentObject(self.postsObserver).offset(x: self.show ? 0 : -UIScreen.main.bounds.width)
+                        SideMenu(isLoggedIn: self.$isLoggedIn, show: self.$show, showLoading: self.$showLoading, showDeleteView: self.$showDeleteView).environmentObject(self.timelinePosts).offset(x: self.show ? 0 : -UIScreen.main.bounds.width)
                             .animation(.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.6))
                         Spacer()
                     }
@@ -110,13 +109,14 @@ struct HomeView: View {
 struct SideMenu: View {
     
     @Binding var isLoggedIn: Bool
+    @Binding var show: Bool
     @State var showSupport = false
     @State var showProfile = false
     @Binding var showLoading: Bool
     @Binding var showDeleteView: Bool//final delete screen
     @State var user: PokeUser = PokeUser(id: UserDefaults.standard.string(forKey: "userid")!, name: UserDefaults.standard.string(forKey: "username")!, profileimage: UserDefaults.standard.string(forKey: "image")!, email: "", user_posts: [String](), createdAt: 0, trainerId:  UserDefaults.standard.string(forKey: "trainerId")!)
     @EnvironmentObject var passedPosts: PostObserver
-    
+    @Environment(\.colorScheme) var scheme
     
     var body: some View {
         
@@ -124,34 +124,35 @@ struct SideMenu: View {
 
                 Button(action: {
                     self.showProfile.toggle()
+                    self.show.toggle()
                 }){
                     VStack(spacing: 8){
-//                        Image(systemName: "person").renderingMode(.original).resizable().frame(width: 25, height: 25)
                         
                         AnimatedImage(url: URL(string: UserDefaults.standard.string(forKey: "image")!)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 35, height: 35).shadow(color: .gray, radius: 5, x: 1, y: 1).clipShape(Circle())
-                        Text("Profile")
+                        Text("Profile").foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                          
                     }
-                }.sheet(isPresented: self.$showProfile)
+                }
+                .fullScreenCover(isPresented: self.$showProfile)
                 {
                     NavigationView{
                         ProfileView(user: self.$user, show: self.$showProfile, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(self.passedPosts)
                             .navigationBarTitle(Text(self.user.name), displayMode: .inline)
-                            /*.navigationBarItems(leading: Button(action: {
+                            .navigationBarItems(leading: Button(action: {
                                 
                                 self.showProfile.toggle()
                             }){
                                 Text("Done")
-                            })*/
+                            })
                     }.navigationViewStyle(StackNavigationViewStyle())
             }
 
             Button(action: {
                 self.showSupport.toggle()
             }){
-                VStack(spacing: 8){
+                HStack(spacing: 8){
                     Image(systemName: "questionmark.circle").renderingMode(.original).resizable().frame(width: 25, height: 25)
-                    Text("Support")
+                    Text("Support").foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                 }
             }.sheet(isPresented: self.$showSupport){
                 SupportView(closeView: self.$showSupport)
@@ -163,8 +164,8 @@ struct SideMenu: View {
                 SignOut()
                 
             }){
-                VStack(spacing: 8){
-                    Image(systemName: "escape").renderingMode(.original).resizable().frame(width: 25, height: 25)
+                HStack(spacing: 8){
+                    Image(systemName: "escape").renderingMode(.original).resizable().frame(width: 25, height: 25).foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                     Text("Log out").foregroundColor(.red)
                 }
             }
@@ -173,10 +174,9 @@ struct SideMenu: View {
             Spacer()
             
         }.padding(12)
+            .padding(.horizontal, 15)
             .foregroundColor(.black)
-            .background(Color("sidemenucolor"))
-            .cornerRadius(16)
-        
+            .background(Color(UIColor.systemBackground))
     }
 }
 

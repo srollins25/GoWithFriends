@@ -72,11 +72,11 @@ struct ProfileView: View {
                         
                         if(self.user.id == UserDefaults.standard.string(forKey: "username")!)
                         {
-                            Text("Trainer Code: " + UserDefaults.standard.string(forKey: "trainerId")!)
+                            Text("Trainer Code: " + UserDefaults.standard.string(forKey: "trainerId")!).foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                         }
                         else
                         {
-                            Text("Trainer Code: " + "\(user.trainerId)")
+                            Text("Trainer Code: " + "\(user.trainerId)").foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                         }
                         
                         if(user.id != Auth.auth().currentUser?.uid)
@@ -104,7 +104,7 @@ struct ProfileView: View {
                                             //check to see if in friends list
                                         }
                                         
-                                    Text(self.buttonText).font(.footnote)
+                                    Text(self.buttonText).foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)
                                     
                                 }
                                 
@@ -114,7 +114,7 @@ struct ProfileView: View {
                                         Image(systemName: "envelope").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
                                     }
                                     
-                                    Text("Message").font(.footnote)
+                                    Text("Message").foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)
                                 }
                                 
                                 VStack(spacing: 10){
@@ -128,7 +128,7 @@ struct ProfileView: View {
                                         Image(systemName: "line.horizontal.3.decrease.circle").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
                                         
                                     }
-                                    Text("More").font(.footnote)
+                                    Text("More").foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)
                                     
                                     if(self.showMoreMenu)
                                     {
@@ -153,7 +153,7 @@ struct ProfileView: View {
                                         FriendsView(closeView: self.$showFriends)
                                     }
                                     
-                                    Text("Friends").font(.footnote)
+                                    Text("Friends").foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)
                                 }
                                 
                                 VStack{
@@ -173,7 +173,7 @@ struct ProfileView: View {
                                     Image(systemName: "envelope").resizable().aspectRatio(contentMode: .fill).frame(width: 30, height: 30).foregroundColor(self.scheme == .dark ? Color.white : Color.gray)
 //
                                     }
-                                    Text("Inbox").font(.footnote)
+                                    Text("Inbox").foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)
                                 }
                                 
                                 ZStack{
@@ -189,7 +189,7 @@ struct ProfileView: View {
                                         }.sheet(isPresented: self.$showProfileSettings){
                                             ProfileSettingsView(closeView: self.$showProfileSettings, closeProfileView: self.$show, showDeleteVerify: self.$showDeleteVerify, showDeleteView: self.$showDeleteView)
                                         }
-                                        Text("Settings").font(.footnote)
+                                        Text("Settings").foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)
                                     }
                                     
                                     if(self.showMoreMenu)
@@ -294,7 +294,7 @@ struct ProfileView: View {
                             {
                                 if(favoritePostsObserver.favoritePosts.isEmpty)
                                 {
-                                    Text("No favorites").fontWeight(.heavy)
+                                    Text("No favorites").foregroundColor(self.scheme == .dark ? Color.white : Color.black).fontWeight(.heavy)
                                     Spacer()
                                 }
                                 else
@@ -365,7 +365,7 @@ struct ProfileView: View {
                                     }
                                 }
                             }
-                        }.padding(.bottom, 120)
+                        }.padding(.bottom, 5)
                     }
                 }
             }
@@ -387,8 +387,6 @@ struct ProfileView: View {
                         self.buttonText = "Follow"
                         self.buttonImage = Image(systemName: "person.crop.circle.badge.plus")
                     }
-                    
-                    
                     self.getUserPosts()
                     self.fetchPosts.toggle()
                 }

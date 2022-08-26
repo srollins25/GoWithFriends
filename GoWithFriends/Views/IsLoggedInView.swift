@@ -66,7 +66,7 @@ struct TabBar: View {
     @Binding var parentPost: String
     @Binding var user: PokeUser
     @Environment(\.colorScheme) var scheme
-    @EnvironmentObject var posts: PostObserver
+    @EnvironmentObject var timelinePosts: PostObserver
     @EnvironmentObject var raids: RaidObserver
     @EnvironmentObject var pokemon: PokemonObserver
     @State var showSideMenu = false
@@ -82,25 +82,20 @@ struct TabBar: View {
     var body: some View{
         
         ZStack(alignment: .bottom){
-            
-            
             if(index == 0){
-                HomeView(show: self.$showSideMenu, showSearchBar: self.$showSearchBar, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(posts)
+                HomeView(show: self.$showSideMenu, showSearchBar: self.$showSearchBar, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).edgesIgnoringSafeArea(.bottom).environmentObject(timelinePosts)
                     .navigationBarTitle(Text("Home"))
                     .navigationBarItems(leading:   Button(action: {
                         self.showSideMenu.toggle()
                     }){
-                        
                         AnimatedImage(url: URL(string: UserDefaults.standard.string(forKey: "image")!)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 35, height: 35).shadow(color: .gray, radius: 5, x: 1, y: 1).clipShape(Circle())
-                        
                     }.accentColor(.white)
                         , trailing:
                         
                         NavigationLink(destination: SearchView(showDeleteView: self.$showDeleteView)){
-                            Image(systemName: "magnifyingglass").resizable().frame(width: 30, height: 30).shadow(color: .gray, radius: 5, x: 1, y: 1).environmentObject(self.posts)
+                            Image(systemName: "magnifyingglass").resizable().frame(width: 30, height: 30).shadow(color: .gray, radius: 5, x: 1, y: 1).environmentObject(self.timelinePosts)
                         }.accentColor(.white))
             }
-                
             else if(index == 1){
                 MapView().environmentObject(pokemon).environmentObject(raids).navigationBarHidden(true)
             }
@@ -108,7 +103,6 @@ struct TabBar: View {
             Spacer()
             VStack{
                 Spacer()
-                
                 
                 if(self.index != 1)
                 {
@@ -168,11 +162,9 @@ struct TabBar: View {
             }.edgesIgnoringSafeArea(.bottom)
         }
     .onAppear(perform: {
-        
         self.interstial = GADInterstitial(adUnitID: "ca-app-pub-9788435879014471/1618293373")
         let req = GADRequest()
         self.interstial.load(req)
-        
     })
         
     }

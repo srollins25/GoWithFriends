@@ -23,14 +23,14 @@ struct SearchView: View {
     let transition = AnyTransition.move(edge: .trailing)
     @State var subParentPost = Post(id: "", userID: "", name: "", trainerId: "", image: "", profileimage: "", postBody: "", comments: [String]() as NSArray, favorites: 0, createdAt: 0, parentPost: "", isReported: false)
     @State var isLoggedIn = true
-    //var qm = QueryModel()
-    @Environment(\.colorScheme) var scheme 
+    @Environment(\.colorScheme) var scheme
     @State var favpic = Image(systemName: "star")
     @State var favSubPic = Image(systemName: "star")
     @State var isFavorite = false
     @State var isSubFavorite = false
     @State var comments = CommentsObserver(parentPost_: "")
     @Binding var showDeleteView: Bool//
+    @ObservedObject var timelinePosts = PostObserver()
     
     
     var body: some View {
@@ -98,8 +98,8 @@ struct SearchView: View {
                             ZStack{
                              
                                 UserCell(id: user.id, name: user.name, image: user.profileimage).edgesIgnoringSafeArea(.all)
-                                
-                                NavigationLink(destination: ProfileView(user: self.$user, show: self.$show, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).navigationBarTitle(user.name)){
+                                //need to pass timeline
+                                NavigationLink(destination: ProfileView(user: self.$user, show: self.$show, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(timelinePosts).navigationBarTitle(user.name)){
                                      
                                      EmptyView()
                                  }.frame(width: 0)

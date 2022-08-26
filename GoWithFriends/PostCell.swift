@@ -38,12 +38,11 @@ struct PostCell: View {
     @Binding var showDeleteView: Bool
     @EnvironmentObject var pastPosts: PostObserver
     @State var pokeuser: PokeUser = PokeUser(id: "", name: "", profileimage: "", email: "", user_posts: [String](), createdAt: 0, trainerId: "")
+    @Environment(\.colorScheme) var scheme
     
     var body: some View {
         
         HStack(alignment: .top){
-            //image
-            
             ZStack{
                 
                 AnimatedImage(url: URL(string: self.profileimage)).resizable().renderingMode(.original).aspectRatio(contentMode: .fill).frame(width: 60, height: 60).clipShape(Circle()).onTapGesture {
@@ -54,21 +53,20 @@ struct PostCell: View {
                     self.pokeuser.trainerId = self.trainerId
                     self.pokeuser.profileimage = self.profileimage
                     
-                }.sheet(isPresented: self.$showProfile){
+                }.fullScreenCover(isPresented: self.$showProfile){
                     
                     NavigationView{
                         ProfileView(user: self.$pokeuser, show: self.$showProfile, isLoggedIn: self.$isLoggedIn, showDeleteView: self.$showDeleteView).environmentObject(self.pastPosts)
                             .navigationBarTitle(Text(self.pokeuser.name), displayMode: .inline)
-                            /*.navigationBarItems(leading: Button(action: {
+                            .navigationBarItems(leading: Button(action: {
                                 self.showProfile.toggle()
                             }){
                                 Text("Done")
-                            })*/
+                            })
                     }.navigationViewStyle(StackNavigationViewStyle())
                 }
             }
             
-            //(vastack: name, text, image)
             VStack(alignment: .leading){
                 //name, text
                 HStack(alignment: .top){
@@ -76,19 +74,18 @@ struct PostCell: View {
                         
                         HStack{
                             
-                            Text(self.name).font(.headline)
+                            Text(self.name).foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.headline).padding(.top, 5)
                             Spacer()
                             VStack(spacing: 10){
                                 if(self.user == Auth.auth().currentUser?.uid)
                                 {
-                                    Image(systemName: "ellipsis").onTapGesture {
+                                    Image(systemName: "ellipsis").foregroundColor(self.scheme == .dark ? Color.white : Color.black).onTapGesture {
                                         
                                         withAnimation(.spring()){
                                             self.showDeleteButton.toggle()
                                             self.show.toggle()
                                         }
                                     }
-                                    
                                     
                                     if(self.show == true)
                                     {
@@ -105,7 +102,6 @@ struct PostCell: View {
                                         }
                                     }
                                     
-                                    
                                     if(self.showReport == true)
                                     {
                                         ReportPopOver(showReportButton: self.$showReport, postId: self.$id, parentPost: self.$parentPost).cornerRadius(5).shadow(radius: 6)
@@ -114,9 +110,7 @@ struct PostCell: View {
                             }
                         }
                         
-                        
-                        
-                        Text(self.postBody).fixedSize(horizontal: false, vertical: true).font(.body)
+                        Text(self.postBody).foregroundColor(self.scheme == .dark ? Color.white : Color.black).fixedSize(horizontal: false, vertical: true).font(.body).padding(.top, 3).padding(.bottom, 5)
                         if(self.image != "")
                         {
                             AnimatedImage(url: URL(string: self.image)).resizable().renderingMode(.original).frame(height: 140).cornerRadius(8)//.onTapGesture {
@@ -131,12 +125,12 @@ struct PostCell: View {
                             self.showCreatePost.toggle()
                             
                         }){
-                            Image(systemName: "bubble.right")
+                            Image(systemName: "bubble.right").foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                         }.buttonStyle(BorderlessButtonStyle())
                             .sheet(isPresented: self.$showCreatePost){
                                 CreatePostView(closeView: self.$showCreatePost, parentPost: self.$id)
                         }
-                        Text(self.comments.count == 0 ? "" : "\(self.comments.count)")
+                        Text(self.comments.count == 0 ? "" : "\(self.comments.count)").foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                     }
                     HStack{
                         
@@ -151,7 +145,7 @@ struct PostCell: View {
                                 self.favoriteImage = Image(systemName: "star")
                             }
                         }){
-                            self.favoriteImage
+                            self.favoriteImage.foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                             
                             
                         }.alert(isPresented: self.$showFavoriteAlert){
@@ -207,7 +201,7 @@ struct PostCell: View {
                             }))
                         }
                         .buttonStyle(BorderlessButtonStyle())
-                        Text(self.favorites == 0 ? "" : "\(self.favorites)")
+                        Text(self.favorites == 0 ? "" : "\(self.favorites)").foregroundColor(self.scheme == .dark ? Color.white : Color.black)
                         
                     }
                     //                    Button(action: {
@@ -218,15 +212,13 @@ struct PostCell: View {
                     
                     Spacer()
                     
-                    Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: self.createdAt)), formatter: RelativeDateTimeFormatter())").font(.footnote)//.padding()
+                    Text("\(Date(timeIntervalSince1970: TimeInterval(truncating: self.createdAt)), formatter: RelativeDateTimeFormatter())").foregroundColor(self.scheme == .dark ? Color.white : Color.black).font(.footnote)//.padding()
                     
-                }.padding(.bottom, 2)
+                }.padding(.bottom, 10).padding(.top, 5)
             }
             
         }.padding(.top)
             .onAppear(perform: {
-                
-                
                 
                 let favoritesArr = (UserDefaults.standard.object(forKey: "favorites")! as? [String])!
                 
